@@ -8,7 +8,6 @@ type DrawMode = "polygon" | "rectangle" | null;
 
 const DrawTool: React.FC = () => {
     const { map } = useMap();
-    const [isHovered, setIsHovered] = useState<boolean>(false);
     const [isDrawing, setIsDrawing] = useState<boolean>(false);
     const [polygonCoords, setPolygonCoords] = useState<[number, number][]>([]);
     const [drawMode, setDrawMode] = useState<DrawMode>(null);
