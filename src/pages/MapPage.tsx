@@ -6,6 +6,8 @@ import Sidebar from '../app/components/sidebar/Sidebar';
 import AuthModal from '../app/components/auth/AuthModal';
 import { MapProvider } from '../app/components/context/MapProvider';
 import DeckGLOverlay from '../app/components/DeckGLOverlay';
+import DrawPolygon from '../app/components/DrawPolygon';
+import { Menu } from 'lucide-react';
 
 
 
@@ -24,7 +26,7 @@ export default function MapPage() {
         layers: [
             new ScatterplotLayer({
                 id: "scatterplot-layer",
-                data: [{ position: [106.8456, -6.2088], size: 800 }, { position: [106.8456, -6.3088], size: 500 }],
+                data: [{ position: [106.8456, -6.2088], size: 100 }],
                 getPosition: (d) => d.position,
                 getRadius: (d) => d.size,
                 getFillColor: [255, 0, 0, 255],
@@ -52,7 +54,7 @@ export default function MapPage() {
                     <Sidebar isMobile={isMobile} menuOpen={menuOpen} />
                     {/* Navbar */}
                     <div
-                        className={`absolute top-0 left-0 bg-gray-900 text-white p-1 flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-lg`} // Added shadow-lg
+                        className={`absolute top-0 left-0 bg-gray-800 text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-lg`} // Added shadow-lg
                         style={{
                             width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
                             marginLeft: menuOpen && !isMobile ? "400px" : "0",
@@ -61,10 +63,12 @@ export default function MapPage() {
                         {/* Toggle Button */}
                         <button
                             onClick={() => setMenuOpen(!menuOpen)}
-                            className="text-white px-3 py-2 bg-gray-800 focus:outline-none "
+                            className="text-white px-4  focus:outline-none "
                         >
-                            ☰
+                            <Menu/>
                         </button>
+
+                        <DrawPolygon />
 
                         {/* Login/Signup Button */}
                         <AuthModal />
@@ -80,7 +84,6 @@ export default function MapPage() {
                     >
                         <MapInstance
                             mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-
                             mapView={mapView}
                         />
                         <DeckGLOverlay {...deckProps} />
