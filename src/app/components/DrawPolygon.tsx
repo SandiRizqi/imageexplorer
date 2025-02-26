@@ -9,7 +9,7 @@ type DrawMode = "polygon" | "rectangle" | null;
 
 const DrawTool: React.FC = () => {
     const { map } = useMap();
-    const {polygon, setPolygon} = usePolygon();
+    const { polygon, setPolygon } = usePolygon();
     const [isDrawing, setIsDrawing] = useState<boolean>(false);
     const [drawMode, setDrawMode] = useState<DrawMode>(null);
     const [startPoint, setStartPoint] = useState<[number, number] | null>(null);
@@ -153,7 +153,7 @@ const DrawTool: React.FC = () => {
         setPolygon([]);
         if (map?.getLayer("polygon-fill")) {
             map.removeLayer("polygon-fill");
-            map.removeSource("polygon");
+
         }
         if (map?.getLayer("polygon-border")) {
             map.removeLayer("polygon-border");
@@ -168,51 +168,55 @@ const DrawTool: React.FC = () => {
             <div className="relative group">
                 <button
                     onClick={() => startDrawing("polygon")}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "polygon" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200`}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "polygon" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
                 >
                     <Pentagon color="white" />
+                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-gray-700 text-xs rounded px-2 py-1 whitespace-nowrap">
+                        Draw Polygon
+                    </span>
                 </button>
-                <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
-                    Draw Polygon
-                </span>
             </div>
 
             {/* Rectangle Tool */}
             <div className="relative group">
                 <button
                     onClick={() => startDrawing("rectangle")}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "rectangle" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200`}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "rectangle" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
                 >
                     <Square color="white" />
+                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-gray-700 text-xs rounded px-2 py-1 whitespace-nowrap">
+                        Draw Rectangle
+                    </span>
+
                 </button>
-                <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
-                    Draw Rectangle
-                </span>
+
             </div>
 
             {/* Transform Tool */}
             <div className="relative group">
                 <button
-                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-yellow-500 transition-colors duration-200"
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-yellow-500 transition-colors duration-200 shadow-xl"
                 >
                     <Tangent color="white" />
+                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-gray-700 text-xs rounded px-2 py-1 whitespace-nowrap">
+                        Transform
+                    </span>
                 </button>
-                <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
-                    Transform
-                </span>
+
             </div>
 
             {/* Delete Tool */}
             <div className="relative group">
                 <button
                     onClick={removeShapes}
-                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-red-500 transition-colors duration-200"
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-red-500 transition-colors duration-200 shadow-xl"
                 >
                     <Trash2 color="white" />
+                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-gray-700 text-xs rounded px-2 py-1 whitespace-nowrap">
+                        Delete
+                    </span>
                 </button>
-                <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
-                    Delete Shapes
-                </span>
+
             </div>
         </div>
 
