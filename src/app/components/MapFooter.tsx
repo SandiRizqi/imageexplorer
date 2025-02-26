@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMap } from './context/MapProvider';
 import { usePolygon } from './context/PolygonProvider';
+import { MapMouseEvent } from 'maplibre-gl';
 import * as turf from "@turf/turf";
 
 type MapFooterProps = React.HTMLAttributes<HTMLDivElement>;
@@ -15,7 +16,7 @@ const MapFooter: React.FC<MapFooterProps> = (props) => {
         if (!map) return;
 
         // Handle mouse move to get cursor coordinates
-        const updateCursor = (e: any) => {
+        const updateCursor = (e: MapMouseEvent) => {
             setCursorCoords([e.lngLat.lng, e.lngLat.lat]);
         };
 
