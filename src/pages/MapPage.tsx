@@ -7,7 +7,6 @@ import AuthModal from '../app/components/auth/AuthModal';
 import { MapProvider } from '../app/components/context/MapProvider';
 import { PolygonProvider } from '../app/components/context/PolygonProvider';
 import DeckGLOverlay from '../app/components/DeckGLOverlay';
-import DrawPolygon from '../app/components/DrawPolygon';
 import ToolsContainer from '../app/components/container/ToolsContainer';
 import MapFooter from '../app/components/MapFooter';
 import { Menu } from 'lucide-react';
