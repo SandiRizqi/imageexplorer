@@ -44,13 +44,25 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
     if (map && mapView) {
       map.jumpTo(mapView);
     }
-  }, [mapView, map]);
+  }, [map]);
 
   useEffect(() => {
     if (map && mapStyle) {
       map.setStyle(mapStyle);
     }
   }, [mapStyle, map]);
+
+    useEffect(() => {
+        if (map) {
+            const handleResize = () => {
+                map.resize();
+            };
+
+            handleResize(); // Initial check
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }
+    }, []);
 
   return <div id={id} className={`absolute w-full h-full ${className}`} ref={mapContainerRef} style={style} />;
 };

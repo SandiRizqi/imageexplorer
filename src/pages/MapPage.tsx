@@ -86,6 +86,7 @@ export default function MapPage() {
                             }}
                         >
                             <MapInstance
+                                id="map"
                                 mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
                                 mapView={mapView}
                             />

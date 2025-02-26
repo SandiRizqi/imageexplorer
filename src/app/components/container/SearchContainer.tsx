@@ -6,7 +6,7 @@ export default function SearchContainer() {
     return (
         <div>
             {/* Content */}
-            <div className="mt-2">
+            <div className="mt-0">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
                         <thead className="border-b border-gray-700 bg-gray-800">
@@ -26,7 +26,7 @@ export default function SearchContainer() {
                                 { sat: 'BJ3A', date: '11-20-2024', res: '50 cm', cloud: '0.0%', offNadir: '10.4' },
                                 { sat: 'P1', date: '09-18-2024', res: '50 cm', cloud: '0.0%', offNadir: '25.1', color: 'text-orange-400' },
                             ].map((row, index) => (
-                                <tr key={index} className="border-b border-gray-700 text-xs">
+                                <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100">
                                     <td className="p-2"><input type="checkbox" /></td>
                                     <td className="p-2">{row.sat}</td>
                                     <td className="p-2">{row.date}</td>
