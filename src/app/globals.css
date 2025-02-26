@@ -25,3 +25,8 @@ body {
     text-wrap: balance;
   }
 }
+
+
+.input-style {
+  @apply w-full bg-transparent border-b border-gray-600 p-2 focus:outline-none focus:border-yellow-500;
+}
