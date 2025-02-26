@@ -44,6 +44,9 @@ const DrawTool: React.FC = () => {
             setIsDrawing(false);
             setStartPoint(null);
             setDrawMode(null);
+            if (map) {
+                map.getCanvas().style.cursor = "grab"; // or "default" depending on your preference
+            }
         };
 
         map.on("click", handleClick);
