@@ -32,6 +32,7 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
       zoom: mapView?.zoom || 3,
       pitch: mapView?.pitch || 0,
       bearing: mapView?.bearing || 0,
+      attributionControl: false, 
     });
 
     setMap(mapInstance);

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useMap } from "./context/MapProvider";
 import { MapMouseEvent, GeoJSONSource } from "maplibre-gl";
-import { Square, Trash2, Pencil } from "lucide-react";
+import { Square, Trash2, Pentagon, Tangent } from "lucide-react";
+import { usePolygon } from "./context/PolygonProvider";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 type DrawMode = "polygon" | "rectangle" | null;
 
 const DrawTool: React.FC = () => {
     const { map } = useMap();
+    const {polygon, setPolygon} = usePolygon();
     const [isDrawing, setIsDrawing] = useState<boolean>(false);
-    const [polygonCoords, setPolygonCoords] = useState<[number, number][]>([]);
     const [drawMode, setDrawMode] = useState<DrawMode>(null);
     const [startPoint, setStartPoint] = useState<[number, number] | null>(null);
 
@@ -20,26 +21,30 @@ const DrawTool: React.FC = () => {
             const newPoint: [number, number] = [e.lngLat.lng, e.lngLat.lat];
 
             if (drawMode === "polygon") {
-                setPolygonCoords((prevCoords) => [...prevCoords, newPoint]);
+                setPolygon((prevCoords) => [...prevCoords, newPoint]);
             } else if (drawMode === "rectangle" && !startPoint) {
                 setStartPoint(newPoint);
             } else if (drawMode === "rectangle" && startPoint) {
-                drawPolygon(generateRectangle(startPoint, newPoint));
+                const coords = generateRectangle(startPoint, newPoint);
+                drawPolygon(coords);
+                setPolygon(coords);
                 stopDrawing();
             }
         };
 
         const handleMouseMove = (e: MapMouseEvent) => {
-            if (drawMode === "polygon" && polygonCoords.length > 0) {
-                drawLine([...polygonCoords, [e.lngLat.lng, e.lngLat.lat]]);
+            if (drawMode === "polygon" && polygon.length > 0) {
+                drawLine([...polygon, [e.lngLat.lng, e.lngLat.lat]]);
             } else if (drawMode === "rectangle" && startPoint) {
                 drawLine(generateRectangle(startPoint, [e.lngLat.lng, e.lngLat.lat]));
+                setPolygon(generateRectangle(startPoint, [e.lngLat.lng, e.lngLat.lat]));
             }
         };
 
         const stopDrawing = () => {
-            if (drawMode === "polygon" && polygonCoords.length > 2) {
-                drawPolygon([...polygonCoords, polygonCoords[0]]);
+            if (drawMode === "polygon" && polygon.length > 2) {
+                drawPolygon([...polygon, polygon[0]]);
+                setPolygon([...polygon, polygon[0]]);
             }
             setIsDrawing(false);
             setStartPoint(null);
@@ -58,14 +63,16 @@ const DrawTool: React.FC = () => {
             map.off("mousemove", handleMouseMove);
             map.off("dblclick", stopDrawing);
         };
-    }, [map, isDrawing, drawMode, polygonCoords, startPoint]);
+    }, [map, isDrawing, drawMode, polygon, startPoint]);
+
+
 
     const startDrawing = (mode: DrawMode) => {
         if (!map) return;
         removeShapes();
         setDrawMode(mode);
         setIsDrawing(true);
-        setPolygonCoords([]);
+        setPolygon([]);
         setStartPoint(null);
         map.getCanvas().style.cursor = "crosshair";
     };
@@ -86,9 +93,9 @@ const DrawTool: React.FC = () => {
                 type: "line",
                 source: "polygon-line",
                 paint: {
-                    "line-color": "pink",
+                    "line-color": "red",
                     "line-width": 3,
-                    "line-dasharray": [4, 2], // Dashed stroke
+                    "line-dasharray": [2, 1], // Dashed stroke
                 },
             });
         }
@@ -111,7 +118,7 @@ const DrawTool: React.FC = () => {
                 type: "fill",
                 source: "polygon",
                 paint: {
-                    "fill-color": "pink",
+                    "fill-color": "red",
                     "fill-opacity": 0, // Semi-transparent pink fill
                 },
             });
@@ -121,7 +128,7 @@ const DrawTool: React.FC = () => {
                 type: "line",
                 source: "polygon",
                 paint: {
-                    "line-color": "pink",
+                    "line-color": "red",
                     "line-width": 4,
                     "line-opacity": 1, // Transparent border
                 },
@@ -143,6 +150,7 @@ const DrawTool: React.FC = () => {
     };
 
     const removeShapes = () => {
+        setPolygon([]);
         if (map?.getLayer("polygon-fill")) {
             map.removeLayer("polygon-fill");
             map.removeSource("polygon");
@@ -155,62 +163,60 @@ const DrawTool: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center gap-2 py-1">
-    {/* Polygon Tool */}
-    <div className="relative group">
-        <button
-            onClick={() => startDrawing("polygon")}
-            className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "polygon" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200`}
-        >
-            <Pencil color="white" />
-        </button>
-        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
-            Draw Polygon
-        </span>
-    </div>
-
-    {/* Rectangle Tool */}
-    <div className="relative group">
-        <button
-            onClick={() => startDrawing("rectangle")}
-            className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "rectangle" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200`}
-        >
-            <Square color="white" />
-        </button>
-        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
-            Draw Rectangle
-        </span>
-    </div>
-
-    {/* Transform Tool */}
-    <div className="relative group">
-        <button
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-yellow-500 transition-colors duration-200"
-        >
-            <div className="w-5 h-5 border-2 border-white flex items-center justify-center">
-                <div className="w-1 h-1 bg-white"></div>
+        <div className="flex items-center justify-center gap-1 py-1">
+            {/* Polygon Tool */}
+            <div className="relative group">
+                <button
+                    onClick={() => startDrawing("polygon")}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "polygon" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200`}
+                >
+                    <Pentagon color="white" />
+                </button>
+                <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
+                    Draw Polygon
+                </span>
             </div>
-        </button>
-        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
-            Transform
-        </span>
-    </div>
 
-    {/* Delete Tool */}
-    <div className="relative group">
-        <button
-            onClick={removeShapes}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-red-500 transition-colors duration-200"
-        >
-            <Trash2 color="white" />
-        </button>
-        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
-            Delete Shapes
-        </span>
-    </div>
-</div>
+            {/* Rectangle Tool */}
+            <div className="relative group">
+                <button
+                    onClick={() => startDrawing("rectangle")}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "rectangle" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200`}
+                >
+                    <Square color="white" />
+                </button>
+                <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
+                    Draw Rectangle
+                </span>
+            </div>
 
-    
+            {/* Transform Tool */}
+            <div className="relative group">
+                <button
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-yellow-500 transition-colors duration-200"
+                >
+                    <Tangent color="white" />
+                </button>
+                <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
+                    Transform
+                </span>
+            </div>
+
+            {/* Delete Tool */}
+            <div className="relative group">
+                <button
+                    onClick={removeShapes}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-red-500 transition-colors duration-200"
+                >
+                    <Trash2 color="white" />
+                </button>
+                <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-500 text-white text-xs rounded px-2 py-1">
+                    Delete Shapes
+                </span>
+            </div>
+        </div>
+
+
     );
 };
 

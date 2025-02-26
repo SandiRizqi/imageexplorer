@@ -5,8 +5,10 @@ import MapInstance from '../app/components/MapInstance';
 import Sidebar from '../app/components/sidebar/Sidebar';
 import AuthModal from '../app/components/auth/AuthModal';
 import { MapProvider } from '../app/components/context/MapProvider';
+import { PolygonProvider } from '../app/components/context/PolygonProvider';
 import DeckGLOverlay from '../app/components/DeckGLOverlay';
 import DrawPolygon from '../app/components/DrawPolygon';
+import MapFooter from '../app/components/MapFooter';
 import { Menu } from 'lucide-react';
 
 
@@ -49,46 +51,52 @@ export default function MapPage() {
     return (
         <div>
             <MapProvider>
-                <div className="relative w-screen h-screen">
-                    {/* Sidebar */}
-                    <Sidebar isMobile={isMobile} menuOpen={menuOpen} />
-                    {/* Navbar */}
-                    <div
-                        className={`absolute top-0 left-0 bg-gray-800 text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-lg`} // Added shadow-lg
-                        style={{
-                            width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
-                            marginLeft: menuOpen && !isMobile ? "400px" : "0",
-                        }}
-                    >
-                        {/* Toggle Button */}
-                        <button
-                            onClick={() => setMenuOpen(!menuOpen)}
-                            className="text-white px-4  focus:outline-none "
+                <PolygonProvider>
+                    <div className="relative w-screen h-screen">
+                        {/* Sidebar */}
+                        <Sidebar isMobile={isMobile} menuOpen={menuOpen} />
+                        {/* Navbar */}
+                        <div
+                            className={`absolute top-0 left-0 bg-gray-800 h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-lg`} // Added shadow-lg
+                            style={{
+                                width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
+                                marginLeft: menuOpen && !isMobile ? "400px" : "0",
+                            }}
                         >
-                            <Menu/>
-                        </button>
+                            {/* Toggle Button */}
+                            <button
+                                onClick={() => setMenuOpen(!menuOpen)}
+                                className="text-white px-4  focus:outline-none "
+                            >
+                                <Menu />
+                            </button>
 
-                        <DrawPolygon />
+                            <DrawPolygon />
 
-                        {/* Login/Signup Button */}
-                        <AuthModal />
+                            {/* Login/Signup Button */}
+                            <AuthModal />
+                        </div>
+
+                        {/* Map Container */}
+                        <div
+                            className={`transition-all duration-300 h-screen`}
+                            style={{
+                                width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
+                                marginLeft: menuOpen && isMobile ? "0" : menuOpen ? "400px" : "0",
+                            }}
+                        >
+                            <MapInstance
+                                mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+                                mapView={mapView}
+                            />
+                            <DeckGLOverlay {...deckProps} />
+                            <MapFooter style={{
+                                width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
+                                marginLeft: menuOpen && !isMobile ? "400px" : "0",
+                            }} />
+                        </div>
                     </div>
-
-                    {/* Map Container */}
-                    <div
-                        className={`transition-all duration-300 h-screen`}
-                        style={{
-                            width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
-                            marginLeft: menuOpen && isMobile ? "0" : menuOpen ? "400px" : "0",
-                        }}
-                    >
-                        <MapInstance
-                            mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-                            mapView={mapView}
-                        />
-                        <DeckGLOverlay {...deckProps} />
-                    </div>
-                </div>
+                </PolygonProvider>
             </MapProvider>
 
         </div>

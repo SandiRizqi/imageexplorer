@@ -29,7 +29,7 @@ export default function AuthModal() {
             </DialogTitle>
 
             {/* Toggle Login/Signup */}
-            <div className="flex mt-4 border-b border-gray-600">
+            <div className="flex mt-4 border-b border-gray-600 text-xs">
               <button
                 className={`w-1/2 py-2 text-center ${
                   isLogin ? "bg-gray-800 text-white" : "text-gray-400"
@@ -49,7 +49,7 @@ export default function AuthModal() {
             </div>
 
             {/* Form Fields */}
-            <form className="mt-4">
+            <form className="mt-4 text-sm">
               {!isLogin && (
                 <>
                   <div className="flex space-x-2">
@@ -65,7 +65,7 @@ export default function AuthModal() {
                 <input type="password" placeholder="Confirm Password *" className="input-style mt-2" />
               )}
 
-              {isLogin && <p className="text-sm text-gray-400 mt-2 cursor-pointer">Forgot your password?</p>}
+              {isLogin && <p className="text-xs text-gray-400 mt-2 cursor-pointer">Forgot your password?</p>}
 
               {/* Submit Button */}
               <button className="w-full bg-yellow-500 text-gray-800 py-2 mt-4 rounded-md shadow-md">
