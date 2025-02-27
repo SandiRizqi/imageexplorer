@@ -7,7 +7,9 @@ import * as shapefile from "shapefile";
 import JSZip from "jszip";
 import { DOMParser } from "@xmldom/xmldom";
 import { useMap } from '../context/MapProvider';
+import { Geometry, Feature, FeatureCollection, GeoJsonProperties, Polygon, MultiPolygon } from 'geojson';
 import * as toGeoJSON from "@tmcw/togeojson";
+
 
 
 interface PolygonUploadModalProps {
@@ -35,7 +37,11 @@ const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose
       } else if (fileType === "kml" || fileType === "kmz") {
         const text = await readFileAsText(file);
         const kml = new DOMParser().parseFromString(text, "text/xml") as unknown as Document;
-        const geojson = toGeoJSON.kml(kml);
+        const rawGeojson = toGeoJSON.kml(kml);
+        const geojson: FeatureCollection<Geometry, GeoJsonProperties> = {
+            type: "FeatureCollection",
+            features: rawGeojson.features.filter((feature) : feature is Feature<Geometry, GeoJsonProperties> => feature.geometry !== null),
+        };
         coordinates = extractCoordinates(geojson);
       } else if (fileType === "zip") {
         coordinates = await parseShapefileZip(file);
@@ -92,15 +98,15 @@ const Dropzone: React.FC<{ onDrop: (files: File[]) => void }> = ({ onDrop }) => 
   );
 };
 
-const extractCoordinates = (geojson: any): [number, number][] => {
+const extractCoordinates = (geojson: FeatureCollection<Geometry, GeoJsonProperties>): [number, number][] => {
     if (!geojson.features || geojson.features.length === 0) return [];
     
     return geojson.features
-      .filter((feature: any) => feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")
-      .flatMap((feature: any) =>
+      .filter((feature) : feature is Feature<Polygon | MultiPolygon, GeoJsonProperties> => feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")
+      .flatMap((feature) =>
         feature.geometry.type === "Polygon"
-          ? feature.geometry.coordinates.flat() // Flatten Polygon (single array)
-          : feature.geometry.coordinates.flat(2) // Deep flatten MultiPolygon (nested arrays)
+          ? feature.geometry.coordinates.flat() as [number,number][]
+          : feature.geometry.coordinates.flat(2) as [number,number][]
       );
   };
 
