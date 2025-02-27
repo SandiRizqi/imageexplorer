@@ -18,6 +18,7 @@
     "@turf/turf": "^7.2.0",
     "@types/geojson": "^7946.0.16",
     "@types/shpjs": "^3.4.7",
+    "framer-motion": "^12.4.7",
     "jszip": "^3.10.1",
     "lucide-react": "^0.476.0",
     "maplibre-gl": "^5.1.1",
@@ -27,7 +28,8 @@
     "react-dom": "^18",
     "react-dropzone": "^14.3.8",
     "react-icons": "^5.5.0",
-    "shapefile": "^0.6.6"
+    "shapefile": "^0.6.6",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@types/node": "^20",

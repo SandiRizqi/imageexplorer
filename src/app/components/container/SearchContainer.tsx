@@ -1,10 +1,53 @@
 import React from 'react';
+import { useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
+import { ChevronUp } from 'lucide-react';
 
 
 export default function SearchContainer() {
+    const [isFilterExpanded, setIsFilterExpanded] = useState<boolean>(false);
+
+    const toggleFilter = () => {
+        setIsFilterExpanded((prev) => !prev);
+    };
+
     return (
-        <div>
+        <>
+            <div
+                className="p-3 text-md bg-gray-800 border-b border-gray-600 h-[50px] flex items-center justify-between cursor-pointer transition-all duration-300 shadow-xl"
+                onClick={toggleFilter}
+            >
+                <div className="flex items-center">
+                    <span className="text-gray-400 font-semibold">Filters</span>
+                    <span className="text-gray-300 text-xs ml-2">
+
+                    </span>
+                </div>
+
+                {/* Animated Arrow Icon */}
+                <div
+                    className={`transition-transform duration-300  ${isFilterExpanded ? "rotate-180" : "rotate-0"
+                        }`}
+                >
+                    <ChevronUp size={22} color="#9ca3af" />
+                </div>
+            </div>
+
+            {/* Expanding Filter Section */}
+            <div
+                className={`overflow-hidden transition-all duration-300 ${isFilterExpanded ? "h-[50%]" : "h-0"
+                    }`}
+            >
+                <div className="p-4">
+                    {/* Add filter controls here */}
+
+
+
+                </div>
+            </div>
+
+
+
             {/* Content */}
             <div className="mt-0">
                 <div className="overflow-x-auto">
@@ -41,6 +84,23 @@ export default function SearchContainer() {
                 </div>
             </div>
 
-        </div>
+
+            {/* Footer Buttons */}
+            <div className="absolute bottom-0 w-full bg-gray-800 p-4 flex flex-col items-center border-t border-gray-300">
+                <p className="text-xs text-gray-200">0 / 0 selected</p>
+                <div className="flex gap-2 w-full mt-2">
+                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-4 rounded-md text-xs hover:bg-yellow-400">
+                        CLEAR
+                    </button>
+                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-4 rounded-md text-xs hover:bg-yellow-400">
+                        REVIEW/SAVE
+                    </button>
+                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-4 rounded-md text-xs hover:bg-yellow-400">
+                        SUBMIT FOR QUOTE
+                    </button>
+                </div>
+            </div>
+
+        </>
     )
 }

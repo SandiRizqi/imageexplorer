@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import SearchContainer from '../container/SearchContainer';
 import AccountContainer from '../container/AccountContainer';
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 
 interface SidebarProps {
@@ -10,6 +12,8 @@ interface SidebarProps {
 
 export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
     const [activeTab, setActiveTab] = useState<'search' | 'account'>('search');
+    
+
 
     return (
         <div>
@@ -36,22 +40,36 @@ export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
                     </button>
                 </div>
 
-                
+
 
                 {/* Content */}
                 <div className='flex flex-col h-[calc(100%-100px)]'>
-                    {activeTab === 'search' ? (
-                        <>
-                            <div className="p-3 text-xs bg-gray-800 border-b border-gray-600 h-[50px] flex items-center">
-                                <span className="text-gray-400">Filters </span>
-                                <span className="text-gray-300 text-xs">39/71 datasets, Res. &lt; 2.0m, Cloud &lt; 100%, Off-Nadir &lt; 60°</span>
-                            </div>
-                            <SearchContainer />
-                        </>
+                    <AnimatePresence mode="wait">
+                        {activeTab === 'search' ? (
+                            <motion.div
+                                key="search"
+                                initial={{ x: "-100%" }}
+                                animate={{ x: "0%" }}
+                                exit={{ x: "100%" }}
+                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                className="w-full h-full"
+                            >
+                                <SearchContainer />
+                            </motion.div>
+                                
+                        ) : (
+                            <motion.div
+                                initial={{ x: "-100%" }}
+                                animate={{ x: "0%" }}
+                                exit={{ x: "100%" }}
+                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                className="w-full h-full"
+                            >
+                                <AccountContainer />
+                            </motion.div>
+                        )}
 
-                    ) : (
-                        <AccountContainer />
-                    )}
+                    </AnimatePresence>
                 </div>
             </div>
         </div>

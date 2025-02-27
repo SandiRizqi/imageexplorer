@@ -11,7 +11,7 @@ export default function AuthModal() {
     <div>
       {/* Button to Open Modal */}
       <button
-        className="bg-yellow-500 px-3 py-2 rounded-md text-gray-800 shadow-md text-xs font-semibold"
+        className="bg-yellow-500 px-3 py-2 rounded-md text-gray-800 shadow-md text-xs font-semibold mr-4"
         onClick={() => setIsOpen(true)}
       >
         LOGIN/SIGNUP

@@ -40,7 +40,7 @@ export default function ToolsContainer() {
 
 
     return (
-        <div className="flex items-center justify-center gap-1 py-1" onMouseLeave={() => setTimeout(() => setActive(null), 500)}>
+        <div className="flex items-center justify-center gap-2 py-1" onMouseLeave={() => setTimeout(() => setActive(null), 500)}>
             {Tools.map((obj, idx) => (
                 <div
                     key={idx}

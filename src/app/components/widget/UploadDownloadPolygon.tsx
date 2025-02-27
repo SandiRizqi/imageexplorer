@@ -132,7 +132,7 @@ const PolygonDownloadModal: React.FC<PolygonDownloadModalProps> = ({ isOpen, onC
 
     return (
         <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <DialogPanel className="bg-gray-900 p-6 rounded-md text-center text-white">
+            <DialogPanel className="bg-gray-900 p-6 rounded-md text-center text-white w-[90%] max-w-md">
                 <DialogTitle className="text-lg font-bold text-yellow-400">Save Your Polygon</DialogTitle>
                 <p className="text-sm my-2 text-xs">Choose which format you would like to receive and your download will begin immediately.</p>
                 <br />
@@ -148,9 +148,9 @@ const PolygonDownloadModal: React.FC<PolygonDownloadModalProps> = ({ isOpen, onC
                             onChange={(e) => setFormat(e.target.value)}
                         >
                             <option value="" disabled>Select format</option>
-                            <option value="geojson">GeoJSON</option>
-                            <option value="kml">KML/KMZ</option>
-                            <option value="zip">Shapefile (ZIP)</option>
+                            <option value="geojson" className='text-gray-200'>GeoJSON</option>
+                            <option value="kml" className='text-gray-200'>KML/KMZ</option>
+                            <option value="zip" className='text-gray-200'>Shapefile (ZIP)</option>
                         </select>
                     </div>
 
@@ -223,7 +223,7 @@ const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <DialogPanel className="bg-gray-900 p-6 rounded-md text-center text-white">
+      <DialogPanel className="bg-gray-900 p-6 rounded-md text-center text-white w-[90%] max-w-md">
         <DialogTitle className="text-lg font-bold text-yellow-400">Upload Polygon</DialogTitle>
         <p className="text-sm my-2 text-xs">You can define an area by uploading a KML/KMZ, GeoJSON or zipped shapefile.</p>
         <p className="text-sm my-2 text-xs">All files must contain a single polygon.</p>

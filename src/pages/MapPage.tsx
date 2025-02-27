@@ -10,6 +10,8 @@ import DeckGLOverlay from '../app/components/DeckGLOverlay';
 import ToolsContainer from '../app/components/container/ToolsContainer';
 import MapFooter from '../app/components/MapFooter';
 import { Menu } from 'lucide-react';
+import logo from '../app/components/assets/logo_ie.webp';
+import Image from 'next/image';
 
 
 
@@ -57,21 +59,25 @@ export default function MapPage() {
                         <Sidebar isMobile={isMobile} menuOpen={menuOpen} />
                         {/* Navbar */}
                         <div
-                            className={`absolute top-0 left-0 bg-gray-800 h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-lg`} // Added shadow-lg
+                            className={`absolute top-0 left-0 bg-gray-800 h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-xl`} // Added shadow-lg
                             style={{
                                 width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
                                 marginLeft: menuOpen && !isMobile ? "400px" : "0",
                             }}
                         >
-                            {/* Toggle Button */}
-                            <button
-                                onClick={() => setMenuOpen(!menuOpen)}
-                                className="text-white px-4  focus:outline-none "
-                            >
-                                <Menu />
-                            </button>
+                            <div className='flex flex-row items-center pl-4'>
+                                {/* Toggle Button */}
+                                <button
+                                    onClick={() => setMenuOpen(!menuOpen)}
+                                    className="text-white focus:outline-none mr-8"
+                                >
+                                    <Menu />
+                                </button>
+                                <Image src={logo} alt="Logo" width={50} height={50} className='mr-8' />
+                                <ToolsContainer />
+                            </div>
 
-                            <ToolsContainer />
+                            
 
                             {/* Login/Signup Button */}
                             <AuthModal />

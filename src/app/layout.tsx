@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Head from "next/head";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -14,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Image Explorer | 1.0",
-  description: "",
+  title: "Image Explorer | Map",
+  description: "we provide high-quality satellite imagery data to empower businesses, researchers, and decision-makers with cutting-edge geospatial insights.",
 };
 
 export default function RootLayout({
@@ -25,6 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="./favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="./favicon.ico" />
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
