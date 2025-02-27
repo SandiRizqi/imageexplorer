@@ -30,3 +30,25 @@ body {
 .input-style {
   @apply w-full bg-transparent border-b border-gray-600 p-2 focus:outline-none focus:border-yellow-500;
 }
+
+
+/* Thin scrollbar styles */
+::-webkit-scrollbar {
+  width: 5px; /* Thin scrollbar */
+  height: 5px; /* Thin scrollbar for horizontal scroll */
+}
+
+::-webkit-scrollbar-track {
+  background: white; /* Darker track */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #97a2b2; /* Gray thumb */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* Lighter gray when hovered */
+  width: 10px; /* Thin scrollbar */
+}

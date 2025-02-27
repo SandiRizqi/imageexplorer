@@ -16,7 +16,7 @@ export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
 
 
     return (
-        <div>
+        <div >
             {/* Sidebar */}
             <div
                 className={`absolute top-0 left-0 h-full bg-gray-100 text-white  transition-transform duration-300 ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}
@@ -43,7 +43,7 @@ export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
 
 
                 {/* Content */}
-                <div className='flex flex-col h-[calc(100%-100px)]'>
+                <div className='flex flex-col h-[calc(100%-100px)] overflow-hidden'>
                     <AnimatePresence mode="wait">
                         {activeTab === 'search' ? (
                             <motion.div
