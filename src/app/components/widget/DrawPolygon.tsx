@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useMap } from "./context/MapProvider";
+import { useMap } from "../context/MapProvider";
 import { MapMouseEvent, GeoJSONSource } from "maplibre-gl";
 import { Square, Trash2, Pentagon, Tangent } from "lucide-react";
-import { usePolygon } from "./context/PolygonProvider";
+import { usePolygon } from "../context/PolygonProvider";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 type DrawMode = "polygon" | "rectangle" | null;

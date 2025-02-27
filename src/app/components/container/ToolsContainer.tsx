@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Waypoints, Hand, Save, Ruler, Settings } from 'lucide-react';
-import DrawTool from '../DrawPolygon';
+import DrawTool from '../widget/DrawPolygon';
+import UploadDownloadPolygon from '../widget/UploadDownloadPolygon';
+
 
 export default function ToolsContainer() {
     const [active, setActive] = useState<string | null>(null);
@@ -21,7 +23,7 @@ export default function ToolsContainer() {
         {
             icon: <Save color="white" size={22} />,
             name: 'save',
-            content: null
+            content: <UploadDownloadPolygon />
         },
         {
             icon: <Ruler color="white" size={22} />,

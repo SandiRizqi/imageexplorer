@@ -51,10 +51,7 @@ const MapFooter: React.FC<MapFooterProps> = (props) => {
             className="absolute bottom-0 right-0 w-full bg-gray-800 text-white text-xs px-4 py-1 flex justify-between items-center"
             {...props} // Spread props for flexibility
         >
-            <div>
-                Contact Us : admin@geo-circle.com
-            </div>
-            <span className='text-gray-300'>Copyright@2025</span>
+            <span className='text-gray-300'></span>
             <div className='flex gap-5'>
                 <div>{totalArea.toFixed(2)} km²</div>
                 {cursorCoords && `Long : ${cursorCoords[0].toFixed(5)}  Lat: ${cursorCoords[1].toFixed(5)}`}

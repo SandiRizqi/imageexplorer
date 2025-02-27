@@ -28,7 +28,7 @@ export default function MapPage() {
         layers: [
             new ScatterplotLayer({
                 id: "scatterplot-layer",
-                data: [{ position: [106.8456, -6.2088], size: 100 }],
+                data: [{ position: [106.8456, -6.2088], size: 0 }],
                 getPosition: (d) => d.position,
                 getRadius: (d) => d.size,
                 getFillColor: [255, 0, 0, 255],
