@@ -11,7 +11,7 @@ type PolygonContextType = {
 export const usePolygon = () => {
   const context = useContext(PolygonContext);
   if (!context) {
-    throw new Error("useMap must be used within a MapProvider");
+    throw new Error("Polygon must be used within PolygonProvider");
   }
   return context;
 };

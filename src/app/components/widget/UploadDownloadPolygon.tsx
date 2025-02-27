@@ -4,11 +4,168 @@ import { useDropzone } from "react-dropzone";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { GeoJSONSource } from 'maplibre-gl';
 import * as shapefile from "shapefile";
-import JSZip from "jszip";
 import { DOMParser } from "@xmldom/xmldom";
 import { useMap } from '../context/MapProvider';
+import { usePolygon } from '../context/PolygonProvider';
+import shpwrite from "@mapbox/shp-write";
+import JSZip from 'jszip';
 import { Geometry, Feature, FeatureCollection, GeoJsonProperties, Polygon, MultiPolygon } from 'geojson';
 import * as toGeoJSON from "@tmcw/togeojson";
+
+
+interface PolygonDownloadModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+  }
+
+
+
+ 
+
+const PolygonDownloadModal: React.FC<PolygonDownloadModalProps> = ({ isOpen, onClose }) => {
+    const [fileName, setFileName] = useState("");
+    const [format, setFormat] = useState<string>("");
+    const {polygon} = usePolygon();
+    const [error, setError] = useState("");
+    
+
+    const convertGeoJSONtoKML = (geojson: GeoJSON.FeatureCollection): string => {
+        const header = `<?xml version="1.0" encoding="UTF-8"?>
+          <kml xmlns="http://www.opengis.net/kml/2.2">
+            <Document>`;
+      
+        const footer = `</Document></kml>`;
+      
+        const placemarks = geojson.features.map((feature) => {
+          if (feature.geometry.type !== "Polygon") return "";
+      
+          const coordinates = (feature.geometry.coordinates as number[][][])[0]
+            .map((coord) => coord.join(","))
+            .join(" ");
+      
+          return `
+            <Placemark>
+              <Polygon>
+                <outerBoundaryIs>
+                  <LinearRing>
+                    <coordinates>${coordinates}</coordinates>
+                  </LinearRing>
+                </outerBoundaryIs>
+              </Polygon>
+            </Placemark>`;
+        });
+      
+        return header + placemarks.join("\n") + footer;
+      };
+
+    function downloadBlob (url: string, format: string) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${fileName}.${format}`; // Set the file name
+        document.body.appendChild(a); // Append to DOM (not necessary but ensures click works)
+        a.click(); // Trigger download
+        document.body.removeChild(a); // Clean up
+        URL.revokeObjectURL(url);
+
+    }
+    
+
+
+    const downloadGeoJSON = () => {
+        const polygonData: GeoJSON.FeatureCollection = {
+            type: "FeatureCollection",
+            features: [{ type: "Feature", geometry: { type: "Polygon", coordinates: [polygon] }, properties: {} }],
+        };
+        const blob = new Blob([JSON.stringify(polygonData, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        downloadBlob(url, 'geojson');
+        
+      };
+ 
+
+      const downloadKML = () => {
+        const polygonData: GeoJSON.FeatureCollection = {
+            type: "FeatureCollection",
+            features: [{ type: "Feature", geometry: { type: "Polygon", coordinates: [polygon] }, properties: {} }],
+        };
+        const kmlData = convertGeoJSONtoKML(polygonData);
+        const blob = new Blob([kmlData], { type: "application/vnd.google-earth.kml+xml" });
+        const url = URL.createObjectURL(blob);
+        downloadBlob(url, 'kml')
+      };
+
+    const downloadZIP = async () => {
+        const polygonData: GeoJSON.FeatureCollection = {
+            type: "FeatureCollection",
+            features: [{ type: "Feature", geometry: { type: "Polygon", coordinates: [polygon] }, properties: {} }],
+        };
+        const options: shpwrite.ZipOptions = {
+            outputType: "blob",
+            compression: "STORE",
+          };
+        const blob = await shpwrite.zip(polygonData, options) as Blob;
+        const url = URL.createObjectURL(blob);
+        downloadBlob(url, 'zip')
+    };
+    
+      
+
+    const handleDownload = () => {
+        if (!fileName.trim() || !format) {
+          setError("Please enter a filename and select a format.");
+          return;
+        }
+        setError(""); // Clear errors
+        if (format === "geojson") downloadGeoJSON();
+        else if (format === "kml") downloadKML();
+        else if (format === "zip") downloadZIP();
+        else setError("Choose the file format.")
+      };
+
+    useEffect(() => {
+        setFileName("");
+        setFormat("");
+        setError("");
+    },[isOpen])
+ 
+
+
+    return (
+        <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <DialogPanel className="bg-gray-900 p-6 rounded-md text-center text-white">
+                <DialogTitle className="text-lg font-bold text-yellow-400">Save Your Polygon</DialogTitle>
+                <p className="text-sm my-2 text-xs">Choose which format you would like to receive and your download will begin immediately.</p>
+                <br />
+                <form className="mt-4 text-sm">
+                    <div className="flex space-x-2">
+                        <input type="text" placeholder="Filename *" className="input-style w-1/2" value={fileName} onChange={(e) => setFileName(e.target.value)} required />
+                    </div>
+                    <div className="flex flex-col mb-3">
+                        <select
+                            className="bg-gray-900 text-gray-200 py-2  input-style"
+                            required
+                            value={format}
+                            onChange={(e) => setFormat(e.target.value)}
+                        >
+                            <option value="" disabled>Select format</option>
+                            <option value="geojson">GeoJSON</option>
+                            <option value="kml">KML/KMZ</option>
+                            <option value="zip">Shapefile (ZIP)</option>
+                        </select>
+                    </div>
+
+                </form>
+                {error && <p className="text-red-500 text-xs">{error}</p>}
+
+                <div className="flex justify-end mt-4">
+                    <button onClick={handleDownload} className="bg-yellow-600 px-3 py-1 rounded-xs">
+                        Download
+                    </button>
+                </div>
+            </DialogPanel>
+        </Dialog>
+    )
+}
 
 
 
@@ -66,16 +223,17 @@ const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <DialogPanel className="bg-gray-900 p-6 rounded-lg w-96 text-white">
+      <DialogPanel className="bg-gray-900 p-6 rounded-md text-center text-white">
         <DialogTitle className="text-lg font-bold text-yellow-400">Upload Polygon</DialogTitle>
-        <p className="text-sm my-2">Upload a KML, KMZ, GeoJSON, or SHP (zipped) file.</p>
+        <p className="text-sm my-2 text-xs">You can define an area by uploading a KML/KMZ, GeoJSON or zipped shapefile.</p>
+        <p className="text-sm my-2 text-xs">All files must contain a single polygon.</p>
 
         <Dropzone onDrop={onDrop} />
 
-        {error && <p className="text-red-400 mt-2">{error}</p>}
+        {error && <p className="text-red-400 mt-2 text-xs">{error}</p>}
 
         <div className="flex justify-end mt-4">
-          <button onClick={onClose} className="bg-gray-600 px-3 py-1 rounded">
+          <button onClick={onClose} className="bg-gray-600 px-3 py-1 rounded-xs">
             Close
           </button>
         </div>
@@ -143,7 +301,20 @@ type Mode = "upload" | "download" | null;
 
 export default function UploadDownloadPolygon() {
     const [mode, setMode] = useState<Mode>(null);
+    const [isPolygon, setIsPolygon] = useState<boolean>(false);
+    const {polygon, setPolygon} = usePolygon();
     const {map} = useMap();
+
+
+    useEffect(() => {
+        if(polygon.length > 2) {
+            setIsPolygon(true);
+        } else {
+            setIsPolygon(false);
+        }
+
+    }, [polygon])
+   
 
     const drawPolygon = (coords: [number, number][]) => {
             if (!map) return;
@@ -200,6 +371,7 @@ export default function UploadDownloadPolygon() {
             duration: 1000, // Smooth animation
         });
         setMode(null);
+        setPolygon(coords);
         drawPolygon(coords);
 
     }
@@ -225,7 +397,8 @@ export default function UploadDownloadPolygon() {
             <div className="relative group">
                 <button
                     onClick={() => setMode("download")}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full ${mode === "download" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
+                    disabled={!isPolygon}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${mode === "download" ? 'bg-yellow-600' : 'bg-gray-500' } ${isPolygon && "hover:bg-yellow-500 bg-gray-700"} transition-colors duration-200 shadow-xl`}
                 >
                     <Download color="white" />
                     <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-gray-700 text-xs rounded px-2 py-1 whitespace-nowrap">
@@ -242,6 +415,12 @@ export default function UploadDownloadPolygon() {
               onUpload={(coords) => {
                   handleUpload(coords);
               }}
+          />
+
+          <PolygonDownloadModal
+              isOpen={mode === "download"}
+              onClose={() => setMode(null)}
+
           />
 
         </div>

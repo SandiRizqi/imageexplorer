@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Image Explorer:1.0",
+  title: "Image Explorer | 1.0",
   description: "",
 };
 
