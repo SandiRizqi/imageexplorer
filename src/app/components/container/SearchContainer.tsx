@@ -19,7 +19,7 @@ export default function SearchContainer() {
                 onClick={toggleFilter}
             >
                 <div className="flex items-center">
-                    <span className="text-gray-400 font-semibold">Filters</span>
+                    <span className="text-gray-300 ">Filters</span>
                     <span className="text-gray-300 text-xs ml-2">
 
                     </span>
@@ -55,11 +55,11 @@ export default function SearchContainer() {
                 <div className="overflow-x-auto h-full">
                     <div className="max-h-full overflow-y-auto">
                         <table className="w-full text-left text-sm">
-                            <thead className="border-b border-gray-700 bg-gray-800 sticky top-0">
-                                <tr className="text-xs shadow-xl">
+                            <thead className="border-b border-gray-700 bg-gray-800 sticky top-0 h-[50px] shadow-xl">
+                                <tr className="text-xs">
                                     <th className="p-2"><input type="checkbox" /></th>
                                     <th className="p-2">Sat</th>
-                                    <th className="p-2">Date ↓</th>
+                                    <th className="p-2">Date</th>
                                     <th className="p-2">Res</th>
                                     <th className="p-2">Cloud</th>
                                     <th className="p-2">Off-Nadir</th>
