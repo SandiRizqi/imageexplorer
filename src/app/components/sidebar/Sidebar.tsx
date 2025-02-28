@@ -51,7 +51,7 @@ export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
                                 initial={{ x: "-100%" }}
                                 animate={{ x: "0%" }}
                                 exit={{ x: "100%" }}
-                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                transition={{ duration: 0.1, ease: "easeInOut" }}
                                 className="w-full h-full"
                             >
                                 <SearchContainer />
@@ -62,7 +62,7 @@ export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
                                 initial={{ x: "-100%" }}
                                 animate={{ x: "0%" }}
                                 exit={{ x: "100%" }}
-                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                transition={{ duration: 0.1, ease: "easeInOut" }}
                                 className="w-full h-full"
                             >
                                 <AccountContainer />

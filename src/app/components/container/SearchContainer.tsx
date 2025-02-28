@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { ChevronUp } from 'lucide-react';
+import DatasetFilter from '../widget/DatasetFilter';
 import responseData from '../assets/responseCitra.json';
 
 
@@ -16,7 +17,7 @@ export default function SearchContainer() {
     return (
         <div className="flex flex-col h-screen">
             <div
-                className="p-3 text-md bg-gray-800 border-b border-gray-600 h-[50px] flex items-center justify-between cursor-pointer transition-all duration-300 shadow-xl"
+                className="p-3 text-md bg-gray-800  h-[50px] flex items-center justify-between cursor-pointer transition-all duration-300 shadow-xl"
                 onClick={toggleFilter}
             >
                 <div className="flex items-center">
@@ -40,50 +41,47 @@ export default function SearchContainer() {
                 className={`overflow-hidden transition-all duration-300 ${isFilterExpanded ? "h-[50%]" : "h-0"
                     }`}
             >
-                <div className="p-2">
+                <div className="p-2 px-4 bg-gray-800 h-full flex flex-col">
                     {/* Add filter controls here */}
-                    <p className="text-gray-600 text-xs">Filter options go here...</p>
-
-
-
+                    <DatasetFilter />
                 </div>
             </div>
 
 
 
             {/* Main Content (Table) */}
-<div className="flex-grow overflow-hidden">
-    <div className="h-full">
-        <div className="max-h-full overflow-y-auto">
-            <table className="w-full table-fixed text-left text-sm max-w-full">
-                <thead className="border-b border-gray-700 bg-gray-800 sticky top-0 h-[50px] shadow-xl">
-                    <tr className="text-xs">
-                        <th className="p-2  w-[30px]"><input type="checkbox" /></th>
-                        <th className="p-2 min-w-[20px]">Sat</th>
-                        <th className="p-2 w-[80px]">Date</th>
-                        <th className="p-2 min-w-[40px]">Res</th>
-                        <th className="p-2 min-w-[40px]">Cloud</th>
-                        <th className="p-2 max-w-[40px] whitespace-nowrap">Off-Nadir</th>
-                        <th className="p-2 min-w-[20px]"></th>
-                    </tr>
-                </thead>
-                <tbody className="bg-white text-gray-800">
-                    {responseData.results.map((row, index) => (
-                        <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px] text-left">
-                            <td className="p-2"><input type="checkbox" /></td>
-                            <td className="p-2 whitespace-nowrap">{row.collection_vehicle_short}</td>
-                            <td className="p-2 whitespace-nowrap">{row.collection_date}</td>
-                            <td className="p-2 whitespace-nowrap">{row.resolution}</td>
-                            <td className="p-2 whitespace-nowrap">{row.cloud_cover_percent} %</td>
-                            <td className={`p-2 font-semibold ${row.color || ''} whitespace-nowrap`}>{100}</td>
-                            <td className="p-2 whitespace-nowrap"><FaInfoCircle className="text-gray-400 hover:text-gray-200" /></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+            <div className={`flex-grow overflow-hidden transition-all duration-300  ${isFilterExpanded ? "max-h-[50%]": "max-h-[100%]"}`}>
+                <div className="h-full">
+                    <div className="max-h-full overflow-y-auto">
+                        <table className="w-full table-fixed text-left text-sm max-w-full">
+                            <thead className="border-b border-gray-700 bg-gray-300 text-gray-800 sticky top-0 h-[50px] shadow-lg">
+                                <tr className="text-xs">
+                                    <th className="p-2  w-[30px]"><input type="checkbox" className='accent-yellow-400'/></th>
+                                    <th className="p-2 min-w-[20px]">Sat</th>
+                                    <th className="p-2 w-[80px]">Date</th>
+                                    <th className="p-2 min-w-[40px]">Res</th>
+                                    <th className="p-2 min-w-[40px]">Cloud</th>
+                                    <th className="p-2 max-w-[40px] whitespace-nowrap">Off-Nadir</th>
+                                    <th className="p-2 min-w-[20px]"></th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white text-gray-800">
+                                {responseData.results.map((row, index) => (
+                                    <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px] text-left">
+                                        <td className="p-2"><input type="checkbox" className='accent-yellow-400' /></td>
+                                        <td className="p-2 whitespace-nowrap">{row.collection_vehicle_short}</td>
+                                        <td className="p-2 whitespace-nowrap">{row.collection_date}</td>
+                                        <td className="p-2 whitespace-nowrap">{row.resolution}</td>
+                                        <td className="p-2 whitespace-nowrap">{row.cloud_cover_percent} %</td>
+                                        <td className={`p-2 font-semibold ${row.color || ''} whitespace-nowrap`}>{100}</td>
+                                        <td className="p-2 whitespace-nowrap"><FaInfoCircle className="text-gray-400 hover:text-gray-200" /></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
 
 
