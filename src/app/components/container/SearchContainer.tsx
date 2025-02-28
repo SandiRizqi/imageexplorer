@@ -2,11 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { ChevronUp } from 'lucide-react';
-import { ImagesData } from '../data';
+import responseData from '../assets/responseCitra.json';
 
 
 export default function SearchContainer() {
     const [isFilterExpanded, setIsFilterExpanded] = useState<boolean>(false);
+    console.log(responseData)
 
     const toggleFilter = () => {
         setIsFilterExpanded((prev) => !prev);
@@ -51,38 +52,39 @@ export default function SearchContainer() {
 
 
             {/* Main Content (Table) */}
-            <div className="flex-grow overflow-hidden">
-                <div className="overflow-x-auto h-full">
-                    <div className="max-h-full overflow-y-auto">
-                        <table className="w-full text-left text-sm">
-                            <thead className="border-b border-gray-700 bg-gray-800 sticky top-0 h-[50px] shadow-xl">
-                                <tr className="text-xs">
-                                    <th className="p-2"><input type="checkbox" /></th>
-                                    <th className="p-2">Sat</th>
-                                    <th className="p-2">Date</th>
-                                    <th className="p-2">Res</th>
-                                    <th className="p-2">Cloud</th>
-                                    <th className="p-2">Off-Nadir</th>
-                                    <th className="p-2"></th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white text-gray-800">
-                                {ImagesData.map((row, index) => (
-                                    <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px]">
-                                        <td className="p-2"><input type="checkbox" /></td>
-                                        <td className="p-2">{row.sat}</td>
-                                        <td className="p-2">{row.date}</td>
-                                        <td className="p-2">{row.res}</td>
-                                        <td className="p-2">{row.cloud}</td>
-                                        <td className={`p-2 font-semibold ${row.color || ''}`}>{row.offNadir}</td>
-                                        <td className="p-2"><FaInfoCircle className="text-gray-400 hover:text-gray-200 cursor-pointer" /></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+<div className="flex-grow overflow-hidden">
+    <div className="h-full">
+        <div className="max-h-full overflow-y-auto">
+            <table className="w-full table-fixed text-left text-sm max-w-full">
+                <thead className="border-b border-gray-700 bg-gray-800 sticky top-0 h-[50px] shadow-xl">
+                    <tr className="text-xs">
+                        <th className="p-2  w-[30px]"><input type="checkbox" /></th>
+                        <th className="p-2 min-w-[20px]">Sat</th>
+                        <th className="p-2 w-[80px]">Date</th>
+                        <th className="p-2 min-w-[40px]">Res</th>
+                        <th className="p-2 min-w-[40px]">Cloud</th>
+                        <th className="p-2 max-w-[40px] whitespace-nowrap">Off-Nadir</th>
+                        <th className="p-2 min-w-[20px]"></th>
+                    </tr>
+                </thead>
+                <tbody className="bg-white text-gray-800">
+                    {responseData.results.map((row, index) => (
+                        <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px] text-left">
+                            <td className="p-2"><input type="checkbox" /></td>
+                            <td className="p-2 whitespace-nowrap">{row.collection_vehicle_short}</td>
+                            <td className="p-2 whitespace-nowrap">{row.collection_date}</td>
+                            <td className="p-2 whitespace-nowrap">{row.resolution}</td>
+                            <td className="p-2 whitespace-nowrap">{row.cloud_cover_percent} %</td>
+                            <td className={`p-2 font-semibold ${row.color || ''} whitespace-nowrap`}>{100}</td>
+                            <td className="p-2 whitespace-nowrap"><FaInfoCircle className="text-gray-400 hover:text-gray-200" /></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -90,13 +92,13 @@ export default function SearchContainer() {
             <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center border-t border-gray-300 pb-4">
                 <p className="text-xs text-gray-200">0 / 0 selected</p>
                 <div className="flex gap-2 w-full mt-2">
-                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-4 rounded-md text-xs hover:bg-yellow-400">
+                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
                         CLEAR
                     </button>
-                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-4 rounded-md text-xs hover:bg-yellow-400">
+                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
                         SAVE
                     </button>
-                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-4 rounded-md text-xs hover:bg-yellow-400">
+                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
                         SUBMIT FOR QUOTE
                     </button>
                 </div>
