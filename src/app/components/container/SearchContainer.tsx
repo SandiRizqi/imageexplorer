@@ -41,7 +41,7 @@ export default function SearchContainer() {
                 className={`overflow-hidden transition-all duration-300 ${isFilterExpanded ? "h-[50%]" : "h-0"
                     }`}
             >
-                <div className="p-2 px-4 bg-gray-800 h-full flex flex-col max-h-[50%] overflow-y-auto">
+                <div className="p-2 px-4 bg-gray-800 h-full flex flex-col overflow-y-auto">
                     {/* Add filter controls here */}
                     <DatasetFilter />
                 </div>
