@@ -15,7 +15,7 @@ export default function DatasetFilter() {
     return (
         <>
             {/* Main Content */}
-            <div className="flex-grow space-y-4 mt-4">
+            <div className="flex-grow space-y-4 mt-4 max-h-[50%]">
                 {/* Date Inputs */}
                 <div className="flex justify-between">
                     <div className="flex flex-col w-1/2 pr-2">
