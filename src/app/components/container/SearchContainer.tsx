@@ -8,7 +8,7 @@ import { useConfig } from '../context/ConfigProvider';
 import { GeoJSONSource, ImageSource } from 'maplibre-gl';
 
 
-type ImageItem = {
+interface ImageItem {
     objectid: string;
     preview_url: string;
     topleft: { x: number; y: number };
@@ -87,7 +87,7 @@ export default function SearchContainer() {
                 paint: {
                     "raster-opacity": 1.0,
                 },
-            });
+            }, "polygon-border");
         }
     };
 
