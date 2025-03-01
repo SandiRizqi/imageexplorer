@@ -4,6 +4,7 @@ import { ScatterplotLayer } from "@deck.gl/layers";
 import MapInstance from '../app/components/MapInstance';
 import Sidebar from '../app/components/sidebar/Sidebar';
 import AuthModal from '../app/components/auth/AuthModal';
+import { ConfigProvider } from '../app/components/context/ConfigProvider';
 import { MapProvider } from '../app/components/context/MapProvider';
 import { PolygonProvider } from '../app/components/context/PolygonProvider';
 import DeckGLOverlay from '../app/components/DeckGLOverlay';
@@ -52,60 +53,61 @@ export default function MapPage() {
 
     return (
         <div>
-            <MapProvider>
-                <PolygonProvider>
-                    <div className="relative w-screen h-screen">
-                        {/* Sidebar */}
-                        <Sidebar isMobile={isMobile} menuOpen={menuOpen} />
-                        {/* Navbar */}
-                        <div
-                            className={`absolute top-0 left-0 bg-gray-800 h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-xl`} // Added shadow-lg
-                            style={{
-                                width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
-                                marginLeft: menuOpen && !isMobile ? "400px" : "0",
-                            }}
-                        >
-                            <div className='flex flex-row items-center pl-4'>
-                                {/* Toggle Button */}
-                                <button
-                                    onClick={() => setMenuOpen(!menuOpen)}
-                                    className="text-white focus:outline-none mr-8"
-                                >
-                                    <Menu />
-                                </button>
-                                <Image src={logo} alt="Logo" width={50} height={50} className='mr-8' />
-                                <ToolsContainer />
+            <ConfigProvider>
+                <MapProvider>
+                    <PolygonProvider>
+                        <div className="relative w-screen h-screen">
+                            {/* Sidebar */}
+                            <Sidebar isMobile={isMobile} menuOpen={menuOpen} />
+                            {/* Navbar */}
+                            <div
+                                className={`absolute top-0 left-0 bg-gray-800 h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-xl`} // Added shadow-lg
+                                style={{
+                                    width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
+                                    marginLeft: menuOpen && !isMobile ? "400px" : "0",
+                                }}
+                            >
+                                <div className='flex flex-row items-center pl-4'>
+                                    {/* Toggle Button */}
+                                    <button
+                                        onClick={() => setMenuOpen(!menuOpen)}
+                                        className="text-white focus:outline-none mr-8"
+                                    >
+                                        <Menu />
+                                    </button>
+                                    <Image src={logo} alt="Logo" width={50} height={50} className='mr-8' />
+                                    <ToolsContainer />
+                                </div>
+
+
+
+                                {/* Login/Signup Button */}
+                                <AuthModal />
                             </div>
 
-                            
-
-                            {/* Login/Signup Button */}
-                            <AuthModal />
+                            {/* Map Container */}
+                            <div
+                                className={`transition-all duration-300 h-screen`}
+                                style={{
+                                    width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
+                                    marginLeft: menuOpen && isMobile ? "0" : menuOpen ? "400px" : "0",
+                                }}
+                            >
+                                <MapInstance
+                                    id="map"
+                                    mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+                                    mapView={mapView}
+                                />
+                                <DeckGLOverlay {...deckProps} />
+                                <MapFooter style={{
+                                    width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
+                                    marginLeft: menuOpen && !isMobile ? "400px" : "0",
+                                }} />
+                            </div>
                         </div>
-
-                        {/* Map Container */}
-                        <div
-                            className={`transition-all duration-300 h-screen`}
-                            style={{
-                                width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
-                                marginLeft: menuOpen && isMobile ? "0" : menuOpen ? "400px" : "0",
-                            }}
-                        >
-                            <MapInstance
-                                id="map"
-                                mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-                                mapView={mapView}
-                            />
-                            <DeckGLOverlay {...deckProps} />
-                            <MapFooter style={{
-                                width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
-                                marginLeft: menuOpen && !isMobile ? "400px" : "0",
-                            }} />
-                        </div>
-                    </div>
-                </PolygonProvider>
-            </MapProvider>
-
+                    </PolygonProvider>
+                </MapProvider>
+            </ConfigProvider>
         </div>
     )
 }

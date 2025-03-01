@@ -1,18 +1,130 @@
 import React from 'react';
-import { useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { ChevronUp } from 'lucide-react';
 import DatasetFilter from '../widget/DatasetFilter';
 import responseData from '../assets/responseCitra.json';
+import { useMap } from '../context/MapProvider';
+import { useConfig } from '../context/ConfigProvider';
+import { GeoJSONSource, ImageSource } from 'maplibre-gl';
 
+
+type ImageItem = {
+    objectid: string;
+    preview_url: string;
+    topleft: { x: number; y: number };
+    bottomright: { x: number; y: number };
+    [key: string]: string | number | object | null; // Allows additional properties
+};
+
+type ImageOverlay = {
+    id: string;
+    url: string;
+    coordinates: [[number, number], [number, number], [number, number], [number, number]];
+};
 
 export default function SearchContainer() {
-    const [isFilterExpanded, setIsFilterExpanded] = useState<boolean>(false);
-    console.log(responseData)
+    const {map} = useMap();
+    const {config, setConfig} = useConfig();
+
+
+    const drawPolygonPreview = (coords: [number, number][]) => {
+            if (!map) return;
+            const polygonData: GeoJSON.FeatureCollection = {
+                type: "FeatureCollection",
+                features: [{ type: "Feature", geometry: { type: "Polygon", coordinates: [coords] }, properties: {} }],
+            };
+    
+            if (map.getSource("polygon-preview")) {
+                (map.getSource("polygon-preview") as GeoJSONSource).setData(polygonData);
+            } else {
+                map.addSource("polygon-preview", { type: "geojson", data: polygonData });
+                map.addLayer({
+                    id: "polygon-preview-border",
+                    type: "line",
+                    source: "polygon-preview",
+                    paint: {
+                        "line-color": "#2a9df4",
+                        "line-width": 4,
+                        "line-opacity": 1, // Transparent border
+                    },
+                });
+            }
+    };
+
+
+    const drawImagePreview  = (item: ImageItem) => {
+        if(!map) return;
+        const bbox: [[number, number], [number, number], [number, number], [number, number]] = [
+            [item.topleft.x, item.topleft.y],  // Top-left
+            [item.bottomright.x, item.topleft.y], // Top-right
+            [item.bottomright.x, item.bottomright.y], // Bottom-right
+            [item.topleft.x, item.bottomright.y], // Bottom-left
+        ]
+
+        const imageOverlay: ImageOverlay = {
+            id: item.objectid ,
+            url: item.preview_url,
+            coordinates: bbox
+        }
+
+        if (map.getSource(imageOverlay.id)) {
+            (map.getSource(imageOverlay.id) as ImageSource)
+            .updateImage({
+                    url: imageOverlay.url,
+                    coordinates: imageOverlay.coordinates,
+                }
+            );
+        } else {
+            map.addSource(imageOverlay.id, {
+                type: "image",
+                url: imageOverlay.url,
+                coordinates: imageOverlay.coordinates,
+            });
+            map.addLayer({
+                id: imageOverlay.id,
+                type: "raster",
+                source: imageOverlay.id,
+                paint: {
+                    "raster-opacity": 1.0,
+                },
+            });
+        }
+    };
+
+
+
+    // const removeShapesPreview = () => {
+    //     if (map?.getLayer("polygon-preview-fill")) {
+    //         map.removeLayer("polygon-preview-fill");
+
+    //     }
+    //     if (map?.getLayer("polygon-preview-border")) {
+    //         map.removeLayer("polygon-preview-border");
+    //         map.removeSource("polygon-preview");
+    //     }
+    // };
+
 
     const toggleFilter = () => {
-        setIsFilterExpanded((prev) => !prev);
+        setConfig((prev) => ({...prev, isFilterOpen: !prev.isFilterOpen}));
     };
+
+    const hoverItemHandler = (item: ImageItem) => {
+        const coords: [number, number][] = [
+            [item.topleft.x, item.topleft.y],  // Top-left
+            [item.bottomright.x, item.topleft.y], // Top-right
+            [item.bottomright.x, item.bottomright.y], // Bottom-right
+            [item.topleft.x, item.bottomright.y], // Bottom-left
+            [item.topleft.x, item.topleft.y] 
+        ]
+
+
+        drawPolygonPreview(coords);
+    }
+
+    const selectItem = (item: ImageItem) => {
+        drawImagePreview(item);
+    }
 
     return (
         <div className="flex flex-col h-screen">
@@ -29,7 +141,7 @@ export default function SearchContainer() {
 
                 {/* Animated Arrow Icon */}
                 <div
-                    className={`transition-transform duration-300  ${isFilterExpanded ? "rotate-180" : "rotate-0"
+                    className={`transition-transform duration-300  ${config.isFilterOpen ? "rotate-180" : "rotate-0"
                         }`}
                 >
                     <ChevronUp size={22} color="#9ca3af" />
@@ -38,7 +150,7 @@ export default function SearchContainer() {
 
             {/* Expanding Filter Section */}
             <div
-                className={`overflow-hidden transition-all duration-300 ${isFilterExpanded ? "h-[50%]" : "h-0"
+                className={`overflow-hidden transition-all duration-300 ${config.isFilterOpen ? "h-[50%]" : "h-0"
                     }`}
             >
                 <div className="p-2 px-4 bg-gray-800 h-full flex flex-col overflow-y-auto">
@@ -50,7 +162,7 @@ export default function SearchContainer() {
 
 
             {/* Main Content (Table) */}
-            <div className={`flex-grow overflow-hidden transition-all duration-300  ${isFilterExpanded ? "max-h-[50%]": "max-h-[100%]"}`}>
+            <div className={`flex-grow overflow-hidden transition-all duration-300  ${config.isFilterOpen ? "max-h-[50%]": "max-h-[100%]"}`}>
                 <div className="h-full">
                     <div className="max-h-full overflow-y-auto">
                         <table className="w-full table-fixed text-left text-sm max-w-full">
@@ -67,7 +179,10 @@ export default function SearchContainer() {
                             </thead>
                             <tbody className="bg-white text-gray-800">
                                 {responseData.results.map((row, index) => (
-                                    <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px] text-left">
+                                    <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px] text-left cursor-pointer" 
+                                    onClick={() => selectItem(row)}
+                                    onMouseEnter={() => hoverItemHandler(row)}
+                                    >
                                         <td className="p-2"><input type="checkbox" className='accent-yellow-400' /></td>
                                         <td className="p-2 whitespace-nowrap">{row.collection_vehicle_short}</td>
                                         <td className="p-2 whitespace-nowrap">{row.collection_date}</td>
@@ -86,8 +201,9 @@ export default function SearchContainer() {
 
 
 
+
             {/* Footer Buttons */}
-            <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center border-t border-gray-300 pb-4">
+            <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center border-t border-gray-300 pb-6">
                 <p className="text-xs text-gray-200">0 / 0 selected</p>
                 <div className="flex gap-2 w-full mt-2">
                     <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">

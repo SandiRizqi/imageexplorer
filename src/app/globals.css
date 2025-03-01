@@ -31,6 +31,10 @@ body {
   @apply w-full bg-transparent border-b border-gray-600 p-2 focus:outline-none focus:border-yellow-500;
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Makes it white */
+}
+
 
 /* Thin scrollbar styles */
 ::-webkit-scrollbar {
