@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
-
+import DatasetSelector from './DatasetSelector';
 
 type selectedMode = string | null;
 
 export default function DatasetFilter() {
     const [selected, setSelected] = useState<selectedMode>(null);
+    const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
 
 
     // Function to handle selection
@@ -84,10 +85,13 @@ export default function DatasetFilter() {
                     </label>
                 </div>
             </div>
+            <DatasetSelector isOpen={isOpenDataSelector} onClose={() => setIsOpenDataSelector(false)}/>
 
             {/* Footer - Stays at Bottom */}
             <div className="mt-auto">
-                <button className="bg-yellow-500 text-black w-full py-2 rounded-md font-semibold hover:bg-yellow-400">
+                <button className="bg-yellow-500 text-black w-full py-2 rounded-md font-semibold hover:bg-yellow-400"
+                onClick={()=> setIsOpenDataSelector(true)}
+                >
                     SELECT DATASETS
                 </button>
                 <div className="flex justify-between items-center text-sm mt-2">

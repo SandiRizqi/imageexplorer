@@ -8,6 +8,7 @@ import { useConfig } from '../context/ConfigProvider';
 import { GeoJSONSource, ImageSource } from 'maplibre-gl';
 
 
+
 interface ImageItem {
     objectid: string;
     preview_url: string;
@@ -25,6 +26,7 @@ type ImageOverlay = {
 export default function SearchContainer() {
     const {map} = useMap();
     const {config, setConfig} = useConfig();
+   
 
 
     const drawPolygonPreview = (coords: [number, number][]) => {
@@ -141,7 +143,7 @@ export default function SearchContainer() {
 
                 {/* Animated Arrow Icon */}
                 <div
-                    className={`transition-transform duration-300  ${config.isFilterOpen ? "rotate-180" : "rotate-0"
+                    className={`transition-transform h-8 w-8 items-center flex justify-center rounded-full bg-gray-600 hover:bg-gray-500 duration-300  ${config.isFilterOpen ? "rotate-180" : "rotate-0"
                         }`}
                 >
                     <ChevronUp size={22} color="#9ca3af" />
@@ -162,7 +164,7 @@ export default function SearchContainer() {
 
 
             {/* Main Content (Table) */}
-            <div className={`flex-grow overflow-hidden transition-all duration-300  ${config.isFilterOpen ? "max-h-[50%]": "max-h-[100%]"}`}>
+            <div className={`flex-grow overflow-hidden transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(50%-250px)]": "max-h-[calc(100%-250px)]"}`}>
                 <div className="h-full">
                     <div className="max-h-full overflow-y-auto">
                         <table className="w-full table-fixed text-left text-sm max-w-full">
@@ -203,7 +205,7 @@ export default function SearchContainer() {
 
 
             {/* Footer Buttons */}
-            <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center border-t border-gray-300 pb-6">
+            <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[150px]">
                 <p className="text-xs text-gray-200">0 / 0 selected</p>
                 <div className="flex gap-2 w-full mt-2">
                     <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
@@ -213,7 +215,7 @@ export default function SearchContainer() {
                         SAVE
                     </button>
                     <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
-                        SUBMIT FOR QUOTE
+                        CREATE QUOTE
                     </button>
                 </div>
             </div>
