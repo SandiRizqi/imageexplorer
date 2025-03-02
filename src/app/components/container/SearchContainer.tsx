@@ -45,8 +45,8 @@ export default function SearchContainer() {
                     type: "line",
                     source: "polygon-preview",
                     paint: {
-                        "line-color": "#2a9df4",
-                        "line-width": 4,
+                        "line-color": config.defaultAOIPreviewColow,
+                        "line-width": 2,
                         "line-opacity": 1, // Transparent border
                     },
                 });
@@ -152,7 +152,7 @@ export default function SearchContainer() {
 
             {/* Expanding Filter Section */}
             <div
-                className={`overflow-hidden transition-all duration-300 ${config.isFilterOpen ? "h-[50%]" : "h-0"
+                className={`overflow-hidden transition-all duration-300 ${config.isFilterOpen ? "h-[calc(50%-50px)]" : "h-0"
                     }`}
             >
                 <div className="p-2 px-4 bg-gray-800 h-full flex flex-col overflow-y-auto">
@@ -164,7 +164,7 @@ export default function SearchContainer() {
 
 
             {/* Main Content (Table) */}
-            <div className={`flex-grow overflow-hidden transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(50%-250px)]": "max-h-[calc(100%-250px)]"}`}>
+            <div className={`flex-grow overflow-hidden transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(50%-200px)]": "max-h-[calc(100%-250px)]"}`}>
                 <div className="h-full">
                     <div className="max-h-full overflow-y-auto">
                         <table className="w-full table-fixed text-left text-sm max-w-full">

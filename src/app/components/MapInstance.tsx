@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import { useMap } from "./context/MapProvider";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -18,8 +18,20 @@ export type MapInstanceProps = {
   mapView?: ViewOptions;
 };
 
+const LoadingScreen = () => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
+      <div className="flex flex-col items-center">
+        <div className="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-white mt-4 text-sm">Loading, please wait...</p>
+      </div>
+    </div>
+  );
+};
+
 const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyle, mapView }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { map, setMap } = useMap();
 
   useEffect(() => {
@@ -37,12 +49,14 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
 
     setMap(mapInstance);
 
+
     return () => mapInstance.remove();
   }, []);
 
   useEffect(() => {
     if (map && mapView) {
       map.jumpTo(mapView);
+      map.on("load", setLoaded)
     }
   }, [map]);
 
@@ -64,7 +78,16 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
         }
     }, []);
 
-  return <div id={id} className={`absolute w-full h-full ${className}`} ref={mapContainerRef} style={style} />;
+
+  function setLoaded () {
+    setIsLoading(false);
+  }
+
+
+
+  return <div id={id} className={`absolute w-full h-full ${className}`} ref={mapContainerRef} style={style}>
+    {isLoading && <LoadingScreen />}
+  </div>;
 };
 
 export default MapInstance;

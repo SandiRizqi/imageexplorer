@@ -3,6 +3,7 @@ import { useMap } from "../context/MapProvider";
 import { MapMouseEvent, GeoJSONSource } from "maplibre-gl";
 import { Square, Trash2, Pentagon, Tangent } from "lucide-react";
 import { usePolygon } from "../context/PolygonProvider";
+import { useConfig } from "../context/ConfigProvider";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 type DrawMode = "polygon" | "rectangle" | null;
@@ -10,6 +11,7 @@ type DrawMode = "polygon" | "rectangle" | null;
 const DrawTool: React.FC = () => {
     const { map } = useMap();
     const { polygon, setPolygon } = usePolygon();
+    const {config} = useConfig();
     const [isDrawing, setIsDrawing] = useState<boolean>(false);
     const [drawMode, setDrawMode] = useState<DrawMode>(null);
     const [startPoint, setStartPoint] = useState<[number, number] | null>(null);
@@ -93,7 +95,7 @@ const DrawTool: React.FC = () => {
                 type: "line",
                 source: "polygon-line",
                 paint: {
-                    "line-color": "red",
+                    "line-color": config.defaultAOIColor,
                     "line-width": 3,
                     "line-dasharray": [2, 1], // Dashed stroke
                 },
@@ -118,7 +120,7 @@ const DrawTool: React.FC = () => {
                 type: "fill",
                 source: "polygon",
                 paint: {
-                    "fill-color": "red",
+                    "fill-color": config.defaultAOIColor,
                     "fill-opacity": 0, // Semi-transparent pink fill
                 },
             });
@@ -128,7 +130,7 @@ const DrawTool: React.FC = () => {
                 type: "line",
                 source: "polygon",
                 paint: {
-                    "line-color": "red",
+                    "line-color": config.defaultAOIColor,
                     "line-width": 4,
                     "line-opacity": 1, // Transparent border
                 },
