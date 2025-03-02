@@ -7,13 +7,22 @@ type selectedMode = string | null;
 
 export default function DatasetFilter() {
     const [selected, setSelected] = useState<selectedMode>(null);
-    const {filters} = useConfig();
+    const {filters, setFilters} = useConfig();
     const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
 
     const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const selectedDate = new Date(e.target.value);
         const formattedDate = new Date(selectedDate.setUTCHours(0, 0, 0, 0)).toISOString();
         console.log(formattedDate);
+    };
+
+
+    function handleChangeSlider(e: React.ChangeEvent<HTMLInputElement>, key: string): void {
+        setFilters(prev => (
+            {...prev,
+                [key]: parseInt(e.target.value)
+            }
+        ))
     }
 
 
@@ -43,15 +52,15 @@ export default function DatasetFilter() {
                 <div className="flex-grow flex flex-col justify-between">
                     <div>
                         <label className="text-sm text-gray-400">Cloud Cover:</label>
-                        <input type="range" min="0" max="100" className="w-full accent-yellow-400 h-[5px]" value={filters.cloudcover_max}/>
+                        <input type="range" min="0" max="100" className="w-full accent-yellow-400 h-[5px]"  value={filters.cloudcover_max} onChange={(e) => handleChangeSlider(e, "cloudcover_max")}/>
                     </div>
                     <div>
                         <label className="text-sm text-gray-400">Off Nadir:</label>
-                        <input type="range" min="0" max="60" className="w-full accent-yellow-400 h-[5px]" value={filters.offnadir_max}/>
+                        <input type="range" min="0" max="60" className="w-full accent-yellow-400 h-[5px]" value={filters.offnadir_max} onChange={(e) => handleChangeSlider(e, "offnadir_max")}/>
                     </div>
                     <div>
                         <label className="text-sm text-gray-400">Resolution:</label>
-                        <input type="range" min="0" max="10" className="w-full accent-yellow-400 h-[5px]" value={filters.resolution_max}/>
+                        <input type="range" min="0" max="10" className="w-full accent-yellow-400 h-[5px]" value={filters.resolution_max} onChange={(e) => handleChangeSlider(e, "resolution_max")}/>
                     </div>
                 </div>
 
@@ -107,7 +116,7 @@ export default function DatasetFilter() {
                 <div className="flex justify-between items-center text-sm mt-2">
                     <div></div>
                     <button className="text-gray-300 bg-gray-600 py-2 px-4 rounded-md hover:bg-gray-500">RESET</button>
-                    <button className="bg-green-600 px-4 py-2 rounded-md text-white hover:bg-green-500">APPLY</button>
+                    <button className="bg-green-600 px-4 py-2 rounded-md text-white hover:bg-green-500" onClick={() => console.log(filters)}>APPLY</button>
                 </div>
             </div>
         </>

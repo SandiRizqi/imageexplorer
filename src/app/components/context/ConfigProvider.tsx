@@ -80,7 +80,7 @@ const initFilters: Filters = {
     persistentScenes: [],
     startDate: "",
     endDate: "",
-    satellites: ["THS", "TSL", "TST", "TS", "WV1", "WV2", "WV3", "WV4"]
+    satellites: ["WV3", "WV4", "SP4", "SP5", "SP6/7"]
 }
 
 export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
