@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { ChevronUp } from 'lucide-react';
 import DatasetFilter from '../widget/DatasetFilter';
@@ -11,7 +12,7 @@ interface Coordinates {
     y: number;
   }
 
-  
+
 
 interface ImageItem {
     acq_time: string;
@@ -66,6 +67,7 @@ type ImageOverlay = {
 export default function SearchContainer() {
     const {map} = useMap();
     const {config, setConfig, imageResult} = useConfig();
+    const [loading, setOnLoading] = useState<boolean>(false);
    
 
 
@@ -197,7 +199,7 @@ export default function SearchContainer() {
             >
                 <div className="p-2 px-4 bg-gray-800 h-full flex flex-col overflow-y-auto">
                     {/* Add filter controls here */}
-                    <DatasetFilter />
+                    <DatasetFilter onLoading={setOnLoading}/>
                 </div>
             </div>
 
@@ -205,40 +207,62 @@ export default function SearchContainer() {
 
             {/* Main Content (Table) */}
             <div className={`flex-grow overflow-hidden transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(50%-150px)]": "max-h-[calc(100%-200px)]"}`}>
-                <div className="h-full">
-                    <div className="max-h-full overflow-y-auto">
-                        <table className="w-full table-fixed text-left text-sm max-w-full">
-                            <thead className="border-b border-gray-700 bg-gray-300 text-gray-800 sticky top-0 h-[50px] shadow-lg">
-                                <tr className="text-xs">
-                                    <th className="p-2  w-[30px]"><input type="checkbox" className='accent-yellow-400'/></th>
-                                    <th className="p-2 min-w-[20px]">Sat</th>
-                                    <th className="p-2 w-[80px]">Date</th>
-                                    <th className="p-2 min-w-[40px]">Res</th>
-                                    <th className="p-2 min-w-[40px]">Cloud</th>
-                                    <th className="p-2 max-w-[40px] whitespace-nowrap">Off-Nadir</th>
-                                    <th className="p-2 min-w-[20px]"></th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white text-gray-800">
-                                {imageResult.length > 1 && imageResult.map((row, index) => (
-                                    <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px] text-left cursor-pointer" 
-                                    onClick={() => selectItem(row)}
-                                    onMouseEnter={() => hoverItemHandler(row)}
-                                    >
-                                        <td className="p-2"><input type="checkbox" className='accent-yellow-400' /></td>
-                                        <td className="p-2 whitespace-nowrap">{row.collection_vehicle_short}</td>
-                                        <td className="p-2 whitespace-nowrap">{row.collection_date}</td>
-                                        <td className="p-2 whitespace-nowrap">{row.resolution}</td>
-                                        <td className="p-2 whitespace-nowrap">{row.cloud_cover_percent} %</td>
-                                        <td className={`p-2 font-semibold ${row.color || ''} whitespace-nowrap`}>{100}</td>
-                                        <td className="p-2 whitespace-nowrap"><FaInfoCircle className="text-gray-400 hover:text-gray-200" /></td>
+            <div className="h-full">
+                <div className="max-h-full overflow-y-auto">
+                    <table className="w-full table-fixed text-left text-sm max-w-full">
+                        <thead className="border-b border-gray-700 bg-gray-300 text-gray-800 sticky top-0 h-[50px] shadow-lg">
+                            <tr className="text-xs">
+                                <th className="p-2  w-[30px]"><input type="checkbox" className='accent-yellow-400'/></th>
+                                <th className="p-2 min-w-[20px]">Sat</th>
+                                <th className="p-2 w-[80px]">Date</th>
+                                <th className="p-2 min-w-[40px]">Res</th>
+                                <th className="p-2 min-w-[40px]">Cloud</th>
+                                <th className="p-2 max-w-[40px] whitespace-nowrap">Off-Nadir</th>
+                                <th className="p-2 min-w-[20px]"></th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white text-gray-800">
+                            {loading ? (
+                                // Render loading rows while data is being fetched
+                                [...Array(10)].map((_, index) => (
+                                    <tr key={index} className="border-b border-gray-500 text-sm h-[40px] bg-gray-200 animate-pulse">
+                                        <td className="p-2"><div className="h-4 w-4 bg-gray-300 rounded"></div></td>
+                                        <td className="p-2"><div className="h-4 w-10 bg-gray-300 rounded"></div></td>
+                                        <td className="p-2"><div className="h-4 w-16 bg-gray-300 rounded"></div></td>
+                                        <td className="p-2"><div className="h-4 w-12 bg-gray-300 rounded"></div></td>
+                                        <td className="p-2"><div className="h-4 w-12 bg-gray-300 rounded"></div></td>
+                                        <td className="p-2"><div className="h-4 w-12 bg-gray-300 rounded"></div></td>
+                                        <td className="p-2"><div className="h-4 w-4 bg-gray-300 rounded"></div></td>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                ))
+                            ) : (
+                                imageResult.length > 0 ? (
+                                    imageResult.map((row, index) => (
+                                        <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px] text-left cursor-pointer" 
+                                            onClick={() => selectItem(row)}
+                                            onMouseEnter={() => hoverItemHandler(row)}
+                                        >
+                                            <td className="p-2"><input type="checkbox" className='accent-yellow-400' /></td>
+                                            <td className="p-2 whitespace-nowrap">{row.collection_vehicle_short}</td>
+                                            <td className="p-2 whitespace-nowrap">{row.collection_date}</td>
+                                            <td className="p-2 whitespace-nowrap">{row.resolution}</td>
+                                            <td className="p-2 whitespace-nowrap">{row.cloud_cover_percent} %</td>
+                                            <td className={`p-2 font-semibold ${row.color || ''} whitespace-nowrap`}>{100}</td>
+                                            <td className="p-2 whitespace-nowrap"><FaInfoCircle className="text-gray-400 hover:text-gray-200" /></td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={7} className="text-center p-4 text-gray-500">No data available</td>
+                                    </tr>
+                                )
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
+
 
 
 

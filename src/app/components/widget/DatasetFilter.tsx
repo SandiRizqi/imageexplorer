@@ -8,8 +8,11 @@ import axios from 'axios';
 
 
 type selectedMode = string | null;
+type DatasetFilterProps = {
+    onLoading: (loading: boolean) => void; // Function that takes a boolean and returns void
+  };
 
-export default function DatasetFilter() {
+export default function DatasetFilter({onLoading} : DatasetFilterProps) {
     const [selected, setSelected] = useState<selectedMode>(null);
     const {filters, setFilters, setImageResults} = useConfig();
     const {polygon} = usePolygon();
@@ -54,6 +57,7 @@ export default function DatasetFilter() {
     
         try {
             setLoading(true);
+            onLoading(true);
     
             const config = {
                 headers: {
@@ -72,6 +76,7 @@ export default function DatasetFilter() {
             }
         } finally {
             setLoading(false);
+            onLoading(false);
         }
     };
 
