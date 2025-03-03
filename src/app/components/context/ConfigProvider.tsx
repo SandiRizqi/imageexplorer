@@ -39,6 +39,7 @@ type ConfigContextType = {
     setConfig: React.Dispatch<React.SetStateAction<Config>>;
     filters: Filters,
     setFilters: React.Dispatch<React.SetStateAction<Filters>>;
+    resetFilter:  () => void;
     imageResult: ResultItem[];
     setImageResults: React.Dispatch<React.SetStateAction<ResultItem[]>>;
 };
@@ -121,7 +122,7 @@ const defaultEndDate = new Date().toISOString().split(".")[0];
 
 const initFilters: Filters = {
     cloudcover_max: 50,
-    offnadir_max: 50,
+    offnadir_max: 30,
     resolution_min: 0,
     resolution_max: 2,
     dem: false,
@@ -157,9 +158,13 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         });
     };
 
+    const resetFilter = () => {
+        setFilters(initFilters);
+    }
+
 
     return (
-        <ConfigContext.Provider value={{ config, setConfig, filters, setFilters, imageResult, setImageResults }}>
+        <ConfigContext.Provider value={{ config, setConfig, filters, setFilters, resetFilter, imageResult, setImageResults }}>
             {children}
         </ConfigContext.Provider>
     );

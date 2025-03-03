@@ -66,7 +66,7 @@ type ImageOverlay = {
 
 export default function SearchContainer() {
     const {map} = useMap();
-    const {config, setConfig, imageResult} = useConfig();
+    const {config, setConfig, filters, imageResult, setImageResults} = useConfig();
     const [loading, setOnLoading] = useState<boolean>(false);
    
 
@@ -178,8 +178,8 @@ export default function SearchContainer() {
             >
                 <div className="flex items-center">
                     <span className="text-gray-300 ">Filters</span>
-                    <span className="text-gray-300 text-xs ml-2">
-
+                    <span className="text-gray-400 text-[10px] ml-2">
+                        {filters.satellites.length}/58 datasets, Res  {`< ${filters.resolution_max} m`}, Cloud {`< ${filters.cloudcover_max}%`}, Off-Nadir {`< ${filters.offnadir_max}°`}
                     </span>
                 </div>
 
@@ -206,11 +206,11 @@ export default function SearchContainer() {
 
 
             {/* Main Content (Table) */}
-            <div className={`flex-grow overflow-hidden transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(50%-150px)]": "max-h-[calc(100%-200px)]"}`}>
+            <div className={`flex-grow overflow-hidden bg-white transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(50%-150px)]": "max-h-[calc(100%-200px)]"}`}>
             <div className="h-full">
                 <div className="max-h-full overflow-y-auto">
                     <table className="w-full table-fixed text-left text-sm max-w-full">
-                        <thead className="border-b border-gray-700 bg-gray-300 text-gray-800 sticky top-0 h-[50px] shadow-lg">
+                        <thead className="bg-gray-300 text-gray-800 sticky top-0 h-[50px] shadow-lg">
                             <tr className="text-xs">
                                 <th className="p-2  w-[30px]"><input type="checkbox" className='accent-yellow-400'/></th>
                                 <th className="p-2 min-w-[20px]">Sat</th>
@@ -272,7 +272,9 @@ export default function SearchContainer() {
             <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[100px]">
                 <p className="text-xs text-gray-200">0 / {imageResult.length} selected</p>
                 <div className="flex gap-2 w-full mt-2">
-                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
+                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400"
+                    onClick={() => setImageResults([])}
+                    >
                         CLEAR
                     </button>
                     <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
