@@ -2,19 +2,59 @@ import React from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { ChevronUp } from 'lucide-react';
 import DatasetFilter from '../widget/DatasetFilter';
-import responseData from '../assets/responseCitra.json';
 import { useMap } from '../context/MapProvider';
 import { useConfig } from '../context/ConfigProvider';
 import { GeoJSONSource, ImageSource } from 'maplibre-gl';
 
+interface Coordinates {
+    x: number;
+    y: number;
+  }
 
+  
 
 interface ImageItem {
+    acq_time: string;
+    alt_productid: string;
+    api: string | null;
+    azimuth_angle: number | null;
+    bottomright: Coordinates;
+    cloud_cover_percent: number;
+    collection_date: string; // Format: MM-DD-YYYY
+    collection_vehicle_short: string;
+    color: boolean;
+    data_type: string | null;
+    imageBand: string;
+    imageBandCount: number | null;
+    js_api: string | null;
+    js_date: string; // Format: MM-DD-YYYY
+    js_resolution: number;
+    length_factor: number;
+    look_direction: string | null;
+    max_off_nadir: number;
+    max_pan_res: number;
+    min_off_nadir: number;
+    min_pan_res: number;
+    mission: string | null;
+    multi_res: string | null;
     objectid: string;
+    offnadir: number;
+    order_id: string;
+    orientation_angle: number | null;
+    path_direction: number | null;
+    polarization_channels: string | null;
     preview_url: string;
-    topleft: { x: number; y: number };
-    bottomright: { x: number; y: number };
-    [key: string]: string | number | object | null; // Allows additional properties
+    renderOrigin: string | null;
+    resolution: string;
+    satellite: string | null;
+    scan_direction: string | null;
+    stereo_pair: string | null;
+    sun_az: number;
+    sun_elev: number;
+    target_az: number | null;
+    target_az_max: number | null;
+    target_az_min: number | null;
+    topleft: Coordinates;
 };
 
 type ImageOverlay = {
@@ -25,7 +65,7 @@ type ImageOverlay = {
 
 export default function SearchContainer() {
     const {map} = useMap();
-    const {config, setConfig} = useConfig();
+    const {config, setConfig, imageResult} = useConfig();
    
 
 
@@ -164,7 +204,7 @@ export default function SearchContainer() {
 
 
             {/* Main Content (Table) */}
-            <div className={`flex-grow overflow-hidden transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(50%-200px)]": "max-h-[calc(100%-250px)]"}`}>
+            <div className={`flex-grow overflow-hidden transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(50%-150px)]": "max-h-[calc(100%-200px)]"}`}>
                 <div className="h-full">
                     <div className="max-h-full overflow-y-auto">
                         <table className="w-full table-fixed text-left text-sm max-w-full">
@@ -180,7 +220,7 @@ export default function SearchContainer() {
                                 </tr>
                             </thead>
                             <tbody className="bg-white text-gray-800">
-                                {responseData.results.map((row, index) => (
+                                {imageResult.length > 1 && imageResult.map((row, index) => (
                                     <tr key={index} className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px] text-left cursor-pointer" 
                                     onClick={() => selectItem(row)}
                                     onMouseEnter={() => hoverItemHandler(row)}
@@ -205,8 +245,8 @@ export default function SearchContainer() {
 
 
             {/* Footer Buttons */}
-            <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[150px]">
-                <p className="text-xs text-gray-200">0 / 0 selected</p>
+            <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[100px]">
+                <p className="text-xs text-gray-200">0 / {imageResult.length} selected</p>
                 <div className="flex gap-2 w-full mt-2">
                     <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
                         CLEAR

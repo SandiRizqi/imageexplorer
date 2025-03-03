@@ -3,15 +3,18 @@ import { useState } from 'react';
 import DatasetSelector from './DatasetSelector';
 import { useConfig } from '../context/ConfigProvider';
 import { usePolygon } from '../context/PolygonProvider';
+import LoadingScreen from '../LoadingScreen';
 import axios from 'axios';
+
 
 type selectedMode = string | null;
 
 export default function DatasetFilter() {
     const [selected, setSelected] = useState<selectedMode>(null);
-    const {filters, setFilters} = useConfig();
+    const {filters, setFilters, setImageResult} = useConfig();
     const {polygon} = usePolygon();
     const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const defaultStartDate = new Date(filters.startDate).toISOString().split("T")[0];
     const defaultEndDate = new Date(filters.endDate).toISOString().split("T")[0];
 
@@ -42,39 +45,41 @@ export default function DatasetFilter() {
 
 
     const handleSubmit = async () => {
-        if (polygon.length < 3) return console.error("You need to provide polygon.");
+        
+        if (polygon.length < 3) {
+            console.error("You need to provide at least 3 coordinates for a polygon.");
+            return;
+        }
         const data = { ...filters, coords: polygon };
-        const formData = new FormData();
-
-        Object.entries(data).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-                formData.append(key, JSON.stringify(value)); // Convert arrays to JSON string
-            } else if (typeof value === "object" && value !== null) {
-                formData.append(key, JSON.stringify(value)); // Convert objects to JSON string
-            } else {
-                formData.append(key, value.toString()); // Convert other types to string
-            }
-        });
-
+    
         try {
+            setLoading(true);
+    
             const config = {
                 headers: {
-                    "Content-Type": "application/json", // Ensure Lambda API returns JSON
+                    "Content-Type": "application/json", 
                 }
-            }
+            };
+    
             const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/search`, data, config);
-            const responseData = response.data;
-            console.log("Response:", responseData);
+            setImageResult(response.data["results"])
+            return ; // Return data if needed for further processing
         } catch (error) {
-            console.error("Failed to submit data:", error);
+            if (axios.isAxiosError(error)) {
+                console.error("Axios error:", error.response?.data || error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        } finally {
+            setLoading(false);
         }
-
-    }
+    };
 
 
     return (
         <>
             {/* Main Content */}
+            {loading && <LoadingScreen />}
             <div className="flex-grow space-y-4 mt-4">
                 {/* Date Inputs */}
                 <div className="flex justify-between">
