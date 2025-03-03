@@ -3,6 +3,7 @@ import { useState } from 'react';
 import DatasetSelector from './DatasetSelector';
 import { useConfig } from '../context/ConfigProvider';
 import { usePolygon } from '../context/PolygonProvider';
+import axios from 'axios';
 
 type selectedMode = string | null;
 
@@ -56,17 +57,13 @@ export default function DatasetFilter() {
         });
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/query`, {
-                method: "POST",
-                body: formData, // Sending FormData
-            });
-
-            if (!response.ok) {
-                console.log(response)
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            const config = {
+                headers: {
+                    "Content-Type": "application/json", // Ensure Lambda API returns JSON
+                }
             }
-
-            const responseData = await response.json();
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/search`, data, config);
+            const responseData = response.data;
             console.log("Response:", responseData);
         } catch (error) {
             console.error("Failed to submit data:", error);

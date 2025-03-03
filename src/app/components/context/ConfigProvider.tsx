@@ -60,12 +60,12 @@ const initConfig: Config = {
 }
 
 const tenYearsAgo = new Date();
-tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
-const defaultStartDate = tenYearsAgo.toISOString();
-const defaultEndDate = new Date().toISOString()
+tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 5);
+const defaultStartDate = tenYearsAgo.toISOString().split(".")[0];// Remove Z
+const defaultEndDate = new Date().toISOString().split(".")[0];
 
 const initFilters: Filters = {
-    cloudcover_max: 100,
+    cloudcover_max: 50,
     offnadir_max: 50,
     resolution_min: 0,
     resolution_max: 2,
@@ -84,7 +84,7 @@ const initFilters: Filters = {
     persistentScenes: [],
     startDate: defaultStartDate,
     endDate: defaultEndDate,
-    satellites: ["ALOS","AW3D","BJ3A","BJ3N","HEX","HEXD","EB","FS2","FS5","GS1","GS2","GF1H","GF1L","GF2","GE1","BSG","IK02","J14","J15","J1N","J1V","K2","K3","K3A","KZ1","KZ2","LS-13","LS4/5","LS_TM","LS7","LS8","LG","OHS","OVS1","OVS23","PS","PNEO","P1","QB","REO","RES","SP1","SP2","SP3","SP4","SP5","SP6","SKYC","SKY","SKYV","SV1","SV2","SVN","TeL","THS","TSC","TSL","TST","TSM","TWSC","TS","VDS","VDT","WD","WDN","WV1","WV2","WV3","WV3_SWIR","WV4","ZY3"]
+    satellites: ["ALOS","J14","J15","J1N","J1V","K2","K3","K3A","KZ1","KZ2","LS-13","LS4/5","LS_TM","LS7","LS8","PS","PNEO","P1","QB","REO","RES","SP1","SP2","SP3","SP4","SP5","SP6","WV1","WV2","WV3","WV3_SWIR","WV4"]
 }
 
 export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
