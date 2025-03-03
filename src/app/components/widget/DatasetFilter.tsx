@@ -2,18 +2,26 @@ import React from 'react';
 import { useState } from 'react';
 import DatasetSelector from './DatasetSelector';
 import { useConfig } from '../context/ConfigProvider';
+import { usePolygon } from '../context/PolygonProvider';
 
 type selectedMode = string | null;
 
 export default function DatasetFilter() {
     const [selected, setSelected] = useState<selectedMode>(null);
     const {filters, setFilters} = useConfig();
+    const {polygon} = usePolygon();
     const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
+    const defaultStartDate = new Date(filters.startDate).toISOString().split("T")[0];
+    const defaultEndDate = new Date(filters.endDate).toISOString().split("T")[0];
 
-    const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>, key: string): void => {
         const selectedDate = new Date(e.target.value);
         const formattedDate = new Date(selectedDate.setUTCHours(0, 0, 0, 0)).toISOString();
-        console.log(formattedDate);
+        setFilters(prev => ({
+            ...prev,
+            [key]: formattedDate,
+            dateFilter: [{ ...prev.dateFilter[0], [key]: formattedDate }]
+        }));
     };
 
 
@@ -32,6 +40,41 @@ export default function DatasetFilter() {
     };
 
 
+    const handleSubmit = async () => {
+        if (polygon.length < 3) return console.error("You need to provide polygon.");
+        const data = { ...filters, coords: polygon };
+        const formData = new FormData();
+
+        Object.entries(data).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                formData.append(key, JSON.stringify(value)); // Convert arrays to JSON string
+            } else if (typeof value === "object" && value !== null) {
+                formData.append(key, JSON.stringify(value)); // Convert objects to JSON string
+            } else {
+                formData.append(key, value.toString()); // Convert other types to string
+            }
+        });
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/query`, {
+                method: "POST",
+                body: formData, // Sending FormData
+            });
+
+            if (!response.ok) {
+                console.log(response)
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const responseData = await response.json();
+            console.log("Response:", responseData);
+        } catch (error) {
+            console.error("Failed to submit data:", error);
+        }
+
+    }
+
+
     return (
         <>
             {/* Main Content */}
@@ -40,11 +83,11 @@ export default function DatasetFilter() {
                 <div className="flex justify-between">
                     <div className="flex flex-col w-1/2 pr-2">
                         <label className="text-sm text-gray-400">Start Date</label>
-                        <input type="date" className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style" onChange={handleChangeDate} />
+                        <input type="date" className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style" value={defaultStartDate} onChange={(e) => handleChangeDate(e, 'startDate')} />
                     </div>
                     <div className="flex flex-col w-1/2 pl-2">
                         <label className="text-sm text-gray-400">End Date</label>
-                        <input type="date" className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style" />
+                        <input type="date" className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style" value={defaultEndDate} onChange={(e) => handleChangeDate(e, 'endDate')}/>
                     </div>
                 </div>
 
@@ -116,7 +159,7 @@ export default function DatasetFilter() {
                 <div className="flex justify-between items-center text-sm mt-2">
                     <div></div>
                     <button className="text-gray-300 bg-gray-600 py-2 px-4 rounded-md hover:bg-gray-500">RESET</button>
-                    <button className="bg-green-600 px-4 py-2 rounded-md text-white hover:bg-green-500" onClick={() => console.log(filters)}>APPLY</button>
+                    <button className="bg-green-600 px-4 py-2 rounded-md text-white hover:bg-green-500" onClick={handleSubmit}>APPLY</button>
                 </div>
             </div>
         </>

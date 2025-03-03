@@ -39,17 +39,17 @@ type ConfigContextType = {
     setConfig: React.Dispatch<React.SetStateAction<Config>>;
     filters: Filters,
     setFilters: React.Dispatch<React.SetStateAction<Filters>>;
-  };
-  
-  
+};
+
+
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
 export const useConfig = () => {
-  const context = useContext(ConfigContext);
-  if (!context) {
-    throw new Error("Polygon must be used within PolygonProvider");
-  }
-  return context;
+    const context = useContext(ConfigContext);
+    if (!context) {
+        throw new Error("Polygon must be used within PolygonProvider");
+    }
+    return context;
 };
 
 const initConfig: Config = {
@@ -59,6 +59,10 @@ const initConfig: Config = {
 
 }
 
+const tenYearsAgo = new Date();
+tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
+const defaultStartDate = tenYearsAgo.toISOString();
+const defaultEndDate = new Date().toISOString()
 
 const initFilters: Filters = {
     cloudcover_max: 100,
@@ -71,26 +75,26 @@ const initFilters: Filters = {
     monthly: false,
     dateRange: true,
     dateFilter: [
-        {startDate: "", endDate: ""}
+        { startDate: defaultStartDate, endDate: defaultEndDate }
     ],
     stereo: false,
-    lazyLoad: true,
+    lazyLoad: false,
     sar: false,
     pageNum: 0,
     persistentScenes: [],
-    startDate: "",
-    endDate: "",
-    satellites: ["WV3", "WV4", "SP4", "SP5", "SP6/7"]
+    startDate: defaultStartDate,
+    endDate: defaultEndDate,
+    satellites: ["ALOS","AW3D","BJ3A","BJ3N","HEX","HEXD","EB","FS2","FS5","GS1","GS2","GF1H","GF1L","GF2","GE1","BSG","IK02","J14","J15","J1N","J1V","K2","K3","K3A","KZ1","KZ2","LS-13","LS4/5","LS_TM","LS7","LS8","LG","OHS","OVS1","OVS23","PS","PNEO","P1","QB","REO","RES","SP1","SP2","SP3","SP4","SP5","SP6","SKYC","SKY","SKYV","SV1","SV2","SVN","TeL","THS","TSC","TSL","TST","TSM","TWSC","TS","VDS","VDT","WD","WDN","WV1","WV2","WV3","WV3_SWIR","WV4","ZY3"]
 }
 
 export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [config, setConfig] = useState<Config>(initConfig);
-  const [filters, setFilters] = useState<Filters>(initFilters);
+    const [config, setConfig] = useState<Config>(initConfig);
+    const [filters, setFilters] = useState<Filters>(initFilters);
 
 
-  return (
-    <ConfigContext.Provider value={{ config, setConfig, filters, setFilters }}>
-      {children}
-    </ConfigContext.Provider>
-  );
+    return (
+        <ConfigContext.Provider value={{ config, setConfig, filters, setFilters }}>
+            {children}
+        </ConfigContext.Provider>
+    );
 };
