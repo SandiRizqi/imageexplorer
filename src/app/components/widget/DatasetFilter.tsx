@@ -11,7 +11,7 @@ type selectedMode = string | null;
 
 export default function DatasetFilter() {
     const [selected, setSelected] = useState<selectedMode>(null);
-    const {filters, setFilters, setImageResult} = useConfig();
+    const {filters, setFilters, setImageResults} = useConfig();
     const {polygon} = usePolygon();
     const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -20,7 +20,7 @@ export default function DatasetFilter() {
 
     const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>, key: string): void => {
         const selectedDate = new Date(e.target.value);
-        const formattedDate = new Date(selectedDate.setUTCHours(0, 0, 0, 0)).toISOString();
+        const formattedDate = new Date(selectedDate.setUTCHours(0, 0, 0, 0)).toISOString().split(".")[0];;
         setFilters(prev => ({
             ...prev,
             [key]: formattedDate,
@@ -62,7 +62,7 @@ export default function DatasetFilter() {
             };
     
             const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/search`, data, config);
-            setImageResult(response.data["results"])
+            setImageResults(response.data["results"])
             return ; // Return data if needed for further processing
         } catch (error) {
             if (axios.isAxiosError(error)) {

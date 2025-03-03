@@ -40,7 +40,7 @@ type ConfigContextType = {
     filters: Filters,
     setFilters: React.Dispatch<React.SetStateAction<Filters>>;
     imageResult: ResultItem[];
-    setImageResult: React.Dispatch<React.SetStateAction<ResultItem[]>>;
+    setImageResults: React.Dispatch<React.SetStateAction<ResultItem[]>>;
 };
 
 
@@ -147,9 +147,19 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [filters, setFilters] = useState<Filters>(initFilters);
     const [imageResult, setImageResult] = useState<ResultItem[]>([]);
 
+    const setImageResults: React.Dispatch<React.SetStateAction<ResultItem[]>> = (data) => {
+        setImageResult((prev) => {
+            const sortedData = [...(typeof data === "function" ? data(prev) : data)];
+            sortedData.sort(
+                (a, b) => new Date(b.collection_date).getTime() - new Date(a.collection_date).getTime()
+            );
+            return sortedData;
+        });
+    };
+
 
     return (
-        <ConfigContext.Provider value={{ config, setConfig, filters, setFilters, imageResult, setImageResult }}>
+        <ConfigContext.Provider value={{ config, setConfig, filters, setFilters, imageResult, setImageResults }}>
             {children}
         </ConfigContext.Provider>
     );
