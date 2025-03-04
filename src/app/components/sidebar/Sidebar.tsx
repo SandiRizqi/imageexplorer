@@ -28,13 +28,13 @@ export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
                 <div className="flex border-b border-gray-600 h-[50px] shadow-xl">
                     <button
                         onClick={() => setActiveTab('search')}
-                        className={`flex-1 text-center text-gray-300 text-xs py-4 font-semibold ${activeTab === 'search' ? 'bg-gray-700 border-b' : 'bg-gray-800'}`}
+                        className={`flex-1 text-center text-gray-300 text-xs py-4 font-semibold ${activeTab === 'search' ? 'bg-secondarycolor border-b' : 'bg-maincolor'}`}
                     >
                         SEARCH
                     </button>
                     <button
                         onClick={() => setActiveTab('account')}
-                        className={`flex-1 text-center py-4 text-xs font-semibold ${activeTab === 'account' ? 'bg-gray-700 border-b' : 'bg-gray-800'}`}
+                        className={`flex-1 text-center py-4 text-xs font-semibold ${activeTab === 'account' ? 'bg-secondarycolor border-b' : 'bg-maincolor'}`}
                     >
                         ACCOUNT
                     </button>

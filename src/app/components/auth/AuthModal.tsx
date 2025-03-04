@@ -20,7 +20,7 @@ export default function AuthModal() {
       {/* Modal */}
       <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-          <DialogPanel className="bg-gray-900 text-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
+          <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
             
 
             {/* Modal Header */}
@@ -32,7 +32,7 @@ export default function AuthModal() {
             <div className="flex mt-4 border-b border-gray-600 text-xs">
               <button
                 className={`w-1/2 py-2 text-center ${
-                  isLogin ? "bg-gray-800 text-white" : "text-gray-400"
+                  isLogin ? "bg-secondarycolor text-white" : "text-gray-400"
                 }`}
                 onClick={() => setIsLogin(true)}
               >
@@ -40,7 +40,7 @@ export default function AuthModal() {
               </button>
               <button
                 className={`w-1/2 py-2 text-center ${
-                  !isLogin ? "bg-gray-800 text-white" : "text-gray-400"
+                  !isLogin ? "bg-secondarycolor text-white" : "text-gray-400"
                 }`}
                 onClick={() => setIsLogin(false)}
               >

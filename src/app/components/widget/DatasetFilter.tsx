@@ -73,7 +73,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
         };
 
         handleReset();
-        
+
         const data = { ...filters, coords: polygon };
     
         try {
@@ -218,8 +218,8 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                 <span className='text-yellow-500 text-xs flex p-1 flex-row w-full justify-center'>{filters.satellites.length} of 58 datasets selected</span>
                 <div className="flex justify-between items-center text-sm mt-2">
                     <div></div>
-                    <button className="text-gray-300 bg-gray-600 py-2 px-4 rounded-md hover:bg-gray-500" onClick={resetFilter}>RESET</button>
-                    <button className="bg-green-600 px-4 py-2 rounded-md text-white hover:bg-green-500" onClick={handleSubmit}>APPLY</button>
+                    <button className="text-gray-300 bg-red-600 py-2 px-4 rounded-md hover:bg-red-500" onClick={resetFilter}>RESET</button>
+                    <button className="bg-buttonmaincolor px-4 py-2 rounded-md text-white hover:bg-buttonsecondarycolor" onClick={handleSubmit}>APPLY</button>
                 </div>
             </div>
         </>

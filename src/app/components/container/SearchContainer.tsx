@@ -199,11 +199,11 @@ export default function SearchContainer() {
     return (
         <div className="flex flex-col h-screen">
             <div
-                className="p-3 text-md bg-gray-800  h-[50px] flex items-center justify-between cursor-pointer transition-all duration-300 shadow-xl"
+                className="p-3 text-md bg-maincolor  h-[50px] flex items-center justify-between cursor-pointer transition-all duration-300 shadow-xl"
                 onClick={toggleFilter}
             >
                 <div className="flex items-center">
-                    <span className="text-gray-300 ">Filters</span>
+                    <span className="text-gray-300">Filters</span>
                     <span className="text-gray-400 text-[10px] ml-2">
                         {filters.satellites.length}/58 datasets, Res  {`< ${filters.resolution_max} m`}, Cloud {`< ${filters.cloudcover_max}%`}, Off-Nadir {`< ${filters.offnadir_max}°`}
                     </span>
@@ -211,7 +211,7 @@ export default function SearchContainer() {
 
                 {/* Animated Arrow Icon */}
                 <div
-                    className={`transition-transform h-8 w-8 items-center flex justify-center rounded-full bg-gray-600 hover:bg-gray-500 duration-300  ${config.isFilterOpen ? "rotate-180" : "rotate-0"
+                    className={`transition-transform h-8 w-8 items-center flex justify-center rounded-full bg-maincolor hover:bg-secondarycolor border duration-300  ${config.isFilterOpen ? "rotate-180" : "rotate-0"
                         }`}
                 >
                     <ChevronUp size={22} color="#9ca3af" />
@@ -223,7 +223,7 @@ export default function SearchContainer() {
                 className={`overflow-hidden transition-all duration-300 ${config.isFilterOpen ? "h-[calc(50%-50px)]" : "h-0"
                     }`}
             >
-                <div className="p-2 px-4 bg-gray-800 h-full flex flex-col overflow-y-auto">
+                <div className="p-2 px-4 bg-maincolor h-full flex flex-col overflow-y-auto">
                     {/* Add filter controls here */}
                     <DatasetFilter onLoading={setOnLoading}/>
                 </div>
@@ -236,7 +236,7 @@ export default function SearchContainer() {
             <div className="h-full">
                 <div className="max-h-full overflow-y-auto">
                     <table className="w-full table-fixed text-left text-sm max-w-full">
-                        <thead className="bg-gray-300 text-gray-800 sticky top-0 h-[50px] shadow-lg">
+                        <thead className="bg-gray-300 text-maincolor sticky top-0 h-[50px] shadow-lg">
                             <tr className="text-xs">
                                 <th className="p-2  w-[30px]"><input type="checkbox" className='accent-yellow-400'/></th>
                                 <th className="p-2 min-w-[20px]">Sat</th>
@@ -247,7 +247,7 @@ export default function SearchContainer() {
                                 <th className="p-2 min-w-[20px]"></th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white text-gray-800">
+                        <tbody className="bg-white text-maincolor">
                             {loading ? (
                                 // Render loading rows while data is being fetched
                                 [...Array(10)].map((_, index) => (
@@ -301,18 +301,18 @@ export default function SearchContainer() {
 
 
             {/* Footer Buttons */}
-            <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[100px]">
+            <div className="absolute bottom-0 w-full bg-maincolor p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[100px]">
                 <p className="text-xs text-gray-200">{selectedItem.length} / {imageResult.length} selected</p>
                 <div className="flex gap-2 w-full mt-2">
-                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400"
+                    <button className="flex-1 bg-yellow-500 text-gray-900 py-2 px-2 rounded-md text-xs hover:bg-yellow-400"
                     onClick={handleReset}
                     >
                         CLEAR
                     </button>
-                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
+                    <button className="flex-1 bg-yellow-500 text-gray-900 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
                         SAVE
                     </button>
-                    <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
+                    <button className="flex-1 bg-yellow-500 text-gray-900 py-2 px-2 rounded-md text-xs hover:bg-yellow-400">
                         CREATE QUOTE
                     </button>
                 </div>

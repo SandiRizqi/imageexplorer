@@ -48,7 +48,7 @@ const MapFooter: React.FC<MapFooterProps> = (props) => {
 
     return (
         <div
-            className="absolute bottom-0 right-0 w-full bg-gray-800 text-white text-xs px-4 py-1 flex justify-between items-center"
+            className="absolute bottom-0 right-0 w-full bg-maincolor text-white text-xs px-4 py-1 flex justify-between items-center"
             {...props} // Spread props for flexibility
         >
             <span className='text-gray-300'></span>

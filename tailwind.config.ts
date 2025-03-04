@@ -9,6 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        maincolor: "#262a59",
+        secondarycolor: "#6168bb",
+        buttonmaincolor: "#d410a9",
+        buttonsecondarycolor: "#f358d1",
         background: "var(--background)",
         foreground: "var(--foreground)",
         gray: {

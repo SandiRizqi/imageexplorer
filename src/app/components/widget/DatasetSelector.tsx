@@ -177,17 +177,17 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
 
     return (
         <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <DialogPanel className="bg-gray-900 p-6 rounded-md text-white w-[90%] max-w-3xl max-h-[90%] flex flex-col">
+            <DialogPanel className="bg-maincolor p-6 rounded-md text-white w-[90%] max-w-3xl max-h-[90%] flex flex-col">
 
                 {/* Fixed Title */}
-                <div className="sticky top-0 bg-gray-900 pb-4 z-10">
+                <div className="sticky top-0 bg-maincolor pb-4 z-10">
                     <DialogTitle className="text-lg font-bold text-yellow-400 text-center">Dataset Selector</DialogTitle>
                 </div>
 
                 {/* Scrollable Content */}
                 <div className="flex-1 overflow-y-auto space-y-2">
                     {datasetCategories.map(category => (
-                        <div key={category.name} className="bg-gray-800 rounded-md p-2">
+                        <div key={category.name} className="bg-secondarycolor rounded-md p-2">
                             <div
                                 className="flex items-center justify-between cursor-pointer"
                                 onClick={() => toggleSection(category.name)}
@@ -218,7 +218,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
                                                     {isChecked ? (
                                                         <CheckSquare className="text-yellow-400 w-5 h-5" />
                                                     ) : (
-                                                        <Square className="text-gray-500 w-5 h-5" />
+                                                        <Square className="text-gray-700 w-5 h-5" />
                                                     )}
                                                     <span className="text-sm">{dataset.name}</span>
                                                 </div>
@@ -234,9 +234,9 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
                 </div>
 
                 {/* Fixed Footer */}
-                <div className="sticky bottom-0 bg-gray-900 pt-4 z-10">
+                <div className="sticky bottom-0 bg-maincolor pt-4 z-10">
                     <div className="flex justify-end">
-                        <button onClick={onClose} className="bg-gray-600 px-3 py-1">
+                        <button onClick={onClose} className="bg-yellow-600 px-3 py-1">
                             Close
                         </button>
                     </div>

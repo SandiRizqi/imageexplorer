@@ -170,10 +170,10 @@ const DrawTool: React.FC = () => {
             <div className="relative group">
                 <button
                     onClick={() => startDrawing("polygon")}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "polygon" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "polygon" ? 'bg-yellow-600' : 'bg-maincolor'} hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
                 >
                     <Pentagon color="white" />
-                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-gray-700 text-xs rounded px-2 py-1 whitespace-nowrap">
+                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
                         Draw Polygon
                     </span>
                 </button>
@@ -183,10 +183,10 @@ const DrawTool: React.FC = () => {
             <div className="relative group">
                 <button
                     onClick={() => startDrawing("rectangle")}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "rectangle" ? 'bg-yellow-600' : 'bg-gray-700'} hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${drawMode === "rectangle" ? 'bg-yellow-600' : 'bg-maincolor'} hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
                 >
                     <Square color="white" />
-                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-gray-700 text-xs rounded px-2 py-1 whitespace-nowrap">
+                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
                         Draw Rectangle
                     </span>
 
@@ -197,10 +197,10 @@ const DrawTool: React.FC = () => {
             {/* Transform Tool */}
             <div className="relative group">
                 <button
-                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-yellow-500 transition-colors duration-200 shadow-xl"
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-maincolor hover:bg-yellow-500 transition-colors duration-200 shadow-xl"
                 >
                     <Tangent color="white" />
-                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-gray-700 text-xs rounded px-2 py-1 whitespace-nowrap">
+                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
                         Transform
                     </span>
                 </button>
@@ -211,10 +211,10 @@ const DrawTool: React.FC = () => {
             <div className="relative group">
                 <button
                     onClick={removeShapes}
-                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-red-500 transition-colors duration-200 shadow-xl"
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-maincolor hover:bg-red-500 transition-colors duration-200 shadow-xl"
                 >
                     <Trash2 color="white" />
-                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-gray-700 text-xs rounded px-2 py-1 whitespace-nowrap">
+                    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
                         Delete
                     </span>
                 </button>

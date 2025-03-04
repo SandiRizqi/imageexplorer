@@ -48,7 +48,7 @@ export default function ToolsContainer() {
                     onClick={() => setActive(obj.name)}
                 >
                     {/* Button */}
-                    <button className={`flex items-center justify-center w-10 h-10 rounded-full ${active === obj.name ? "bg-gray-500" : "hover:bg-gray-600"} bg-gray-700 transition-colors duration-200`}>
+                    <button className={`flex items-center justify-center w-10 h-10 rounded-full ${active === obj.name ? "bg-secondarycolor" : "hover:bg-gray-600"} bg-[#262a59] transition-colors duration-200`}>
                         {obj.icon}
                     </button>
 
