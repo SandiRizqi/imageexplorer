@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         maincolor: "#262a59",
-        secondarycolor: "#6168bb",
+        secondarycolor: "#343b7d",
         buttonmaincolor: "#d410a9",
         buttonsecondarycolor: "#f358d1",
         background: "var(--background)",

@@ -218,7 +218,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
                                                     {isChecked ? (
                                                         <CheckSquare className="text-yellow-400 w-5 h-5" />
                                                     ) : (
-                                                        <Square className="text-gray-700 w-5 h-5" />
+                                                        <Square className="text-gray-500 w-5 h-5" />
                                                     )}
                                                     <span className="text-sm">{dataset.name}</span>
                                                 </div>

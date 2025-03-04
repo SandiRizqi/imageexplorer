@@ -66,7 +66,7 @@ type ImageOverlay = {
 };
 
 export default function SearchContainer() {
-    const {map} = useMap();
+    const {map, setLoadingMap} = useMap();
     const {config, setConfig, filters, imageResult, setImageResults, selectedItem, setSelectedItem} = useConfig();
     const [loading, setOnLoading] = useState<boolean>(false);
    
@@ -175,18 +175,21 @@ export default function SearchContainer() {
     }
 
     const selectItem = async (item: ImageItem) => {
+
         if (selectedItem.includes(item.objectid)) {
             removeImagePreview(item.objectid);
-            const filteredArray = selectedItem.filter(obj => obj !== item.objectid );
+            const filteredArray = selectedItem.filter(obj => obj !== item.objectid);
             setSelectedItem(filteredArray);
             return;
-        }
-       const url = await drawImagePreview(item);
-       if (url) {
+        };
+        setLoadingMap(true);
+        const url = await drawImagePreview(item);
+        if (url) {
             setSelectedItem(prev => ([...prev, item.objectid]));
-       };
-       return;
-        
+        };
+        setLoadingMap(false);
+        return;
+
     }
 
     const handleReset = () => {
