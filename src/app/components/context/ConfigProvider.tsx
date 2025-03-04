@@ -42,6 +42,8 @@ type ConfigContextType = {
     resetFilter:  () => void;
     imageResult: ResultItem[];
     setImageResults: React.Dispatch<React.SetStateAction<ResultItem[]>>;
+    selectedItem: string[];
+    setSelectedItem: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 
@@ -147,6 +149,7 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [config, setConfig] = useState<Config>(initConfig);
     const [filters, setFilters] = useState<Filters>(initFilters);
     const [imageResult, setImageResult] = useState<ResultItem[]>([]);
+    const [selectedItem, setSelectedItem] = useState<string[]>([])
 
     const setImageResults: React.Dispatch<React.SetStateAction<ResultItem[]>> = (data) => {
         setImageResult((prev) => {
@@ -160,11 +163,17 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const resetFilter = () => {
         setFilters(initFilters);
+        setSelectedItem([]);
     }
 
 
     return (
-        <ConfigContext.Provider value={{ config, setConfig, filters, setFilters, resetFilter, imageResult, setImageResults }}>
+        <ConfigContext.Provider value={{ 
+            config, setConfig, 
+            filters, setFilters, 
+            resetFilter, 
+            imageResult, setImageResults, 
+            selectedItem, setSelectedItem }}>
             {children}
         </ConfigContext.Provider>
     );

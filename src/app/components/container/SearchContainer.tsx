@@ -6,6 +6,7 @@ import DatasetFilter from '../widget/DatasetFilter';
 import { useMap } from '../context/MapProvider';
 import { useConfig } from '../context/ConfigProvider';
 import { GeoJSONSource, ImageSource } from 'maplibre-gl';
+import { getPresignedUrl } from '../Tools';
 
 interface Coordinates {
     x: number;
@@ -60,19 +61,20 @@ interface ImageItem {
 
 type ImageOverlay = {
     id: string;
-    url: string;
+    url: string ;
     coordinates: [[number, number], [number, number], [number, number], [number, number]];
 };
 
 export default function SearchContainer() {
     const {map} = useMap();
-    const {config, setConfig, filters, imageResult, setImageResults} = useConfig();
+    const {config, setConfig, filters, imageResult, setImageResults, selectedItem, setSelectedItem} = useConfig();
     const [loading, setOnLoading] = useState<boolean>(false);
    
 
 
     const drawPolygonPreview = (coords: [number, number][]) => {
             if (!map) return;
+            
             const polygonData: GeoJSON.FeatureCollection = {
                 type: "FeatureCollection",
                 features: [{ type: "Feature", geometry: { type: "Polygon", coordinates: [coords] }, properties: {} }],
@@ -96,32 +98,38 @@ export default function SearchContainer() {
     };
 
 
-    const drawImagePreview  = (item: ImageItem) => {
+    const drawImagePreview  = async (item: ImageItem) => {
         if(!map) return;
+        const data  = {
+            catid: item['objectid'],
+            forceHighestQuality: false
+        }
+        const response: string = await getPresignedUrl(data);
         const bbox: [[number, number], [number, number], [number, number], [number, number]] = [
-            [item.topleft.x, item.topleft.y],  // Top-left
-            [item.bottomright.x, item.topleft.y], // Top-right
-            [item.bottomright.x, item.bottomright.y], // Bottom-right
+            
             [item.topleft.x, item.bottomright.y], // Bottom-left
+            [item.bottomright.x, item.bottomright.y], // Bottom-right
+            [item.bottomright.x, item.topleft.y], // Top-right
+            [item.topleft.x, item.topleft.y],  // Top-left
         ]
 
         const imageOverlay: ImageOverlay = {
             id: item.objectid ,
-            url: item.preview_url,
+            url: response,
             coordinates: bbox
         }
 
         if (map.getSource(imageOverlay.id)) {
             (map.getSource(imageOverlay.id) as ImageSource)
             .updateImage({
-                    url: imageOverlay.url,
+                    url: response,
                     coordinates: imageOverlay.coordinates,
                 }
             );
         } else {
             map.addSource(imageOverlay.id, {
                 type: "image",
-                url: imageOverlay.url,
+                url: response,
                 coordinates: imageOverlay.coordinates,
             });
             map.addLayer({
@@ -137,16 +145,12 @@ export default function SearchContainer() {
 
 
 
-    // const removeShapesPreview = () => {
-    //     if (map?.getLayer("polygon-preview-fill")) {
-    //         map.removeLayer("polygon-preview-fill");
-
-    //     }
-    //     if (map?.getLayer("polygon-preview-border")) {
-    //         map.removeLayer("polygon-preview-border");
-    //         map.removeSource("polygon-preview");
-    //     }
-    // };
+    const removeImagePreview = (id: string) => {
+        if (map?.getLayer(id)) {
+            map.removeLayer(id);
+            map.removeSource(id);
+        }
+    };
 
 
     const toggleFilter = () => {
@@ -161,13 +165,25 @@ export default function SearchContainer() {
             [item.topleft.x, item.bottomright.y], // Bottom-left
             [item.topleft.x, item.topleft.y] 
         ]
-
-
         drawPolygonPreview(coords);
     }
 
     const selectItem = (item: ImageItem) => {
+        if (selectedItem.includes(item.objectid)) {
+            removeImagePreview(item.objectid);
+            const filteredArray = selectedItem.filter(obj => obj !== item.objectid );
+            setSelectedItem(filteredArray);
+            return;
+        }
         drawImagePreview(item);
+        setSelectedItem(prev => ([...prev, item.objectid]));
+    }
+
+    const handleReset = () => {
+        selectedItem.forEach(item => {
+            removeImagePreview(item);
+          });
+        setImageResults([]);
     }
 
     return (
@@ -242,7 +258,7 @@ export default function SearchContainer() {
                                             onClick={() => selectItem(row)}
                                             onMouseEnter={() => hoverItemHandler(row)}
                                         >
-                                            <td className="p-2"><input type="checkbox" className='accent-yellow-400' /></td>
+                                            <td className="p-2"><input type="checkbox" className='accent-yellow-400' checked={selectedItem.includes(row.objectid)} /></td>
                                             <td className="p-2 whitespace-nowrap">{row.collection_vehicle_short}</td>
                                             <td className="p-2 whitespace-nowrap">{row.collection_date}</td>
                                             <td className="p-2 whitespace-nowrap">{row.resolution}</td>
@@ -273,7 +289,7 @@ export default function SearchContainer() {
                 <p className="text-xs text-gray-200">0 / {imageResult.length} selected</p>
                 <div className="flex gap-2 w-full mt-2">
                     <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400"
-                    onClick={() => setImageResults([])}
+                    onClick={handleReset}
                     >
                         CLEAR
                     </button>
