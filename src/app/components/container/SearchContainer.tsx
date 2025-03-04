@@ -102,6 +102,7 @@ export default function SearchContainer() {
         if(!map) return;
         const data  = {
             catid: item['objectid'],
+            satelliteShortName: item['collection_vehicle_short'],
             forceHighestQuality: false
         }
         const response: string = await getPresignedUrl(data);

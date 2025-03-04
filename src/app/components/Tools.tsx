@@ -3,6 +3,7 @@ import { AxiosResponse, CancelTokenSource } from "axios";
 
 interface PreviewRequest {
     catid: string;
+    satelliteShortName: string;
     forceHighestQuality: boolean;
   }
   

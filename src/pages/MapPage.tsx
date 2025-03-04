@@ -17,7 +17,7 @@ import Image from 'next/image';
 
 
 export default function MapPage() {
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
 
     const mapView = {

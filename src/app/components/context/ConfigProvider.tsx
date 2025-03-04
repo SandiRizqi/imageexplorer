@@ -111,7 +111,7 @@ export const useConfig = () => {
 };
 
 const initConfig: Config = {
-    isFilterOpen: false,
+    isFilterOpen: true,
     defaultAOIColor: "#FF2C2C",
     defaultAOIPreviewColow: "#2a9df4"
 
