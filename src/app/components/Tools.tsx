@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AxiosResponse } from "axios";
+import { AxiosResponse, CancelTokenSource } from "axios";
 
 interface PreviewRequest {
     catid: string;
@@ -10,19 +10,32 @@ interface PreviewRequest {
     presigned_url: string;
   }
   
- export const getPresignedUrl = async (requestData: PreviewRequest): Promise<string | ''> => {
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/preview`;
+  let cancelToken: CancelTokenSource | null = null; // Store the cancel token globally
+
+  export const getPresignedUrl = async (requestData: PreviewRequest): Promise<string | ''> => {
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/preview`;
   
-    try {
-      const response: AxiosResponse<PreviewResponse> = await axios.post(url, requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      // Cancel the previous request if it's still pending
+      if (cancelToken) {
+          cancelToken.cancel('Request canceled due to new request.');
+      }
   
-      return response.data.presigned_url;
-    } catch (error) {
-      console.error('Error fetching presigned URL:', error);
-      return '';
-    }
-  }
+      // Create a new cancel token
+      cancelToken = axios.CancelToken.source();
+  
+      try {
+          const response: AxiosResponse<PreviewResponse> = await axios.post(url, requestData, {
+              headers: { 'Content-Type': 'application/json' },
+              cancelToken: cancelToken.token, // Attach the cancel token
+          });
+  
+          return response.data.presigned_url;
+      } catch (error) {
+          if (axios.isCancel(error)) {
+              console.log('Previous request canceled:', error.message);
+          } else {
+              console.error('Error fetching presigned URL:', error);
+          }
+          return '';
+      }
+  };

@@ -4,6 +4,7 @@ import DatasetSelector from './DatasetSelector';
 import { useConfig } from '../context/ConfigProvider';
 import { usePolygon } from '../context/PolygonProvider';
 import LoadingScreen from '../LoadingScreen';
+import { useMap } from '../context/MapProvider';
 import axios from 'axios';
 
 
@@ -13,8 +14,9 @@ type DatasetFilterProps = {
   };
 
 export default function DatasetFilter({onLoading} : DatasetFilterProps) {
+    const {map} = useMap();
     const [selected, setSelected] = useState<selectedMode>(null);
-    const {filters, setFilters, resetFilter, setImageResults} = useConfig();
+    const {filters, setFilters, resetFilter, selectedItem, setImageResults} = useConfig();
     const {polygon} = usePolygon();
     const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -48,12 +50,30 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
     };
 
 
+    const removeImagePreview = (id: string) => {
+        if (map?.getLayer(id)) {
+            map.removeLayer(id);
+            map.removeSource(id);
+        }
+    };
+
+    const handleReset = () => {
+        selectedItem.forEach(item => {
+            removeImagePreview(item);
+          });
+        setImageResults([]);
+    }
+
+
     const handleSubmit = async () => {
         
         if (polygon.length < 3) {
             console.error("You need to provide at least 3 coordinates for a polygon.");
             return;
-        }
+        };
+
+        handleReset();
+        
         const data = { ...filters, coords: polygon };
     
         try {

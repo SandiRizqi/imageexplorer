@@ -112,6 +112,9 @@ export default function SearchContainer() {
             [item.bottomright.x, item.topleft.y], // Top-right
             [item.topleft.x, item.topleft.y],  // Top-left
         ]
+        if(response === '') {
+            return null;
+        }
 
         const imageOverlay: ImageOverlay = {
             id: item.objectid ,
@@ -141,6 +144,8 @@ export default function SearchContainer() {
                 },
             }, "polygon-border");
         }
+
+        return response;
     };
 
 
@@ -168,15 +173,19 @@ export default function SearchContainer() {
         drawPolygonPreview(coords);
     }
 
-    const selectItem = (item: ImageItem) => {
+    const selectItem = async (item: ImageItem) => {
         if (selectedItem.includes(item.objectid)) {
             removeImagePreview(item.objectid);
             const filteredArray = selectedItem.filter(obj => obj !== item.objectid );
             setSelectedItem(filteredArray);
             return;
         }
-        drawImagePreview(item);
-        setSelectedItem(prev => ([...prev, item.objectid]));
+       const url = await drawImagePreview(item);
+       if (url) {
+            setSelectedItem(prev => ([...prev, item.objectid]));
+       };
+       return;
+        
     }
 
     const handleReset = () => {
@@ -263,7 +272,13 @@ export default function SearchContainer() {
                                             <td className="p-2 whitespace-nowrap">{row.collection_date}</td>
                                             <td className="p-2 whitespace-nowrap">{row.resolution}</td>
                                             <td className="p-2 whitespace-nowrap">{row.cloud_cover_percent} %</td>
-                                            <td className={`p-2 font-semibold ${row.color || ''} whitespace-nowrap`}>{100}</td>
+                                            <td className={`p-2 font-semibold whitespace-nowrap`}>
+                                            {Array.isArray(row.offnadir)
+                                                ? parseFloat(row.offnadir[0]).toFixed(1) // Get the first value if it's an array
+                                                : typeof row.offnadir === 'number'
+                                                ? row.offnadir.toFixed(1) // Round if it's a number
+                                                : row.offnadir || ''} {/* Display as-is if it's a string */}
+                                            </td>
                                             <td className="p-2 whitespace-nowrap"><FaInfoCircle className="text-gray-400 hover:text-gray-200" /></td>
                                         </tr>
                                     ))
@@ -286,7 +301,7 @@ export default function SearchContainer() {
 
             {/* Footer Buttons */}
             <div className="absolute bottom-0 w-full bg-gray-800 p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[100px]">
-                <p className="text-xs text-gray-200">0 / {imageResult.length} selected</p>
+                <p className="text-xs text-gray-200">{selectedItem.length} / {imageResult.length} selected</p>
                 <div className="flex gap-2 w-full mt-2">
                     <button className="flex-1 bg-yellow-500 text-gray-800 py-2 px-2 rounded-md text-xs hover:bg-yellow-400"
                     onClick={handleReset}
