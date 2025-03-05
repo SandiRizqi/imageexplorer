@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { ScatterplotLayer } from "@deck.gl/layers";
@@ -61,13 +62,13 @@ export default function MapPage() {
                     <PolygonProvider>
                         <div className="relative w-screen h-screen">
                             {/* Sidebar */}
-                            <Sidebar isMobile={isMobile} menuOpen={menuOpen} />
+                            <Sidebar isMobile={isMobile} menuOpen={menuOpen} onClose={() => setMenuOpen(false)}/>
                             {/* Navbar */}
                             <div
                                 className={`absolute top-0 left-0 bg-[#262a59] h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-xl`} // Added shadow-lg
                                 style={{
-                                    width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
-                                    marginLeft: menuOpen && !isMobile ? "400px" : "0",
+                                    width: isMobile ? "100%" : menuOpen ? "calc(100% - 400px)" : "100%",
+                                    marginLeft: isMobile ? "0" : menuOpen ? "400px" : "0",
                                 }}
                             >
                                 <div className='flex flex-row items-center pl-4'>

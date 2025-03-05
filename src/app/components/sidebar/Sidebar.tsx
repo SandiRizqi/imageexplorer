@@ -2,28 +2,39 @@ import React, { useState } from 'react';
 import SearchContainer from '../container/SearchContainer';
 import AccountContainer from '../container/AccountContainer';
 import { motion, AnimatePresence } from 'framer-motion';
-
-
+import { X } from 'lucide-react';
 
 interface SidebarProps {
     isMobile: boolean;
     menuOpen: boolean;
+    onClose: () => void; // Function to handle closing
 }
 
-export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
+export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
     const [activeTab, setActiveTab] = useState<'search' | 'account'>('search');
-    
-
 
     return (
-        <div >
+        <div>
             {/* Sidebar */}
-            <div
-                className={`absolute top-0 left-0 h-full bg-gray-100 text-white  transition-transform duration-300 ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}
+            <motion.div
+                initial={{ x: "-100%" }}
+                animate={{ x: menuOpen ? "0%" : "-100%" }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="absolute top-0 left-0 h-full bg-gray-100 text-white z-20 shadow-lg"
                 style={{
                     width: isMobile ? "100%" : "400px",
                 }}
             >
+                {/* Close Button for Mobile */}
+                {isMobile && (
+                    <button
+                        onClick={onClose}
+                        className="absolute top-2 right-3 bg-maincolor hover:bg-secondarycolor text-white p-2 rounded-full shadow-md border"
+                    >
+                        <X size={14} />
+                    </button>
+                )}
+
                 {/* Tabs */}
                 <div className="flex border-b border-gray-600 h-[50px] shadow-xl">
                     <button
@@ -40,8 +51,6 @@ export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
                     </button>
                 </div>
 
-
-
                 {/* Content */}
                 <div className='flex flex-col h-[calc(100%-100px)] overflow-hidden'>
                     <AnimatePresence mode="wait">
@@ -56,9 +65,9 @@ export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
                             >
                                 <SearchContainer />
                             </motion.div>
-                                
                         ) : (
                             <motion.div
+                                key="account"
                                 initial={{ x: "-100%" }}
                                 animate={{ x: "0%" }}
                                 exit={{ x: "100%" }}
@@ -68,10 +77,9 @@ export default function Sidebar({ isMobile, menuOpen }: SidebarProps) {
                                 <AccountContainer />
                             </motion.div>
                         )}
-
                     </AnimatePresence>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 }

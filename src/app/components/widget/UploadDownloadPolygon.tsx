@@ -7,6 +7,7 @@ import * as shapefile from "shapefile";
 import { DOMParser } from "@xmldom/xmldom";
 import { useMap } from '../context/MapProvider';
 import { usePolygon } from '../context/PolygonProvider';
+import { useConfig } from '../context/ConfigProvider';
 import shpwrite from "@mapbox/shp-write";
 import JSZip from 'jszip';
 import { Geometry, Feature, FeatureCollection, GeoJsonProperties, Polygon, MultiPolygon } from 'geojson';
@@ -177,6 +178,7 @@ interface PolygonUploadModalProps {
 
 const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose, onUpload }) => {
   const [error, setError] = useState<string | null>(null);
+  
 
   const onDrop = async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return;
@@ -300,6 +302,7 @@ type Mode = "upload" | "download" | null;
 
 
 export default function UploadDownloadPolygon() {
+  const {config} = useConfig();
     const [mode, setMode] = useState<Mode>(null);
     const [isPolygon, setIsPolygon] = useState<boolean>(false);
     const {polygon, setPolygon} = usePolygon();
@@ -332,7 +335,7 @@ export default function UploadDownloadPolygon() {
                     type: "fill",
                     source: "polygon",
                     paint: {
-                        "fill-color": "red",
+                        "fill-color": config.defaultAOIColor,
                         "fill-opacity": 0, // Semi-transparent pink fill
                     },
                 });
@@ -342,7 +345,7 @@ export default function UploadDownloadPolygon() {
                     type: "line",
                     source: "polygon",
                     paint: {
-                        "line-color": "red",
+                        "line-color": config.defaultAOIColor,
                         "line-width": 4,
                         "line-opacity": 1, // Transparent border
                     },

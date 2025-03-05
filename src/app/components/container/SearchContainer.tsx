@@ -65,10 +65,16 @@ type ImageOverlay = {
     coordinates: [[number, number], [number, number], [number, number], [number, number]];
 };
 
+type SortKey = keyof ImageItem;
+
+type SortOrder = 'asc' | 'desc';
+
 export default function SearchContainer() {
     const {map, setLoadingMap} = useMap();
     const {config, setConfig, filters, imageResult, setImageResults, selectedItem, setSelectedItem} = useConfig();
     const [loading, setOnLoading] = useState<boolean>(false);
+    const [sortKey, setSortKey] = useState<SortKey | null>(null);
+    const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
    
 
 
@@ -204,7 +210,48 @@ export default function SearchContainer() {
             removeImagePreview(item);
           });
         setImageResults([]);
-    }
+    };
+
+
+    const handleSort = (key: SortKey) => {
+        const newOrder: SortOrder = sortKey === key && sortOrder === 'asc' ? 'desc' : 'asc';
+        setSortKey(key);
+        setSortOrder(newOrder);
+    
+        const sortedData = [...imageResult].sort((a, b) => {
+            let valueA = a[key];
+            let valueB = b[key];
+    
+            // Ensure both values exist
+            if (valueA === null || valueA === undefined) valueA = '';
+            if (valueB === null || valueB === undefined) valueB = '';
+    
+            // Sort by 'collection_date' (convert "MM-DD-YYYY" to Date)
+            if (key === 'collection_date') {
+                const dateA = new Date(valueA as string).getTime();
+                const dateB = new Date(valueB as string).getTime();
+                return newOrder === 'asc' ? dateA - dateB : dateB - dateA;
+            }
+    
+            // Convert 'cloud_cover_percent', 'offnadir', 'sun_az', 'resolution' to numbers
+            if (['cloud_cover_percent', 'offnadir', 'resolution'].includes(key)) {
+                const numA = parseFloat((valueA as string).toString().replace(/[^0-9.]/g, '')) || 0;
+                const numB = parseFloat((valueB as string).toString().replace(/[^0-9.]/g, '')) || 0;
+                return newOrder === 'asc' ? numA - numB : numB - numA;
+            }
+    
+            // Sort by 'collection_vehicle_short' as a string
+            if (key === 'collection_vehicle_short') {
+                return newOrder === 'asc' 
+                    ? (valueA as string).localeCompare(valueB as string) 
+                    : (valueB as string).localeCompare(valueA as string);
+            }
+    
+            return 0;
+        });
+    
+        setImageResults(sortedData);
+    };
 
     return (
         <div className="flex flex-col h-screen">
@@ -249,18 +296,18 @@ export default function SearchContainer() {
                         <thead className="bg-gray-300 text-maincolor sticky top-0 h-[50px] shadow-lg">
                             <tr className="text-xs">
                                 <th className="p-2  w-[30px]"><input type="checkbox" className='accent-yellow-400'/></th>
-                                <th className="p-2 min-w-[20px]">Sat</th>
-                                <th className="p-2 w-[80px]">Date</th>
-                                <th className="p-2 min-w-[40px]">Res</th>
-                                <th className="p-2 min-w-[40px]">Cloud</th>
-                                <th className="p-2 max-w-[40px] whitespace-nowrap">Off-Nadir</th>
+                                <th className="p-2 min-w-[20px] cursor-pointer" onClick={() => handleSort('collection_vehicle_short')} >Sat</th>
+                                <th className="p-2 w-[80px] cursor-pointer" onClick={() => handleSort('collection_date')}>Date</th>
+                                <th className="p-2 min-w-[40px] cursor-pointer" onClick={() => handleSort('resolution')}>Res</th>
+                                <th className="p-2 min-w-[40px] cursor-pointer" onClick={() => handleSort('cloud_cover_percent')}>Cloud</th>
+                                <th className="p-2 max-w-[40px] whitespace-nowrap" >Off-Nadir</th>
                                 <th className="p-2 min-w-[20px]"></th>
                             </tr>
                         </thead>
                         <tbody className="bg-white text-maincolor" onMouseLeave={leaveItemHendler}>
                             {loading ? (
                                 // Render loading rows while data is being fetched
-                                [...Array(10)].map((_, index) => (
+                                [...Array(20)].map((_, index) => (
                                     <tr key={index} className="border-b border-gray-500 text-sm h-[40px] bg-gray-200 animate-pulse">
                                         <td className="p-2"><div className="h-4 w-4 bg-gray-300 rounded"></div></td>
                                         <td className="p-2"><div className="h-4 w-10 bg-gray-300 rounded"></div></td>
