@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMap } from "../context/MapProvider";
 import { MapMouseEvent, GeoJSONSource } from "maplibre-gl";
-import { Square, Trash2, Pentagon, Tangent } from "lucide-react";
+import { Square, Trash2, Pentagon } from "lucide-react";
 import { usePolygon } from "../context/PolygonProvider";
 import { useConfig } from "../context/ConfigProvider";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -15,6 +15,20 @@ const DrawTool: React.FC = () => {
     const [isDrawing, setIsDrawing] = useState<boolean>(false);
     const [drawMode, setDrawMode] = useState<DrawMode>(null);
     const [startPoint, setStartPoint] = useState<[number, number] | null>(null);
+
+    const stopDrawing = () => {
+        if (drawMode === "polygon" && polygon.length > 2) {
+            drawPolygon([...polygon, polygon[0]]);
+            setPolygon([...polygon, polygon[0]]);
+        }
+        setIsDrawing(false);
+        setStartPoint(null);
+        setDrawMode(null);
+        if (map) {
+            map.getCanvas().style.cursor = "grab"; // or "default" depending on your preference
+        }
+    };
+
 
     useEffect(() => {
         if (!map || !isDrawing) return;
@@ -43,18 +57,7 @@ const DrawTool: React.FC = () => {
             }
         };
 
-        const stopDrawing = () => {
-            if (drawMode === "polygon" && polygon.length > 2) {
-                drawPolygon([...polygon, polygon[0]]);
-                setPolygon([...polygon, polygon[0]]);
-            }
-            setIsDrawing(false);
-            setStartPoint(null);
-            setDrawMode(null);
-            if (map) {
-                map.getCanvas().style.cursor = "grab"; // or "default" depending on your preference
-            }
-        };
+        
 
         map.on("click", handleClick);
         map.on("mousemove", handleMouseMove);
@@ -162,6 +165,7 @@ const DrawTool: React.FC = () => {
             map.removeSource("polygon");
         }
         removeLine();
+        stopDrawing();
     };
 
     return (
@@ -195,7 +199,7 @@ const DrawTool: React.FC = () => {
             </div>
 
             {/* Transform Tool */}
-            <div className="relative group">
+            {/* <div className="relative group">
                 <button
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-maincolor hover:bg-yellow-500 transition-colors duration-200 shadow-xl"
                 >
@@ -205,7 +209,7 @@ const DrawTool: React.FC = () => {
                     </span>
                 </button>
 
-            </div>
+            </div> */}
 
             {/* Delete Tool */}
             <div className="relative group">

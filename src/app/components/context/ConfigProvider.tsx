@@ -142,7 +142,7 @@ const initFilters: Filters = {
     persistentScenes: [],
     startDate: defaultStartDate,
     endDate: defaultEndDate,
-    satellites: ["ALOS","J14","J15","K2","K3","K3A","KZ1","KZ2","LS-13","LS4/5","LS_TM","LS7","LS8","PS","PNEO","P1","QB","REO","RES","SP1","SP2","SP3","SP4","SP5","SP6","WV1","WV2","WV3","WV3_SWIR","WV4"]
+    satellites: ["ALOS","J14","J15","K2","K3","K3A","KZ1","KZ2","LS-13","LS4/5","LS_TM","LS7","LS8","PS","PNEO","P1","QB","REO","RES","SP1","SP2","SP3","SP4","SP5","SP6","WV1","WV2","WV3","WV4"]
 }
 
 export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

@@ -15,7 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Image Explorer | Map",
+  title: "Image Explore | Map",
   description: "We provide high-quality satellite imagery data to empower businesses, researchers, and decision-makers with cutting-edge geospatial insights.",
 };
 

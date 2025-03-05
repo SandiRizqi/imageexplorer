@@ -174,6 +174,13 @@ export default function SearchContainer() {
         drawPolygonPreview(coords);
     }
 
+    const leaveItemHendler = () => {
+        if (map?.getLayer("polygon-preview-border")) {
+            map.removeLayer("polygon-preview-border");
+            map.removeSource("polygon-preview");
+        }
+    }
+
     const selectItem = async (item: ImageItem) => {
 
         if (selectedItem.includes(item.objectid)) {
@@ -250,7 +257,7 @@ export default function SearchContainer() {
                                 <th className="p-2 min-w-[20px]"></th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white text-maincolor">
+                        <tbody className="bg-white text-maincolor" onMouseLeave={leaveItemHendler}>
                             {loading ? (
                                 // Render loading rows while data is being fetched
                                 [...Array(10)].map((_, index) => (

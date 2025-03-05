@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Waypoints, Hand, Save, Ruler, Settings } from 'lucide-react';
+import { Waypoints, Save, Ruler, Settings } from 'lucide-react';
 import DrawTool from '../widget/DrawPolygon';
 import UploadDownloadPolygon from '../widget/UploadDownloadPolygon';
 
@@ -8,13 +8,17 @@ export default function ToolsContainer() {
     const [active, setActive] = useState<string | null>(null);
 
 
+    function handleClick (name: string) {
+        if (name === active) {
+            setActive(null);
+        }
+        setActive(name)
+    }
+
+
 
     const Tools = [
-        {
-            icon: <Hand color="white" size={22} />,
-            name: 'drag',
-            content: null
-        },
+        
         {
             icon: <Waypoints color="white" size={22} />,
             name: 'drawtool',
@@ -45,7 +49,7 @@ export default function ToolsContainer() {
                 <div
                     key={idx}
                     className="relative"
-                    onClick={() => setActive(obj.name)}
+                    onClick={() => handleClick(obj.name)}
                 >
                     {/* Button */}
                     <button className={`flex items-center justify-center w-10 h-10 rounded-full ${active === obj.name ? "bg-secondarycolor" : "hover:bg-secondarycolor"} bg-[#262a59] transition-colors duration-200`}>

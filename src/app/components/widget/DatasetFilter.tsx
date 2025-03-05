@@ -8,14 +8,14 @@ import { useMap } from '../context/MapProvider';
 import axios from 'axios';
 
 
-type selectedMode = string | null;
+// type selectedMode = string | null;
 type DatasetFilterProps = {
     onLoading: (loading: boolean) => void; // Function that takes a boolean and returns void
   };
 
 export default function DatasetFilter({onLoading} : DatasetFilterProps) {
     const {map} = useMap();
-    const [selected, setSelected] = useState<selectedMode>(null);
+    // const [selected, setSelected] = useState<selectedMode>(null);
     const {filters, setFilters, resetFilter, selectedItem, setImageResults} = useConfig();
     const {polygon} = usePolygon();
     const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
@@ -45,9 +45,9 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
 
 
     // Function to handle selection
-    const handleCheckboxChange = (value: selectedMode) : void => {
-        setSelected(selected === value ? null : value);
-    };
+    // const handleCheckboxChange = (value: selectedMode) : void => {
+    //     setSelected(selected === value ? null : value);
+    // };
 
 
     const removeImagePreview = (id: string) => {
@@ -164,7 +164,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
 
                 {/* Data Types - Allow Only One Selection */}
                 
-                <p className='mb-0 mb-0 text-gray-400'>Filter:</p>
+                {/* <p className='mb-0 mb-0 text-gray-400'>Filter:</p>
                 <div className="text-sm text-gray-400 flex flex-row space-x-4">
                     
                     <label className="flex items-center space-x-2">
@@ -203,9 +203,9 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                         />
                         <span className='text-xs'>SAR</span>
                     </label>
-                </div>
+                </div> */}
 
-            </div>
+            </div> 
             <DatasetSelector isOpen={isOpenDataSelector} onClose={() => setIsOpenDataSelector(false)}/>
 
             {/* Footer - Stays at Bottom */}
