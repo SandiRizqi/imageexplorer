@@ -11,7 +11,7 @@ import { PolygonProvider } from '../app/components/context/PolygonProvider';
 import DeckGLOverlay from '../app/components/DeckGLOverlay';
 import ToolsContainer from '../app/components/container/ToolsContainer';
 import MapFooter from '../app/components/MapFooter';
-import { Menu } from 'lucide-react';
+import { Menu, ShoppingCart } from 'lucide-react';
 import logo from '../app/components/assets/logo_ie.webp';
 import Image from 'next/image';
 
@@ -86,8 +86,13 @@ export default function MapPage() {
 
 
                                 {/* Login/Signup Button */}
-                                <AuthModal />
-                            </div>
+                                <div className="flex items-center gap-4">
+                                    <button className="flex items-center gap-2 p-2 text-white hover:text-gray-300 w-10 h-10 rounded-full hover:bg-secondarycolor transition">
+                                        <ShoppingCart className="w-5 h-5" size={14} />
+                                    </button>
+                                    <AuthModal />
+                                </div>
+                             </div>
 
                             {/* Map Container */}
                             <div

@@ -12,7 +12,7 @@ export default function ToolsContainer() {
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
+            setIsMobile(window.innerWidth <= 937);
         };
 
         handleResize();

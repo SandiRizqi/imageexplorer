@@ -307,7 +307,7 @@ export default function SearchContainer() {
                         <tbody className="bg-white text-maincolor" onMouseLeave={leaveItemHendler}>
                             {loading ? (
                                 // Render loading rows while data is being fetched
-                                [...Array(20)].map((_, index) => (
+                                [...Array(50)].map((_, index) => (
                                     <tr key={index} className="border-b border-gray-500 text-sm h-[40px] bg-gray-200 animate-pulse">
                                         <td className="p-2"><div className="h-4 w-4 bg-gray-300 rounded"></div></td>
                                         <td className="p-2"><div className="h-4 w-10 bg-gray-300 rounded"></div></td>

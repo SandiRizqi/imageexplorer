@@ -6,6 +6,8 @@ import { usePolygon } from '../context/PolygonProvider';
 import LoadingScreen from '../LoadingScreen';
 import { useMap } from '../context/MapProvider';
 import axios from 'axios';
+import Alert from '../Alert';
+
 
 
 // type selectedMode = string | null;
@@ -16,12 +18,13 @@ type DatasetFilterProps = {
 export default function DatasetFilter({onLoading} : DatasetFilterProps) {
     const {map} = useMap();
     // const [selected, setSelected] = useState<selectedMode>(null);
-    const {filters, setFilters, resetFilter, selectedItem, setImageResults} = useConfig();
+    const {config, setConfig, filters, setFilters, resetFilter, selectedItem, setImageResults} = useConfig();
     const {polygon} = usePolygon();
     const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const defaultStartDate = new Date(filters.startDate).toISOString().split("T")[0];
     const defaultEndDate = new Date(filters.endDate).toISOString().split("T")[0];
+    const [Error, setError] = useState<string|null>(null);
 
     const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>, key: string): void => {
         const selectedDate = new Date(e.target.value); // Parse as local time
@@ -62,13 +65,14 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
             removeImagePreview(item);
           });
         setImageResults([]);
+        setConfig({...config, isFilterOpen: false});
     }
 
 
     const handleSubmit = async () => {
         
         if (polygon.length < 3) {
-            console.error("You need to provide at least 3 coordinates for a polygon.");
+            setError("You need to provide at least 3 coordinates for a polygon or upload a geojson, kml, or shapefile.");
             return;
         };
 
@@ -222,6 +226,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                     <button className="bg-buttonmaincolor px-4 py-2 rounded-md text-white hover:bg-buttonsecondarycolor" onClick={handleSubmit}>APPLY</button>
                 </div>
             </div>
+            {Error && <Alert category={"error"} message={Error} setClose={setError} />}
         </>
     )
 }
