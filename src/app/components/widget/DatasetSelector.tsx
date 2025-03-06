@@ -38,7 +38,7 @@ const datasetCategories: DatasetCategory[] = [
             { name: "SPOT 3 (SP3) - 10-m 3-band", value: "SP3" },
             { name: "SPOT 4 (SP4) - 10-m 3-band + 20-m SWIR", value: "SP4" },
             { name: "SPOT 5 (SP5) - 2.5-m 3-band + 20-m SWIR", value: "SP5" },
-            { name: "SPOT 6/7 (SP6/7) - 1.5-m 4-band", value: "SP6/7" },
+            { name: "SPOT 6/7 (SP6) - 1.5-m 4-band", value: "SP6" },
             { name: "TerraSAR-X Staring SpotLight (TST) - up to 25-cm X-band SAR", value: "TST" },
             { name: "TerraSAR-X High Resolution SpotLight (THS) - up to 1-m X-band SAR", value: "THS" },
             { name: "TerraSAR-X SpotLight (TSL) - up to 2-m X-band SAR", value: "TSL" },
