@@ -58,7 +58,7 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
       map.jumpTo(mapView);
       map.on("load", setLoaded)
     }
-  }, [map]);
+  }, [map, mapView]);
 
   useEffect(() => {
     if (map && mapStyle) {
