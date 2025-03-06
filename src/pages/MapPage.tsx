@@ -14,7 +14,7 @@ import MapFooter from '../app/components/MapFooter';
 import { Menu, ShoppingCart } from 'lucide-react';
 import logo from '../app/components/assets/logo_ie.webp';
 import Image from 'next/image';
-
+import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
 
 
 
@@ -104,10 +104,11 @@ export default function MapPage() {
                             >
                                 <MapInstance
                                     id="map"
-                                    mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+                                    mapStyle="https://tiles.stadiamaps.com/styles/osm_bright.json"
                                     mapView={mapView}
                                 />
                                 <DeckGLOverlay {...deckProps} />
+                                <BasemapSwitcher />
                                 <MapFooter style={{
                                     width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
                                     marginLeft: menuOpen && !isMobile ? "400px" : "0",

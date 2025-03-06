@@ -99,6 +99,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
             } else {
                 console.error("Unexpected error:", error);
             }
+            setConfig(prev => ({...prev, isFilterOpen: true}))
         } finally {
             setLoading(false);
             onLoading(false);
