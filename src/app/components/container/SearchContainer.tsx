@@ -378,13 +378,6 @@ export default function SearchContainer() {
                         SAVE
                     </button>
 
-                    <button 
-                        className="flex-1 bg-yellow-500 text-gray-900 py-2 px-2 rounded-md text-xs 
-                        hover:bg-yellow-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
-                        disabled={selectedItem.length <=0 }
-                    >
-                        CREATE QUOTE
-                    </button>
                 </div>
             </div>
 

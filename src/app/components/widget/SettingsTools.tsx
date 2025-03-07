@@ -83,7 +83,7 @@ const SettingsTools: React.FC<AOISettingsModalProps> = ({ isOpen, onClose }) => 
 
         {/* Buttons */}
         <div className="flex justify-end mt-4 space-x-2">
-          <button onClick={handleSave} className="bg-yellow-600 px-3 py-1 text-white">Save</button>
+          <button onClick={handleSave} className="bg-yellow-600 px-3 py-1 text-white rounded-sm">Save</button>
         </div>
       </DialogPanel>
     </Dialog>
