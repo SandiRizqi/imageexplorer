@@ -11,10 +11,11 @@ import { PolygonProvider } from '../app/components/context/PolygonProvider';
 import DeckGLOverlay from '../app/components/DeckGLOverlay';
 import ToolsContainer from '../app/components/container/ToolsContainer';
 import MapFooter from '../app/components/MapFooter';
-import { Menu, ShoppingCart } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import logo from '../app/components/assets/logo_ie.webp';
 import Image from 'next/image';
 import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
+import Cart from '../app/components/widget/Cart';
 
 
 
@@ -23,6 +24,7 @@ import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
 export default function MapPage() {
     const [menuOpen, setMenuOpen] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+
 
     const mapView = {
         center: [106.8456, -6.2088] as [number, number], // Jakarta
@@ -87,9 +89,7 @@ export default function MapPage() {
 
                                 {/* Login/Signup Button */}
                                 <div className="flex items-center gap-4">
-                                    <button className="flex items-center gap-2 p-2 text-white hover:text-gray-300 w-10 h-10 rounded-full hover:bg-secondarycolor transition">
-                                        <ShoppingCart className="w-5 h-5" size={14} />
-                                    </button>
+                                    <Cart isMobile={isMobile} />
                                     <AuthModal />
                                 </div>
                              </div>
