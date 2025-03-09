@@ -22,7 +22,7 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
     const {setFilters, setImageResults, setSelectedItem} = useConfig();
     const {setPolygon} = usePolygon();
     const searchParams = useSearchParams();
-    const configId = searchParams?.get('saveconfig');
+    const configId = searchParams?.get('savedconfig');
     const [Error, setError] = useState<string|null>(null);
 
 
