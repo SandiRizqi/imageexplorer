@@ -3,6 +3,13 @@ import SearchContainer from '../container/SearchContainer';
 import AccountContainer from '../container/AccountContainer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useConfig } from '../context/ConfigProvider';
+import { usePolygon } from '../context/PolygonProvider';
+import { getSavedConfig } from '../Tools';
+import Alert from '../Alert';
+
 
 interface SidebarProps {
     isMobile: boolean;
@@ -12,6 +19,30 @@ interface SidebarProps {
 
 export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
     const [activeTab, setActiveTab] = useState<'search' | 'account'>('search');
+    const {setFilters, setImageResults, setSelectedItem} = useConfig();
+    const {setPolygon} = usePolygon();
+    const searchParams = useSearchParams();
+    const configId = searchParams?.get('saveconfig');
+    const [Error, setError] = useState<string|null>(null);
+
+
+    useEffect(() => {
+        if (configId) {
+            const fetchConfig = async () => {
+                const data = await getSavedConfig(configId, setError);
+                if (data) {
+                    setFilters(data['filter']);
+                    setImageResults(data['results']);
+                    setSelectedItem(data['selected'])
+                    setPolygon(data['polygon'])
+                    return;
+                }
+            };
+    
+            fetchConfig();
+        }
+
+    },[configId])
 
     return (
         <div>
@@ -80,6 +111,7 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
                     </AnimatePresence>
                 </div>
             </motion.div>
+            {Error && <Alert category={"error"} message={Error} setClose={setError} />}
         </div>
     );
 }

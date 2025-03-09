@@ -83,3 +83,34 @@ export const saveConfig = async (configData: SaveConfig,
         return '';
     }
 }
+
+
+export const getSavedConfig = async (id: string,
+    setError: (message: string) => void) : Promise<SaveConfig | null > => {
+
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/saveconfig?id=${id}`;
+
+    // Cancel the previous request if it's still pending
+    if (cancelToken) {
+        cancelToken.cancel('Request canceled due to new request.');
+    }
+
+    // Create a new cancel token
+    cancelToken = axios.CancelToken.source();
+
+    try {
+        const response: AxiosResponse<SaveConfig> = await axios.get(url, {
+            headers: { 'Content-Type': 'application/json' },
+            cancelToken: cancelToken.token, // Attach the cancel token
+        });
+
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            setError(error.response?.data.error)
+        } else {
+            setError("Something error in server.");
+        }
+        return null;
+    }
+}

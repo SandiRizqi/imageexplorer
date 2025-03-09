@@ -1,10 +1,11 @@
 'use client'
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { ScatterplotLayer } from "@deck.gl/layers";
 import MapInstance from '../app/components/MapInstance';
 import Sidebar from '../app/components/sidebar/Sidebar';
 import AuthModal from '../app/components/auth/AuthModal';
+import LoadingScreen from '../app/components/LoadingScreen';
 import { ConfigProvider } from '../app/components/context/ConfigProvider';
 import { MapProvider } from '../app/components/context/MapProvider';
 import { PolygonProvider } from '../app/components/context/PolygonProvider';
@@ -16,6 +17,7 @@ import logo from '../app/components/assets/logo_ie.webp';
 import Image from 'next/image';
 import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
 import Cart from '../app/components/widget/Cart';
+
 
 
 
@@ -58,7 +60,7 @@ export default function MapPage() {
 
 
     return (
-        <div>
+        <Suspense fallback={<LoadingScreen />}>
             <ConfigProvider>
                 <MapProvider>
                     <PolygonProvider>
@@ -118,6 +120,6 @@ export default function MapPage() {
                     </PolygonProvider>
                 </MapProvider>
             </ConfigProvider>
-        </div>
+        </Suspense>
     )
 }
