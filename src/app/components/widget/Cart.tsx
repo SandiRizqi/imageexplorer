@@ -74,10 +74,10 @@ export default function Cart({ isMobile }: CartProps) {
                                             {cartItem.map((item, index) => (
                                                 <li key={index} className="p-3 mt-1 border-b border-gray-700 bg-maincolor rounded-lg flex flex-col">
                                                     {/* Details */}
-                                                    <p className="font-semibold text-white">{item.collection_vehicle_short}_{item.objectid}</p>
+                                                    <p className="font-semibold text-white truncate w-50">{item.collection_vehicle_short}_{item.objectid}</p>
                                                     <p className="text-gray-300"><span className="font-bold">Date:</span> {item.collection_date}</p>
                                                     <p className="text-gray-300"><strong>Time:</strong> {item.acq_time || "N/A"}</p>
-                                                    <p className="text-gray-300"><span className="font-bold">Resolution:</span> {item.resolution} m</p>
+                                                    <p className="text-gray-300"><span className="font-bold">Resolution:</span> {item.resolution}</p>
                                                     <p className="text-gray-300"><span className="font-bold">Cloud coverage:</span> {item.cloud_cover_percent}%</p>
                                                 </li>
                                             ))}

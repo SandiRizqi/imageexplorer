@@ -95,9 +95,9 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
             return ; // Return data if needed for further processing
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error("Axios error:", error.response?.data || error.message);
+                setError(error.response?.data.error)
             } else {
-                console.error("Unexpected error:", error);
+                setError("Something error in server.");
             }
             setConfig(prev => ({...prev, isFilterOpen: true}))
         } finally {

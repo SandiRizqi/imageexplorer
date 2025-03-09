@@ -50,3 +50,37 @@ export interface ImageItem {
     target_az_min: number | null;
     topleft: Coordinates;
 }
+
+interface DateFilter {
+  startDate: string;
+  endDate: string;
+}
+
+export interface Filters {
+  cloudcover_max: number;
+  offnadir_max: number;
+  resolution_min: number;
+  resolution_max: number;
+  dem: boolean;
+  coords: [number, number][];
+  seasonal: boolean;
+  monthly: boolean;
+  dateRange: boolean;
+  dateFilter: DateFilter[];
+  stereo: boolean;
+  lazyLoad: boolean;
+  sar: boolean;
+  pageNum: number;
+  persistentScenes: [];
+  startDate: string;
+  endDate: string;
+  satellites: string[];
+}
+
+
+export interface SaveConfig {
+  filter: Filters
+  polygon: [number, number][]
+  results: ImageItem[]
+  selected: string[]
+}

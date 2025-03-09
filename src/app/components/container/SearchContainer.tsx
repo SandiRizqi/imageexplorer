@@ -7,8 +7,9 @@ import { useMap } from '../context/MapProvider';
 import { usePolygon } from '../context/PolygonProvider';
 import { useConfig } from '../context/ConfigProvider';
 import { GeoJSONSource, ImageSource } from 'maplibre-gl';
-import { getPresignedUrl } from '../Tools';
+import { getPresignedUrl  } from '../Tools';
 import ShowImageInfo from '../widget/ShowInfo';
+import SaveConfigButton from '../widget/SaveConfig';
 import { ImageItem } from '../types';
 import Alert from '../Alert';
 
@@ -68,7 +69,7 @@ export default function SearchContainer() {
             satelliteShortName: item['collection_vehicle_short'],
             forceHighestQuality: false
         }
-        const response: string = await getPresignedUrl(data);
+        const response: string = await getPresignedUrl(data, setError);
         const bbox: [[number, number], [number, number], [number, number], [number, number]] = [
 
             [item.topleft.x, item.bottomright.y], // Bottom-left
@@ -214,6 +215,9 @@ export default function SearchContainer() {
 
         setImageResults(sortedData);
     };
+
+
+
 
     return (
         <div className="flex flex-col h-screen">
@@ -370,13 +374,7 @@ export default function SearchContainer() {
                     >
                         CLEAR
                     </button>
-                    <button 
-                        className="flex-1 bg-yellow-500 text-gray-900 py-2 px-2 rounded-md text-xs 
-                        hover:bg-yellow-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
-                        disabled={selectedItem.length <= 0 }
-                    >
-                        SAVE
-                    </button>
+                    <SaveConfigButton />
 
                 </div>
             </div>

@@ -1,31 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
-import { ImageItem } from "../types";
+import { ImageItem, Filters } from "../types";
 
-interface DateFilter {
-    startDate: string;
-    endDate: string;
-}
 
-interface Filters {
-    cloudcover_max: number;
-    offnadir_max: number;
-    resolution_min: number;
-    resolution_max: number;
-    dem: boolean;
-    coords: [number, number][];
-    seasonal: boolean;
-    monthly: boolean;
-    dateRange: boolean;
-    dateFilter: DateFilter[];
-    stereo: boolean;
-    lazyLoad: boolean;
-    sar: boolean;
-    pageNum: number;
-    persistentScenes: [];
-    startDate: string;
-    endDate: string;
-    satellites: string[];
-}
 
 
 
