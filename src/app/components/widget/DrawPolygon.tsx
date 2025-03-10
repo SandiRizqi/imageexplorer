@@ -171,9 +171,11 @@ const DrawTool: React.FC = () => {
 
     useEffect(() => {
         if (!map) return;
-        if (polygon[0][0] === polygon[polygon.length - 1][0] && polygon[0][1] === polygon[polygon.length - 1][1]) {
-            drawPolygon(polygon);
-          }
+        if(polygon.length > 2) {
+            if (polygon[0][0] === polygon[polygon.length - 1][0] && polygon[0][1] === polygon[polygon.length - 1][1]) {
+                drawPolygon(polygon);
+            }
+        }
     }, [polygon])
 
     return (
