@@ -12,6 +12,8 @@ export default function Cart({ isMobile }: CartProps) {
     const cartItem = imageResult.filter(item => selectedItem.includes(item.objectid));
     const [isOpen, setIsOpen] = useState(false);
 
+    
+
     return (
         <>
             {/* Cart Button */}

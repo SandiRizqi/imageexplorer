@@ -3,7 +3,7 @@ import { Waypoints, Save, Ruler, Settings } from 'lucide-react';
 import DrawTool from '../widget/DrawPolygon';
 import UploadDownloadPolygon from '../widget/UploadDownloadPolygon';
 import SettingsTools from '../widget/SettingsTools';
-import MeasureTool from '../widget/MeasureTool';
+// import MeasureTool from '../widget/MeasureTool';
 
 export default function ToolsContainer() {
     const [active, setActive] = useState<string | null>(null);
@@ -43,7 +43,7 @@ export default function ToolsContainer() {
     const Tools = [
         { icon: <Waypoints color="white" size={22} />, name: 'drawtool', content: <DrawTool /> },
         { icon: <Save color="white" size={22} />, name: 'save', content: <UploadDownloadPolygon /> },
-        { icon: <Ruler color="white" size={22} />, name: 'measure', content: <MeasureTool isMeasure={true} /> },
+        { icon: <Ruler color="white" size={22} />, name: 'measure', content: null },
         { icon: <Settings color="white" size={22} />, name: 'settings', content: null },
     ];
 

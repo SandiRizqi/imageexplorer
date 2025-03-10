@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { ChevronUp } from 'lucide-react';
@@ -217,6 +217,30 @@ export default function SearchContainer() {
     };
 
 
+    useEffect(() => {
+        if (!map) return;
+    
+        const drawSavedImage = async (item: string) => {
+            if (!map.getSource(item)) {
+                const Item = imageResult.find(obj => obj.objectid === item);
+                if (Item) {
+                    await drawImagePreview(Item);
+                }
+            }
+        };
+    
+        const drawImagesSequentially = async () => {
+            for (const item of selectedItem) {
+                await drawSavedImage(item); // This will wait for each image to be drawn before moving to the next one
+            }
+        };
+    
+        if (selectedItem.length > 0) {
+            drawImagesSequentially(); // Start processing items sequentially
+        }
+    
+    }, [selectedItem, imageResult]);
+
 
 
     return (
@@ -296,6 +320,7 @@ export default function SearchContainer() {
                                                         type="checkbox"
                                                         className="accent-yellow-400"
                                                         checked={selectedItem.includes(row.objectid)}
+                                                        readOnly
                                                     />
                                                 </td>
                                                 <td

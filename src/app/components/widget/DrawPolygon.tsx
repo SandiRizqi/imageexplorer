@@ -168,6 +168,14 @@ const DrawTool: React.FC = () => {
         stopDrawing();
     };
 
+
+    useEffect(() => {
+        if (!map) return;
+        if (polygon[0][0] === polygon[polygon.length - 1][0] && polygon[0][1] === polygon[polygon.length - 1][1]) {
+            drawPolygon(polygon);
+          }
+    }, [polygon])
+
     return (
         <div className="flex items-center justify-center gap-1 py-1">
             {/* Polygon Tool */}

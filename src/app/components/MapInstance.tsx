@@ -3,6 +3,11 @@ import maplibregl from "maplibre-gl";
 import { useMap } from "./context/MapProvider";
 import "maplibre-gl/dist/maplibre-gl.css";
 
+
+
+
+
+
 export type ViewOptions = {
   center?: [number, number];
   zoom?: number;
@@ -33,6 +38,10 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { map, setMap } = useMap();
+
+
+
+
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -77,6 +86,8 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
             return () => window.removeEventListener("resize", handleResize);
         }
     }, []);
+
+
 
 
   function setLoaded () {

@@ -28,6 +28,7 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
 
     useEffect(() => {
         if (configId) {
+            // setLoadingMap(true);
             const fetchConfig = async () => {
                 const data = await getSavedConfig(configId, setError);
                 if (data) {
@@ -35,6 +36,7 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
                     setImageResults(data['results']);
                     setSelectedItem(data['selected'])
                     setPolygon(data['polygon'])
+                    // setLoadingMap(false);
                     return;
                 }
             };
