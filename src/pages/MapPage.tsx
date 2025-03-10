@@ -69,7 +69,7 @@ export default function MapPage() {
                             <Sidebar isMobile={isMobile} menuOpen={menuOpen} onClose={() => setMenuOpen(false)}/>
                             {/* Navbar */}
                             <div
-                                className={`absolute top-0 left-0 bg-[#262a59] h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-xl`} // Added shadow-lg
+                                className={`absolute top-0 left-0 bg-maincolor h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-xl`} // Added shadow-lg
                                 style={{
                                     width: isMobile ? "100%" : menuOpen ? "calc(100% - 400px)" : "100%",
                                     marginLeft: isMobile ? "0" : menuOpen ? "400px" : "0",
