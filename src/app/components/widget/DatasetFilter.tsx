@@ -159,7 +159,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                         <input 
                             type="range" 
                             min="0" 
-                            max="10" 
+                            max="30" 
                             className="w-full accent-yellow-400 h-[5px]" 
                             value={filters.resolution_max} 
                             onChange={(e) => handleChangeSlider(e, "resolution_max")}
