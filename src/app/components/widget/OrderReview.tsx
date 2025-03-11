@@ -56,7 +56,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-gray-900 rounded-lg shadow-lg max-w-2xl w-full mx-4">
+            <div className="bg-secondarycolor rounded-lg shadow-lg max-w-2xl w-full mx-4">
                 <div className="p-6">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-bold text-yellow-500">Order Review</h2>
@@ -71,12 +71,12 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                     </div>
                     
                     {/* Selected Scenes Section */}
-                    <div className="bg-gray-800 rounded-md p-4 mb-4">
+                    <div className="bg-maincolor rounded-md p-4 mb-4">
                         <h3 className="text-sm font-medium text-yellow-500 mb-2">Your selected scenes</h3>
                         
                         <div className="overflow-x-auto max-h-[200px] overflow-y-auto">
                             <table className="min-w-full text-sm text-left">
-                                <thead className="text-xs border-b border-gray-700 sticky top-0 bg-gray-800 z-10">
+                                <thead className="text-xs border-b border-gray-700 sticky top-0 bg-secondarycolor z-10">
                                     <tr>
                                         <th scope="col" className="py-2 px-3 text-gray-400">Sensor name</th>
                                         <th scope="col" className="py-2 px-3 text-gray-400">Date</th>
@@ -109,7 +109,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                     {/* Two-column grid layout for larger screens, single column for mobile */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Left column - Your Information */}
-                        <div className="bg-gray-800 rounded-md p-4">
+                        <div className="bg-maincolor rounded-md p-4">
                             <h3 className="text-sm font-medium text-yellow-500 mb-2">Your Information</h3>
                             
                             <div className="space-y-3">
@@ -121,7 +121,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                         type="text"
                                         id="name"
                                         name="name"
-                                        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                                        className="w-full px-3 py-2 input-style rounded-md text-white text-sm"
                                         value={userData.name}
                                         onChange={handleInputChange}
                                         required
@@ -136,7 +136,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                         type="email"
                                         id="email"
                                         name="email"
-                                        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                                        className="w-full px-3 py-2 input-style rounded-md text-white text-sm"
                                         value={userData.email}
                                         onChange={handleInputChange}
                                         required
@@ -151,7 +151,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                         type="tel"
                                         id="phone"
                                         name="phone"
-                                        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                                        className="w-full px-3 py-2 input-style rounded-md text-white text-sm"
                                         value={userData.phone}
                                         onChange={handleInputChange}
                                         required
@@ -166,7 +166,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                         type="text"
                                         id="company"
                                         name="company"
-                                        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                                        className="w-full px-3 py-2 input-style rounded-md text-white text-sm"
                                         value={userData.company}
                                         onChange={handleInputChange}
                                     />
@@ -175,7 +175,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                         </div>
 
                         {/* Right column - Order Summary */}
-                        <div className="bg-gray-800 rounded-md p-4">
+                        <div className="bg-maincolor rounded-md p-4">
                             <h3 className="text-sm font-medium text-yellow-500 mb-2">Order Summary</h3>
                             
                             <div className="space-y-2 text-sm">
@@ -215,7 +215,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                         <textarea
                             id="notes"
                             rows={3}
-                            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                            className="w-full px-3 py-2 bg-maincolor border border-gray-700 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500"
                             placeholder="Add any specific requirements or notes for your order..."
                             value={additionalNotes}
                             onChange={(e) => setAdditionalNotes(e.target.value)}
