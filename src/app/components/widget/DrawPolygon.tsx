@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useMap } from "../context/MapProvider";
-import { MapMouseEvent, GeoJSONSource } from "maplibre-gl";
+import { MapMouseEvent, GeoJSONSource, LngLatBounds } from "maplibre-gl";
 import { Square, Trash2, Pentagon } from "lucide-react";
 import { usePolygon } from "../context/PolygonProvider";
 import { useConfig } from "../context/ConfigProvider";
@@ -171,9 +171,22 @@ const DrawTool: React.FC = () => {
 
     useEffect(() => {
         if (!map) return;
+
+        const zoomToPolygon = (PolygonCoord: [number, number][]) => {
+            const bounds = new LngLatBounds();
+            PolygonCoord.forEach(coord => {
+                bounds.extend(coord);
+            });
+            // Zoom to fit the polygon
+            map.fitBounds(bounds, {
+                padding:400 // Optional: add padding around the polygon
+            });
+        };
+
         if(polygon.length > 2) {
             if (polygon[0][0] === polygon[polygon.length - 1][0] && polygon[0][1] === polygon[polygon.length - 1][1]) {
                 drawPolygon(polygon);
+                zoomToPolygon(polygon);
             }
         }
     }, [polygon])

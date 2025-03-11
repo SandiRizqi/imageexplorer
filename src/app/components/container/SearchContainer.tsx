@@ -220,26 +220,39 @@ export default function SearchContainer() {
     useEffect(() => {
         if (!map) return;
     
+        // Function to draw a single image (this already handles async drawing)
         const drawSavedImage = async (item: string) => {
+            // Check if the item source is already present in the map
             if (!map.getSource(item)) {
+                // Find the item in the imageResult array
                 const Item = imageResult.find(obj => obj.objectid === item);
                 if (Item) {
+                    // Draw the image preview (assuming drawImagePreview is async)
                     await drawImagePreview(Item);
                 }
             }
         };
     
+        // Function to draw images sequentially
         const drawImagesSequentially = async () => {
+            setLoadingMap(true); // Set loading state true before starting
+            // Iterate over selectedItem array and draw images one by one
             for (const item of selectedItem) {
-                await drawSavedImage(item); // This will wait for each image to be drawn before moving to the next one
+                try {
+                    await drawSavedImage(item); // Wait for each image to be drawn
+                } catch (error) {
+                    console.error(`Failed to draw image for item ${item}:`, error);
+                }
             }
+            setLoadingMap(false); // Set loading state false when done
         };
     
+        // Only start drawing if selectedItem has data
         if (selectedItem.length > 0) {
-            drawImagesSequentially(); // Start processing items sequentially
+            map.on("load", drawImagesSequentially)
         }
     
-    }, [selectedItem, imageResult]);
+    }, [selectedItem, imageResult, map]);
 
 
 

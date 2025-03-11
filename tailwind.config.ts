@@ -10,9 +10,9 @@ const config: Config = {
     extend: {
       colors: {
         maincolor: "#1B1F3B",
-secondarycolor: "#2F334D",
-buttonmaincolor: "#F4A100",
-buttonsecondarycolor: "#FFCE54",
+        secondarycolor: "#2F334D",
+        buttonmaincolor: "#F4A100",
+        buttonsecondarycolor: "#FFCE54",
 
 
         background: "var(--background)",

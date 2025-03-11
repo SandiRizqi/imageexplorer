@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import { useState, useEffect, Suspense } from 'react';
-import { ScatterplotLayer } from "@deck.gl/layers";
+// import { ScatterplotLayer } from "@deck.gl/layers";
 import MapInstance from '../app/components/MapInstance';
 import Sidebar from '../app/components/sidebar/Sidebar';
 import AuthModal from '../app/components/auth/AuthModal';
@@ -9,7 +9,7 @@ import LoadingScreen from '../app/components/LoadingScreen';
 import { ConfigProvider } from '../app/components/context/ConfigProvider';
 import { MapProvider } from '../app/components/context/MapProvider';
 import { PolygonProvider } from '../app/components/context/PolygonProvider';
-import DeckGLOverlay from '../app/components/DeckGLOverlay';
+// import DeckGLOverlay from '../app/components/DeckGLOverlay';
 import ToolsContainer from '../app/components/container/ToolsContainer';
 import MapFooter from '../app/components/MapFooter';
 import { Menu } from 'lucide-react';
@@ -24,7 +24,7 @@ import Cart from '../app/components/widget/Cart';
 
 
 export default function MapPage() {
-    const [menuOpen, setMenuOpen] = useState(true);
+    const [menuOpen, setMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
 
@@ -35,17 +35,17 @@ export default function MapPage() {
         bearing: 0,
     };
 
-    const deckProps = {
-        layers: [
-            new ScatterplotLayer({
-                id: "scatterplot-layer",
-                data: [{ position: [106.8456, -6.2088], size: 0 }],
-                getPosition: (d) => d.position,
-                getRadius: (d) => d.size,
-                getFillColor: [255, 0, 0, 255],
-            }),
-        ],
-    };
+    // const deckProps = {
+    //     layers: [
+    //         new ScatterplotLayer({
+    //             id: "scatterplot-layer",
+    //             data: [{ position: [106.8456, -6.2088], size: 0 }],
+    //             getPosition: (d) => d.position,
+    //             getRadius: (d) => d.size,
+    //             getFillColor: [255, 0, 0, 255],
+    //         }),
+    //     ],
+    // };
 
     useEffect(() => {
         const handleResize = () => {
@@ -109,7 +109,7 @@ export default function MapPage() {
                                     mapStyle="https://tiles.stadiamaps.com/styles/osm_bright.json"
                                     mapView={mapView}
                                 />
-                                <DeckGLOverlay {...deckProps} />
+                                {/* <DeckGLOverlay {...deckProps} /> */}
                                 <BasemapSwitcher />
                                 <MapFooter style={{
                                     width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",

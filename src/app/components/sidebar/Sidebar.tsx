@@ -32,10 +32,10 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
             const fetchConfig = async () => {
                 const data = await getSavedConfig(configId, setError);
                 if (data) {
+                    setPolygon(data['polygon'])
                     setFilters(data['filter']);
                     setImageResults(data['results']);
                     setSelectedItem(data['selected'])
-                    setPolygon(data['polygon'])
                     // setLoadingMap(false);
                     return;
                 }

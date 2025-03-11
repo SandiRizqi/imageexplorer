@@ -95,7 +95,6 @@ export const getSavedConfig = async (id: string,
         cancelToken.cancel('Request canceled due to new request.');
     }
 
-    // Create a new cancel token
     cancelToken = axios.CancelToken.source();
 
     try {
