@@ -227,7 +227,7 @@ export default function Cart({ isMobile }: CartProps) {
                         </div>
                         <h3 className="text-xl font-semibold mb-2">Order Submitted!</h3>
                         <p className="text-gray-300 mb-6">
-                            Your order has been successfully processed. We'll contact you shortly.
+                            Your order has been successfully processed. We will contact you shortly.
                         </p>
                         <button
                             className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md shadow-md hover:bg-yellow-400"

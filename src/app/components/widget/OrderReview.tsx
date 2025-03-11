@@ -7,7 +7,6 @@ interface OrderReviewProps {
     selectedItems: number;
     onConfirm: () => void;
     onBack: () => void;
-    onClose?: () => void;
 }
 
 interface UserFormData {
@@ -17,7 +16,7 @@ interface UserFormData {
     company: string;
 }
 
-export default function OrderReviewModal({ orderData, selectedItems, onConfirm, onBack, onClose }: OrderReviewProps) {
+export default function OrderReviewModal({ orderData, selectedItems, onConfirm, onBack}: OrderReviewProps) {
     const [additionalNotes, setAdditionalNotes] = useState('');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const { imageResult, selectedItem } = useConfig();
