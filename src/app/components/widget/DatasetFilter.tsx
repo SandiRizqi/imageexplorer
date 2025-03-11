@@ -7,6 +7,7 @@ import LoadingScreen from '../LoadingScreen';
 import { useMap } from '../context/MapProvider';
 import axios from 'axios';
 import Alert from '../Alert';
+import { checkTotalArea } from '../Tools';
 
 
 
@@ -75,6 +76,13 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
             setError("You need to provide at least 3 coordinates for a polygon or upload a geojson, kml, or shapefile.");
             return;
         };
+
+        const totalArea = checkTotalArea(polygon);
+        
+        if (totalArea > 500) {
+            setError("Area should not exceed 500 km²!");
+            return;
+        }
 
         handleReset();
 

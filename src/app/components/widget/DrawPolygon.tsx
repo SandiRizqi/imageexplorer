@@ -183,12 +183,14 @@ const DrawTool: React.FC = () => {
             });
         };
 
-        if(polygon.length > 2) {
+        if(polygon.length >= 3 && !isDrawing) {
             if (polygon[0][0] === polygon[polygon.length - 1][0] && polygon[0][1] === polygon[polygon.length - 1][1]) {
                 drawPolygon(polygon);
                 zoomToPolygon(polygon);
             }
-        }
+        };
+
+
     }, [polygon])
 
     return (

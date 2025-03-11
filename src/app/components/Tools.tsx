@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AxiosResponse, CancelTokenSource } from "axios";
 import { SaveConfig } from "./types";
+import * as turf from "@turf/turf";
 
 
 interface PreviewRequest {
@@ -112,4 +113,13 @@ export const getSavedConfig = async (id: string,
         }
         return null;
     }
+}
+
+
+export const checkTotalArea = (polygon: [number, number][]) : number => {
+    const turfPolygon = turf.polygon([polygon]);
+    // Calculate the area in square meters
+    const area = turf.area(turfPolygon);
+    const kmarea = area/1000000;
+    return kmarea;
 }

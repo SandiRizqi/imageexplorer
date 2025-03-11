@@ -3,14 +3,16 @@ import { useMap } from './context/MapProvider';
 import { usePolygon } from './context/PolygonProvider';
 import { MapMouseEvent } from 'maplibre-gl';
 import * as turf from "@turf/turf";
+import Alert from './Alert';
 
 type MapFooterProps = React.HTMLAttributes<HTMLDivElement>;
 
 const MapFooter: React.FC<MapFooterProps> = (props) => {
     const { map } = useMap();
-    const {polygon} = usePolygon();
+    const {polygon } = usePolygon();
     const [totalArea, setTotalArea] = useState<number>(0);
     const [cursorCoords, setCursorCoords] = useState<[number, number] | null>(null);
+    const [Error, setError] = useState<string|null>(null);
 
     useEffect(() => {
         if (!map) return;
@@ -39,7 +41,11 @@ const MapFooter: React.FC<MapFooterProps> = (props) => {
                 const turfPolygon = turf.polygon([polygon]);
                 // Calculate the area in square meters
                 const area = turf.area(turfPolygon);
-                setTotalArea(area/1000000);
+                const kmarea = area/1000000;
+                setTotalArea(kmarea);
+                if (kmarea > 500) {
+                    setError("Area should not exceed 500 km²!");
+                }
             }
         } else {
             setTotalArea(0);
@@ -56,6 +62,7 @@ const MapFooter: React.FC<MapFooterProps> = (props) => {
                 <div>{totalArea.toFixed(2)} km²</div>
                 {cursorCoords && `Long : ${cursorCoords[0].toFixed(5)}  Lat: ${cursorCoords[1].toFixed(5)}`}
             </div>
+            {Error && <Alert category={"error"} message={Error} setClose={setError} />}
         </div>
     );
 };
