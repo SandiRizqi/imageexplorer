@@ -10,6 +10,7 @@ import { GeoJSONSource, ImageSource } from 'maplibre-gl';
 import { getPresignedUrl  } from '../Tools';
 import ShowImageInfo from '../widget/ShowInfo';
 import SaveConfigButton from '../widget/SaveConfig';
+import OrderProcessingButton from '../widget/OrderProcessing';
 import { ImageItem } from '../types';
 import Alert from '../Alert';
 
@@ -369,18 +370,19 @@ export default function SearchContainer() {
             <div className="absolute bottom-0 w-full bg-maincolor p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[100px]">
                 <p className="text-xs text-gray-200">{selectedItem.length} / {imageResult.length} selected</p>
                 <div className="flex gap-2 w-full mt-2">
-                    <button className="flex-1 bg-yellow-500 text-gray-900 py-2 px-2 rounded-md text-xs hover:bg-yellow-400"
+                    <button 
+                        className="flex-1 bg-gray-600 text-white py-2 px-2 rounded-md text-xs hover:bg-gray-500"
                         onClick={handleReset}
                     >
                         CLEAR
                     </button>
                     <SaveConfigButton />
-
+                    <OrderProcessingButton />
                 </div>
             </div>
 
             {infoDetail && <ShowImageInfo isOpen={infoDetail !== null} onClose={() => setInfoDetail(null)} imageData={infoDetail} />}
             {Error && <Alert category={"error"} message={Error} setClose={setError} />}
         </div>
-    )
+    );
 }
