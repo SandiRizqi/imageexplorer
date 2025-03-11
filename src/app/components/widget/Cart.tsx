@@ -6,6 +6,32 @@ import ProcessingOptions from "./ProcessingOptions";
 import OrderReview from "./OrderReview";
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
+
+const StepIndicator = ({ currentStep, steps }: { currentStep: number; steps: string[] }) => {
+    return (
+      <div className="flex items-center justify-center mb-6">
+        {steps.map((step, index) => (
+          <React.Fragment key={step}>
+            <div className="flex flex-col items-center">
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center 
+                  ${currentStep >= index ? 'bg-yellow-500 text-gray-900' : 'bg-gray-700 text-gray-300'}`}
+              >
+                {currentStep > index ? '✓' : index + 1}
+              </div>
+              <span className={`text-xs mt-2 ${currentStep >= index ? 'text-yellow-500' : 'text-gray-400'}`}>
+                {step}
+              </span>
+            </div>
+            {index < steps.length - 1 && (
+              <div className={`h-1 w-16 mx-2 ${currentStep > index ? 'bg-yellow-500' : 'bg-gray-700'}`} />
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    );
+  };
+
 interface CartProps {
     isMobile: boolean;
 }
@@ -160,57 +186,61 @@ export default function Cart({ isMobile }: CartProps) {
             
             {/* Processing Options Modal */}
             <Dialog open={isProcessingModalOpen} onClose={() => setIsProcessingModalOpen(false)} className="relative z-[60]">
-                <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
-                    <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
-                        <DialogTitle className="text-lg font-semibold text-yellow-500 text-center mb-4">
-                            {currentStep === 'options' ? "Order Processing" : 
-                             currentStep === 'review' ? "Order Review" : 
-                             "Order Confirmation"}
-                        </DialogTitle>
-                        
-                        {currentStep === 'options' && (
-                            <ProcessingOptions 
-                                onSelect={handleProcessingSelect} 
-                                selectedItems={cartItem.length} 
-                            />
-                        )}
-                        
-                        {currentStep === 'review' && (
-                            <OrderReview 
-                                orderData={orderData}
-                                selectedItems={selectedItem.length}
-                                onConfirm={handleConfirmOrder}
-                                onBack={() => setCurrentStep('options')}
-                            />
-                        )}
-                        
-                        {currentStep === 'confirmation' && (
-                            <div className="mt-4">
-                                <p className="text-sm text-center mb-4">
-                                    Your order has been submitted successfully!
-                                </p>
-                                
-                                <div className="flex justify-end mt-6">
-                                    <button
-                                        className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md shadow-md hover:bg-yellow-400"
-                                        onClick={resetOrderProcess}
-                                    >
-                                        Done
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                        
-                        {currentStep === 'options' && (
-                            <button
-                                className="mt-4 text-gray-400 text-sm hover:text-gray-300"
-                                onClick={() => setIsProcessingModalOpen(false)}
-                            >
-                                Cancel
-                            </button>
-                        )}
-                    </DialogPanel>
+            <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
+                <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-2xl shadow-xl">
+                <StepIndicator 
+                    currentStep={currentStep === 'options' ? 1 : currentStep === 'review' ? 2 : 3}
+                    steps={['Image Collection', 'Processing Options', 'Order Review', 'Confirmation']}
+                />
+                
+                <div className="border border-gray-700 rounded-lg p-6">
+                    <DialogTitle className="text-lg font-semibold text-yellow-500 text-center mb-4">
+                    {currentStep === 'options' ? "Select Processing Options" : 
+                    currentStep === 'review' ? "Review Your Order" : 
+                    "Order Confirmation"}
+                    </DialogTitle>
+
+                    {/* Konten step */}
+                    <div className="max-h-[50vh] overflow-y-auto">
+                    {currentStep === 'options' && (
+                        <ProcessingOptions 
+                        onSelect={handleProcessingSelect} 
+                        selectedItems={cartItem.length} 
+                        />
+                    )}
+                    
+                    {currentStep === 'review' && (
+                        <OrderReview 
+                        orderData={orderData}
+                        selectedItems={selectedItem.length}
+                        onConfirm={handleConfirmOrder}
+                        onBack={() => setCurrentStep('options')}
+                        />
+                    )}
+                    
+                    {currentStep === 'confirmation' && (
+                        <div className="mt-4 text-center">
+                        <div className="mb-6">
+                            <svg className="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2">Order Submitted!</h3>
+                        <p className="text-gray-300 mb-6">
+                            Your order has been successfully processed. We will contact you shortly.
+                        </p>
+                        <button
+                            className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md shadow-md hover:bg-yellow-400"
+                            onClick={resetOrderProcess}
+                        >
+                            Close
+                        </button>
+                        </div>
+                    )}
+                    </div>
                 </div>
+                </DialogPanel>
+            </div>
             </Dialog>
         </>
     );

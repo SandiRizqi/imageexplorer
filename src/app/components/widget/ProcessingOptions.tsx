@@ -15,7 +15,7 @@ interface ProcessingOptionsProps {
 }
 
 export default function ProcessingOptions({ onSelect, selectedItems }: ProcessingOptionsProps) {
-    const [selectedOptions, setSelectedOptions] = useState<ProcessingType[]>([]);
+    const [selectedOptions, setSelectedOptions] = useState<ProcessingType[]>(['rawdata']);
 
     const options: ProcessingOption[] = [
         {
@@ -61,6 +61,7 @@ export default function ProcessingOptions({ onSelect, selectedItems }: Processin
     ];
 
     const toggleOption = (option: ProcessingType) => {
+        if (option === 'rawdata') return;
         if (selectedOptions.includes(option)) {
             setSelectedOptions(selectedOptions.filter(o => o !== option));
         } else {
@@ -68,62 +69,65 @@ export default function ProcessingOptions({ onSelect, selectedItems }: Processin
         }
     };
 
+    // Di bagian return
     return (
-        <div>
-            <p className="text-sm text-center mb-4">
-                Select processing options for your {selectedItems} selected image{selectedItems !== 1 ? 's' : ''}:
-            </p>
-
-            <div className="space-y-3 max-h-[40vh] overflow-y-auto pr-1">
-                {options.map((option) => (
-                    <div 
-                        key={option.id}
-                        className={`flex items-center p-3 rounded-md cursor-pointer transition-all
-                                  ${selectedOptions.includes(option.id) 
-                                      ? 'bg-yellow-500/20 border border-yellow-500' 
-                                      : 'bg-gray-800 border border-gray-700 hover:border-gray-500'}`}
-                        onClick={() => toggleOption(option.id)}
-                    >
-                        <div className={`p-2 rounded-full ${selectedOptions.includes(option.id) ? 'bg-yellow-500 text-gray-900' : 'bg-gray-700 text-gray-300'}`}>
-                            {option.icon}
-                        </div>
-                        <div className="ml-3">
-                            <h3 className={`font-medium ${selectedOptions.includes(option.id) ? 'text-yellow-500' : 'text-white'}`}>
-                                {option.name}
-                            </h3>
-                            <p className="text-xs text-gray-400">{option.description}</p>
-                        </div>
-                        <div className="ml-auto">
-                            <div className={`w-5 h-5 rounded-full border-2
-                                          ${selectedOptions.includes(option.id)
-                                              ? 'border-yellow-500 bg-yellow-500'
-                                              : 'border-gray-500'}`}>
-                                {selectedOptions.includes(option.id) && (
-                                    <svg className="w-full h-full text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            <div className="flex justify-between mt-6">
-                <button
-                    className="bg-gray-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-gray-600"
-                    onClick={() => setSelectedOptions([])}
+        <div className="space-y-6">
+        <p className="text-sm text-center mb-4 text-gray-300">
+            Select processing options for your {selectedItems} selected image{selectedItems !== 1 ? 's' : ''}
+        </p>
+    
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {options.map((option) => (
+                <div 
+                    key={option.id}
+                    className={`p-4 rounded-lg border-2 transition-all
+                        ${selectedOptions.includes(option.id) 
+                            ? 'border-yellow-500 bg-yellow-500/10' 
+                            : 'border-gray-700'}
+                        ${option.id === 'rawdata' 
+                            ? 'cursor-not-allowed opacity-75' 
+                            : 'cursor-pointer hover:border-gray-500'}`}
+                    onClick={() => option.id !== 'rawdata' && toggleOption(option.id)}
                 >
-                    Clear
-                </button>
-                <button
-                    className="bg-yellow-500 text-gray-800 px-4 py-2 rounded-md shadow-md hover:bg-yellow-400 disabled:bg-gray-600 disabled:text-gray-400"
-                    onClick={() => onSelect(selectedOptions)}
-                    disabled={selectedOptions.length === 0}
-                >
-                    Continue
-                </button>
+                <div className="flex items-start">
+                <div className={`p-2 rounded-lg ${selectedOptions.includes(option.id) ? 'bg-yellow-500' : 'bg-gray-700'}`}>
+                    {option.icon}
+                </div>
+                <div className="ml-4">
+                    <h3 className={`font-medium ${selectedOptions.includes(option.id) ? 'text-yellow-500' : 'text-white'}`}>
+                    {option.name}
+                    </h3>
+                    <p className="text-xs text-gray-400 mt-1">{option.description}</p>
+                </div>
+                </div>
             </div>
+            ))}
+        </div>
+    
+        {/* Tombol */}
+        <div className="flex justify-between mt-8">
+            {/* <button
+            className="px-6 py-2 border border-gray-600 rounded-md hover:bg-gray-700 transition"
+            onClick={() => setIsProcessingModalOpen(false)}
+            >
+            Cancel
+            </button> */}
+            <div className="space-x-4">
+            <button
+                className="px-6 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition"
+                onClick={() => setSelectedOptions(['rawdata'])}
+            >
+                Clear
+            </button>
+            <button
+                className="px-6 py-2 bg-yellow-500 text-gray-900 rounded-md hover:bg-yellow-400 transition disabled:opacity-50"
+                onClick={() => onSelect(selectedOptions)}
+                disabled={selectedOptions.length === 0}
+            >
+                Continue
+            </button>
+            </div>
+        </div>
         </div>
     );
 }
