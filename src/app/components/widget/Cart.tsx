@@ -2,17 +2,69 @@ import React, { useState } from "react";
 import { ShoppingCart, X } from "lucide-react";
 import { useConfig } from "../context/ConfigProvider";
 import { motion, AnimatePresence } from "framer-motion";
+import ProcessingOptions from "./ProcessingOptions";
+import OrderReview from "./OrderReview";
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 interface CartProps {
     isMobile: boolean;
+}
+
+type OrderStep = 'options' | 'review' | 'confirmation';
+type ProcessingType = 'rawdata' | 'imageprocessing' | 'imageanalysis' | 'layouting';
+
+interface OrderData {
+  processingTypes: ProcessingType[];
+  estimatedPrice: number;
+  orderDetails?: string;
+  configID?: string;
 }
 
 export default function Cart({ isMobile }: CartProps) {
     const { selectedItem, imageResult } = useConfig();
     const cartItem = imageResult.filter(item => selectedItem.includes(item.objectid));
     const [isOpen, setIsOpen] = useState(false);
-
+    const [isProcessingModalOpen, setIsProcessingModalOpen] = useState(false);
+    const [currentStep, setCurrentStep] = useState<OrderStep>('options');
+    const [orderData, setOrderData] = useState<OrderData>({
+        processingTypes: [],
+        estimatedPrice: 0
+    });
     
+    const handleProcessingSelect = (selectedOptions: ProcessingType[]) => {
+        const basePrice = selectedItem.length * 50;
+        let processingMultiplier = 1;
+        
+        if (selectedOptions.includes('rawdata')) processingMultiplier += 0.5;
+        if (selectedOptions.includes('imageprocessing')) processingMultiplier += 1;
+        if (selectedOptions.includes('imageanalysis')) processingMultiplier += 2;
+        if (selectedOptions.includes('layouting')) processingMultiplier += 1.5;
+        
+        const estimatedPrice = Math.round(basePrice * processingMultiplier);
+        
+        setOrderData({
+            processingTypes: selectedOptions,
+            estimatedPrice: estimatedPrice
+        });
+        
+        setCurrentStep('review');
+    };
+
+    const handleConfirmOrder = () => {
+        // Here you can implement the order confirmation logic
+        // For example, saving configuration, sending order to backend, etc.
+        console.log("Order confirmed with data:", orderData);
+        setCurrentStep('confirmation');
+    };
+
+    const resetOrderProcess = () => {
+        setIsProcessingModalOpen(false);
+        setCurrentStep('options');
+        setOrderData({
+            processingTypes: [],
+            estimatedPrice: 0
+        });
+    };
 
     return (
         <>
@@ -95,7 +147,7 @@ export default function Cart({ isMobile }: CartProps) {
                                 <div className="p-4 bg-maincolor">
                                     <button 
                                         className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md hover:bg-yellow-400 transition"
-                                        onClick={() => console.log("Create Quote Clicked")}
+                                        onClick={() => setIsProcessingModalOpen(true)}
                                     >
                                         Create Quote
                                     </button>
@@ -105,6 +157,61 @@ export default function Cart({ isMobile }: CartProps) {
                     </>
                 )}
             </AnimatePresence>
+            
+            {/* Processing Options Modal */}
+            <Dialog open={isProcessingModalOpen} onClose={() => setIsProcessingModalOpen(false)} className="relative z-[60]">
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
+                    <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
+                        <DialogTitle className="text-lg font-semibold text-yellow-500 text-center mb-4">
+                            {currentStep === 'options' ? "Order Processing" : 
+                             currentStep === 'review' ? "Order Review" : 
+                             "Order Confirmation"}
+                        </DialogTitle>
+                        
+                        {currentStep === 'options' && (
+                            <ProcessingOptions 
+                                onSelect={handleProcessingSelect} 
+                                selectedItems={cartItem.length} 
+                            />
+                        )}
+                        
+                        {currentStep === 'review' && (
+                            <OrderReview 
+                                orderData={orderData}
+                                selectedItems={selectedItem.length}
+                                onConfirm={handleConfirmOrder}
+                                onBack={() => setCurrentStep('options')}
+                            />
+                        )}
+                        
+                        {currentStep === 'confirmation' && (
+                            <div className="mt-4">
+                                <p className="text-sm text-center mb-4">
+                                    Your order has been submitted successfully!
+                                </p>
+                                
+                                <div className="flex justify-end mt-6">
+                                    <button
+                                        className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md shadow-md hover:bg-yellow-400"
+                                        onClick={resetOrderProcess}
+                                    >
+                                        Done
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        
+                        {currentStep === 'options' && (
+                            <button
+                                className="mt-4 text-gray-400 text-sm hover:text-gray-300"
+                                onClick={() => setIsProcessingModalOpen(false)}
+                            >
+                                Cancel
+                            </button>
+                        )}
+                    </DialogPanel>
+                </div>
+            </Dialog>
         </>
     );
 }
