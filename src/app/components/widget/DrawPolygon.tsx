@@ -68,7 +68,7 @@ const DrawTool: React.FC = () => {
             map.off("mousemove", handleMouseMove);
             map.off("dblclick", stopDrawing);
         };
-    }, [map, isDrawing, drawMode, polygon, startPoint]);
+    }, [map, isDrawing, drawMode, polygon, startPoint, setPolygon, stopDrawing]);
 
 
 

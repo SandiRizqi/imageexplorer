@@ -44,7 +44,7 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
             fetchConfig();
         }
 
-    },[configId])
+    }, [configId, setFilters, setImageResults, setPolygon, setSelectedItem]);
 
     return (
         <div>

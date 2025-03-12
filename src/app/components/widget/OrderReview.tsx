@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { OrderData } from './OrderProcessing';
 import { useConfig } from '../context/ConfigProvider';
+import { ImageItem } from '../types';
 
 interface OrderReviewProps {
     orderData: OrderData;
-    selectedItems: number;
+    selectedItems: ImageItem[]
     onConfirm: () => void;
     onBack: () => void;
 }
@@ -19,7 +20,7 @@ interface UserFormData {
 export default function OrderReviewModal({ orderData, selectedItems, onConfirm, onBack}: OrderReviewProps) {
     const [additionalNotes, setAdditionalNotes] = useState('');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
-    const { imageResult, selectedItem } = useConfig();
+    const {selectedItem } = useConfig();
     const [userData, setUserData] = useState<UserFormData>({
         name: '',
         email: '',
@@ -45,13 +46,34 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
         }
     };
 
-    const handleSubmit = () => {
-        if (!userData.name || !userData.email || !userData.phone) {
-            alert('Please fill in all required fields.');
-            return;
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/saveorder`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userData: userData,
+                    processingTypes: orderData.processingTypes,
+                    estimatedPrice: orderData.estimatedPrice,
+                    additionalNotes: additionalNotes,
+                    selectedItems: selectedItem,
+                    configID: orderData.configID
+                })
+            });
+    
+            if (!response.ok) throw new Error('Failed to save order');
+            
+            const responseData = await response.json();
+            console.log("Order ID:", responseData.id);
+            onConfirm();
+        } catch (error) {
+            console.error('Order submission error:', error);
+            alert('Failed to save order');
         }
-        onConfirm();
     };
+
 
     return (
         <>
@@ -72,7 +94,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                 </tr>
                             </thead>
                             <tbody>
-                                {imageResult.filter(img => selectedItem.includes(img.objectid)).map((scene) => (
+                                {selectedItems.map((scene) => (
                                     <tr key={scene.objectid} className="border-b border-gray-700 hover:bg-gray-700">
                                         <td className="py-2 px-3 text-yellow-500">{scene.collection_vehicle_short}</td>
                                         <td className="py-2 px-3">{scene.collection_date}</td>
@@ -167,7 +189,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                         <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
                                 <span className="text-gray-400">Selected Scenes:</span>
-                                <span className="text-white">{selectedItems}</span>
+                                <span className="text-white">{selectedItems.length}</span>
                             </div>
 
                             <div className="flex justify-between">
