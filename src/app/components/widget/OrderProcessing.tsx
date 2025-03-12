@@ -31,6 +31,9 @@ export default function OrderProcessingButton() {
         estimatedPrice: 0
     });
 
+    // Get full item objects matching selected IDs
+    const cartItems = imageResult.filter(item => selectedItem.includes(item.objectid));
+
     const handleSaveConfig = async () => {
         setError(null);
         setConfigID(null);
@@ -166,7 +169,7 @@ export default function OrderProcessingButton() {
                             {!error && currentStep === 'review' && (
                                 <OrderReview 
                                     orderData={orderData}
-                                    selectedItems={selectedItem.length}
+                                    selectedItems={cartItems}
                                     onConfirm={handleConfirmOrder}
                                     onBack={() => setCurrentStep('options')}
                                 />
