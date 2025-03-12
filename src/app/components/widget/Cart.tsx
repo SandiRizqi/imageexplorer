@@ -212,10 +212,10 @@ export default function Cart({ isMobile }: CartProps) {
                     {currentStep === 'review' && (
                         <OrderReview 
                         orderData={orderData}
-                        selectedItems={selectedItem.length}
+                        selectedItems={cartItem}
                         onConfirm={handleConfirmOrder}
                         onBack={() => setCurrentStep('options')}
-                        />
+                    />                    
                     )}
                     
                     {currentStep === 'confirmation' && (

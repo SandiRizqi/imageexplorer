@@ -128,7 +128,7 @@ export default function MeasureTool({ isMeasure }: MeasureToolProps) {
       map.off("mousemove", handleMouseMove);
       map.off("dblclick", handleDoubleClick);
     };
-  }, [map, isMeasure, isDrawing]);
+  }, [map, isMeasure, isDrawing, completeMeasurement, coordinates, drawLine, drawShape, startMeasurement]);
 
   // Calculate measurements using Turf.js
   let distance;

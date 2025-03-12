@@ -60,7 +60,7 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
 
 
     return () => mapInstance.remove();
-  }, []);
+  }, [mapStyle, mapView?.bearing, mapView?.center, mapView?.pitch, mapView?.zoom, setMap]);
 
   useEffect(() => {
     if (map && mapView) {
