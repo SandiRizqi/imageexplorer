@@ -17,6 +17,7 @@ import logo from '../app/components/assets/logo_ie.webp';
 import Image from 'next/image';
 import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
 import Cart from '../app/components/widget/Cart';
+import SearchLocation from '../app/components/widget/SeachLocation';
 
 
 
@@ -84,6 +85,7 @@ export default function MapPage() {
                                         <Menu />
                                     </button>
                                     <Image src={logo} alt="Logo" width={50} height={50} className='mr-8' />
+                                    <SearchLocation />
                                     <ToolsContainer />
                                 </div>
 
