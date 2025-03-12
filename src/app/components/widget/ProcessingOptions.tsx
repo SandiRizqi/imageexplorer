@@ -106,12 +106,6 @@ export default function ProcessingOptions({ onSelect, selectedItems }: Processin
     
         {/* Tombol */}
         <div className="flex justify-between mt-8">
-            {/* <button
-            className="px-6 py-2 border border-gray-600 rounded-md hover:bg-gray-700 transition"
-            onClick={() => setIsProcessingModalOpen(false)}
-            >
-            Cancel
-            </button> */}
             <div className="space-x-4">
             <button
                 className="px-6 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition"

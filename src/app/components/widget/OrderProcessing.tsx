@@ -5,16 +5,17 @@ import { saveConfig } from '../Tools';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import ProcessingOptions from './ProcessingOptions';
 import OrderReview from './OrderReview';
+import { ImageItem } from '../types';
 
 
 type OrderStep = 'options' | 'review' | 'confirmation';
 type ProcessingType = 'rawdata' | 'imageprocessing' | 'imageanalysis' | 'layouting';
 
 export interface OrderData {
-  processingTypes: ProcessingType[];
-  estimatedPrice: number;
-  orderDetails?: string;
-  configID?: string;
+    processingTypes: ProcessingType[];
+    estimatedPrice: number;
+    orderDetails?: string;
+    configID?: string;
 }
 
 export default function OrderProcessingButton() {
@@ -31,6 +32,10 @@ export default function OrderProcessingButton() {
         estimatedPrice: 0
     });
 
+    const cartItems: ImageItem[] = imageResult.filter(item => 
+        selectedItem.includes(item.collection_vehicle_short)
+    );
+    
     const handleSaveConfig = async () => {
         setError(null);
         setConfigID(null);
@@ -49,7 +54,7 @@ export default function OrderProcessingButton() {
             const savedConfigID = await saveConfig(configData, setError);
             if (savedConfigID) {
                 setConfigID(savedConfigID);
-                setOrderData(prev => ({...prev, configID: savedConfigID}));
+                setOrderData(prev => ({ ...prev, configID: savedConfigID }));
             }
         } catch {
             setError("Failed to save configuration.");
@@ -66,19 +71,19 @@ export default function OrderProcessingButton() {
     const handleProcessingSelection = (selectedOptions: ProcessingType[]) => {
         const basePrice = selectedItem.length * 50;
         let processingMultiplier = 1;
-        
+
         if (selectedOptions.includes('rawdata')) processingMultiplier += 0.5;
         if (selectedOptions.includes('imageprocessing')) processingMultiplier += 1;
         if (selectedOptions.includes('imageanalysis')) processingMultiplier += 2;
         if (selectedOptions.includes('layouting')) processingMultiplier += 1.5;
-        
+
         const estimatedPrice = Math.round(basePrice * processingMultiplier);
-        
+
         setOrderData({
             processingTypes: selectedOptions,
             estimatedPrice: estimatedPrice
         });
-        
+
         setCurrentStep('review');
     };
 
@@ -123,30 +128,30 @@ export default function OrderProcessingButton() {
             {/* Modal */}
             <Dialog open={modalOpen} onClose={() => setModalOpen(false)} className="relative z-50">
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-                    <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[100%] max-w-2xl shadow-xl max-h-[90vh] flex flex-col">    
+                    <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[100%] max-w-2xl shadow-xl max-h-[90vh] flex flex-col">
                         <DialogTitle className="text-lg font-semibold text-yellow-500 text-center">
-                            {error ? "Error" : 
-                             currentStep === 'options' ? "Processing Options" :
-                             currentStep === 'review' ? "Order Review" : 
-                             "Order Confirmation"}
+                            {error ? "Error" :
+                                currentStep === 'options' ? "Processing Options" :
+                                    currentStep === 'review' ? "Order Review" :
+                                        "Order Confirmation"}
                         </DialogTitle>
 
                         <div className="mt-6 mb-8">
                             <div className="flex justify-center items-center">
                                 {/* Step Indicator */}
                                 <div className="flex items-center space-x-4">
-                                {['options', 'review', 'confirmation'].map((step, index) => (
-                                    <React.Fragment key={step}>
-                                    <div className={`flex flex-col items-center ${currentStep === step ? 'text-yellow-500' : 'text-gray-400'}`}>
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center 
+                                    {['options', 'review', 'confirmation'].map((step, index) => (
+                                        <React.Fragment key={step}>
+                                            <div className={`flex flex-col items-center ${currentStep === step ? 'text-yellow-500' : 'text-gray-400'}`}>
+                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center 
                                         ${currentStep === step ? 'bg-yellow-500 text-white' : 'bg-gray-700'}`}>
-                                        {index + 1}
-                                        </div>
-                                        <span className="text-xs mt-1 capitalize">{step}</span>
-                                    </div>
-                                    {index < 2 && <div className="w-12 h-px bg-gray-600"></div>}
-                                    </React.Fragment>
-                                ))}
+                                                    {index + 1}
+                                                </div>
+                                                <span className="text-xs mt-1 capitalize">{step}</span>
+                                            </div>
+                                            {index < 2 && <div className="w-12 h-px bg-gray-600"></div>}
+                                        </React.Fragment>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -157,16 +162,16 @@ export default function OrderProcessingButton() {
 
                         <div className="max-h-[70vh] overflow-y-auto">
                             {!error && currentStep === 'options' && (
-                                <ProcessingOptions 
-                                    onSelect={handleProcessingSelection} 
+                                <ProcessingOptions
+                                    onSelect={handleProcessingSelection}
                                     selectedItems={selectedItem.length}
                                 />
                             )}
 
                             {!error && currentStep === 'review' && (
-                                <OrderReview 
+                                <OrderReview
                                     orderData={orderData}
-                                    selectedItems={selectedItem.length}
+                                    selectedItems={cartItems}
                                     onConfirm={handleConfirmOrder}
                                     onBack={() => setCurrentStep('options')}
                                 />
@@ -177,7 +182,7 @@ export default function OrderProcessingButton() {
                                     <p className="text-sm text-center mb-4">
                                         Your order has been submitted successfully!
                                     </p>
-                                    
+
                                     {configID && (
                                         <div className="flex items-center justify-between bg-gray-800 px-3 py-2 rounded-md mt-4">
                                             <span className="text-sm text-gray-300 truncate">{`${process.env.NEXT_PUBLIC_HOST}/?savedconfig=${configID}`}</span>
