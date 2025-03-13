@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { OrderData } from './OrderProcessing';
-import { ImageItem } from '../types';
 import { useConfig } from '../context/ConfigProvider';
+import { ImageItem } from '../types';
 
 interface OrderReviewProps {
     orderData: OrderData;
