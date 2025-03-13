@@ -32,7 +32,7 @@ const mapView = {
 
 
 export default function MapPage() {
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
 
 

@@ -235,6 +235,8 @@ export default function SearchContainer() {
     
         // Function to draw images sequentially
         const drawImagesSequentially = async () => {
+            if (selectedItem.length === 0) return;
+
             setLoadingMap(true); // Set loading state true before starting
             // Iterate over selectedItem array and draw images one by one
             for (const item of selectedItem) {
@@ -248,11 +250,14 @@ export default function SearchContainer() {
         };
     
         // Only start drawing if selectedItem has data
-        if (selectedItem.length > 0) {
-            map.on("load", drawImagesSequentially)
-        }
+
+        map.on("load", drawImagesSequentially)
+
+        return () => {
+            map.off("load", drawImagesSequentially);
+        };
     
-    }, [selectedItem, imageResult, map, drawImagePreview, setLoadingMap]);
+    }, [selectedItem, imageResult, map]);
 
 
 
