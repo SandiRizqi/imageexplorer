@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { OrderData } from './OrderProcessing';
-import { useConfig } from '../context/ConfigProvider';
 import { ImageItem } from '../types';
+import { useConfig } from '../context/ConfigProvider';
 
 interface OrderReviewProps {
     orderData: OrderData;
@@ -19,8 +19,8 @@ interface UserFormData {
 
 export default function OrderReviewModal({ orderData, selectedItems, onConfirm, onBack}: OrderReviewProps) {
     const [additionalNotes, setAdditionalNotes] = useState('');
+    const {config} = useConfig();
     const [agreedToTerms, setAgreedToTerms] = useState(false);
-    const {selectedItem } = useConfig();
     const [userData, setUserData] = useState<UserFormData>({
         name: '',
         email: '',
@@ -48,19 +48,21 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
     const handleSubmit = async () => {
         try {
+            const data = {
+                userData: userData,
+                processingTypes: orderData.processingTypes,
+                estimatedPrice: orderData.estimatedPrice,
+                additionalNotes: additionalNotes,
+                selectedItems: selectedItems,
+                configID: config.configID
+            };
+            // console.log(data);
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/saveorder`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    userData: userData,
-                    processingTypes: orderData.processingTypes,
-                    estimatedPrice: orderData.estimatedPrice,
-                    additionalNotes: additionalNotes,
-                    selectedItems: selectedItem,
-                    configID: orderData.configID
-                })
+                body: JSON.stringify(data)
             });
     
             if (!response.ok) throw new Error('Failed to save order');

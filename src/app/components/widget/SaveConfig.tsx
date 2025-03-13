@@ -6,7 +6,7 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 export default function SaveConfigButton() {
     const { polygon } = usePolygon();
-    const { filters, imageResult, selectedItem } = useConfig();
+    const { config, filters, imageResult, selectedItem } = useConfig();
     const [modalOpen, setModalOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [configID, setConfigID] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export default function SaveConfigButton() {
         };
 
         try {
-            const savedConfigID = await saveConfig(configData, setError);
+            const savedConfigID = await saveConfig(configData, setError, config.configID);
             if (savedConfigID) {
                 setConfigID(savedConfigID);
             }

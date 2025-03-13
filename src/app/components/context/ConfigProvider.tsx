@@ -6,6 +6,7 @@ import { ImageItem, Filters } from "../types";
 
 
 interface Config {
+    configID: string | null,
     isFilterOpen: boolean;
     defaultAOIColor: string;
     defaultAOIPreviewColow: string;
@@ -40,6 +41,7 @@ export const useConfig = () => {
 // const savedColor = localStorage.getItem("aoiColor");
 
 const initConfig: Config = {
+    configID: null,
     isFilterOpen: true,
     defaultAOIColor: "#f218ca",
     defaultAOIPreviewColow: "#2a9df4"

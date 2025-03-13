@@ -152,7 +152,7 @@ export default function Cart({ isMobile }: CartProps) {
                                     {cartItem.length > 0 ? (
                                         <ul>
                                             {cartItem.map((item, index) => (
-                                                <li key={index} className="p-3 mt-1 border-b border-gray-700 bg-maincolor rounded-lg flex flex-col">
+                                                <li key={index} className="p-3 mt-1 border-b border-gray-700 bg-maincolor rounded-lg flex flex-col text-xs">
                                                     {/* Details */}
                                                     <p className="font-semibold text-white truncate w-50">{item.collection_vehicle_short}_{item.objectid}</p>
                                                     <p className="text-gray-300"><span className="font-bold">Date:</span> {item.collection_date}</p>
@@ -173,7 +173,10 @@ export default function Cart({ isMobile }: CartProps) {
                                 <div className="p-4 bg-maincolor">
                                     <button 
                                         className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md hover:bg-yellow-400 transition"
-                                        onClick={() => setIsProcessingModalOpen(true)}
+                                        onClick={() => {
+                                            setIsProcessingModalOpen(true);
+                                            setIsOpen(false);
+                                        }}
                                     >
                                         Create Quote
                                     </button>
@@ -193,7 +196,7 @@ export default function Cart({ isMobile }: CartProps) {
                     steps={['Image Collection', 'Processing Options', 'Order Review', 'Confirmation']}
                 />
                 
-                <div className="border border-gray-700 rounded-lg p-6">
+                <div className="border border-gray-700 p-2 rounded-lg">
                     <DialogTitle className="text-lg font-semibold text-yellow-500 text-center mb-4">
                     {currentStep === 'options' ? "Select Processing Options" : 
                     currentStep === 'review' ? "Review Your Order" : 
@@ -201,7 +204,7 @@ export default function Cart({ isMobile }: CartProps) {
                     </DialogTitle>
 
                     {/* Konten step */}
-                    <div className="max-h-[50vh] overflow-y-auto">
+                    <div className="max-h-[50vh] p-4 overflow-y-auto">
                     {currentStep === 'options' && (
                         <ProcessingOptions 
                         onSelect={handleProcessingSelect} 

@@ -19,7 +19,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
     const [activeTab, setActiveTab] = useState<'search' | 'account'>('search');
-    const {setFilters, setImageResults, setSelectedItem} = useConfig();
+    const {setConfig, setFilters, setImageResults, setSelectedItem} = useConfig();
     const {setPolygon} = usePolygon();
     const searchParams = useSearchParams();
     const configId = searchParams?.get('savedconfig');
@@ -35,7 +35,8 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
                     setPolygon(data['polygon'])
                     setFilters(data['filter']);
                     setImageResults(data['results']);
-                    setSelectedItem(data['selected'])
+                    setSelectedItem(data['selected']);
+                    setConfig(prev => ({...prev, configID: configId}));
                     // setLoadingMap(false);
                     return;
                 }
@@ -44,7 +45,7 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
             fetchConfig();
         }
 
-    }, [configId, setFilters, setImageResults, setPolygon, setSelectedItem]);
+    }, [configId]);
 
     return (
         <div>

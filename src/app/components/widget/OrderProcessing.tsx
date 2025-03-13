@@ -20,7 +20,7 @@ export interface OrderData {
 
 export default function OrderProcessingButton() {
     const { polygon } = usePolygon();
-    const { filters, imageResult, selectedItem } = useConfig();
+    const { config, filters, imageResult, selectedItem } = useConfig();
     const [modalOpen, setModalOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [configID, setConfigID] = useState<string | null>(null);
@@ -51,7 +51,7 @@ export default function OrderProcessingButton() {
         };
 
         try {
-            const savedConfigID = await saveConfig(configData, setError);
+            const savedConfigID = await saveConfig(configData, setError, config.configID);
             if (savedConfigID) {
                 setConfigID(savedConfigID);
                 setOrderData(prev => ({ ...prev, configID: savedConfigID }));
@@ -128,7 +128,7 @@ export default function OrderProcessingButton() {
             {/* Modal */}
             <Dialog open={modalOpen} onClose={() => setModalOpen(false)} className="relative z-50">
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-                    <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[100%] max-w-2xl shadow-xl max-h-[90vh] flex flex-col">
+                    <DialogPanel className="bg-maincolor text-white rounded-lg  w-[100%] max-w-2xl shadow-xl max-h-[90vh] flex flex-col">
                         <DialogTitle className="text-lg font-semibold text-yellow-500 text-center">
                             {error ? "Error" :
                                 currentStep === 'options' ? "Processing Options" :
@@ -160,7 +160,7 @@ export default function OrderProcessingButton() {
                             <p className="mt-4 text-sm text-center text-red-500">{error}</p>
                         )}
 
-                        <div className="max-h-[70vh] overflow-y-auto">
+                        <div className="max-h-[70vh] p-4 overflow-y-auto">
                             {!error && currentStep === 'options' && (
                                 <ProcessingOptions
                                     onSelect={handleProcessingSelection}

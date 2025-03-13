@@ -252,7 +252,7 @@ export default function SearchContainer() {
             map.on("load", drawImagesSequentially)
         }
     
-    }, [selectedItem, imageResult, map, drawImagePreview, setLoadingMap]);
+    }, [selectedItem, imageResult, map]);
 
 
 

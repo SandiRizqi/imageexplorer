@@ -63,6 +63,8 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
   }, [mapStyle, mapView?.bearing, mapView?.center, mapView?.pitch, mapView?.zoom, setMap]);
 
   useEffect(() => {
+    if(!map) return;
+    
     if (map && mapView) {
       map.jumpTo(mapView);
       map.on("load", setLoaded)

@@ -22,6 +22,13 @@ import SearchLocation from '../app/components/widget/SeachLocation';
 
 
 
+const mapView = {
+    center: [106.8456, -6.2088] as [number, number], // Jakarta
+    zoom: 10,
+    pitch: 0,
+    bearing: 0,
+};
+
 
 
 export default function MapPage() {
@@ -29,12 +36,7 @@ export default function MapPage() {
     const [isMobile, setIsMobile] = useState(false);
 
 
-    const mapView = {
-        center: [106.8456, -6.2088] as [number, number], // Jakarta
-        zoom: 10,
-        pitch: 0,
-        bearing: 0,
-    };
+    
 
     // const deckProps = {
     //     layers: [

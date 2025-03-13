@@ -56,9 +56,9 @@ interface SaveConfigResponse {
 
 
 export const saveConfig = async (configData: SaveConfig,
-    setError: (message: string) => void) : Promise<string | "" > => {
+    setError: (message: string) => void, configID: string | null) : Promise<string | "" > => {
 
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/saveconfig`;
+    const url = configID ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/saveconfig?id=${configID}`: `${process.env.NEXT_PUBLIC_BACKEND_URL}/saveconfig`;
 
     // Cancel the previous request if it's still pending
     if (cancelToken) {
