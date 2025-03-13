@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Head from "next/head";
 import localFont from "next/font/local";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./components/auth/auth";
+import { AuthProviders } from "./components/context/AuthProrider";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -19,11 +22,15 @@ export const metadata: Metadata = {
   description: "We provide high-quality satellite imagery data to empower businesses, researchers, and decision-makers with cutting-edge geospatial insights.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <Head>
@@ -33,7 +40,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AuthProviders session={session}>
         {children}
+        </AuthProviders>
       </body>
     </html>
   );
