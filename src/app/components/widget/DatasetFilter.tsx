@@ -31,12 +31,33 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
         const selectedDate = new Date(e.target.value); // Parse as local time
         selectedDate.setHours(selectedDate.getHours() + 7); // Adjust to UTC+7
         const formattedDate = selectedDate.toISOString().split(".")[0];
-        setFilters(prev => ({
-            ...prev,
-            [key]: formattedDate,
-            dateFilter: [{ ...prev.dateFilter[0], [key]: formattedDate }]
-        }));
+    
+        setFilters(prev => {
+            const startDate = new Date(prev.dateFilter[0]?.startDate || formattedDate);
+            const endDate = new Date(prev.dateFilter[0]?.endDate || formattedDate);
+    
+            // Update the corresponding date in the filter
+            if (key === "startDate") {
+                startDate.setTime(selectedDate.getTime());
+            } else if (key === "endDate") {
+                endDate.setTime(selectedDate.getTime());
+            }
+    
+            // Check if the date range exceeds 10 years
+            const tenYearsInMs = 10 * 365 * 24 * 60 * 60 * 1000; // 10 years in milliseconds
+            if (endDate.getTime() - startDate.getTime() > tenYearsInMs) {
+                setError("Date range cannot exceed 10 years!");
+                return prev; // Prevent updating the state
+            }
+    
+            return {
+                ...prev,
+                [key]: formattedDate,
+                dateFilter: [{ ...prev.dateFilter[0], [key]: formattedDate }]
+            };
+        });
     };
+    
 
 
     function handleChangeSlider(e: React.ChangeEvent<HTMLInputElement>, key: string): void {
