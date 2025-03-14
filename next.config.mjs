@@ -1,12 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-    experimental: {
-        runtime: 'edge',
-      },
-      // Required for Cloudflare Pages
-      images: {
-        unoptimized: true,
-      }
-};
+const nextConfig = {};
 
 export default nextConfig;
+
