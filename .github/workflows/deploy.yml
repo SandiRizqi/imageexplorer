@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop  # Change if using another branch
+      - main
 
 jobs:
   deploy:

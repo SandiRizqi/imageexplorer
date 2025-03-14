@@ -1,0 +1,7 @@
+NEXT_PUBLIC_BACKEND_URL=https://gpj8t6ikq1.execute-api.ap-southeast-1.amazonaws.com/v1
+NEXT_PUBLIC_MAIN_COLOR=#262a59
+NEXT_PUBLIC_HOST=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=203535330901-fjk3b0f6gj000rjpircescbcppsibsp8.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+NEXT_AUTHSECRET=4NGYkyOpouEhkMaS/rmJWnPK7f8N7yeuai6SXZPs8Z0=
