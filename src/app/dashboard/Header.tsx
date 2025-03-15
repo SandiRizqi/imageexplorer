@@ -4,6 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '../components/context/AuthProrider';
 import Image from 'next/image';
+import logo from "../components/assets/logo_ie.webp";
 
 export default function Header() {
     const router = useRouter();
@@ -22,20 +23,25 @@ export default function Header() {
     return (
         <header className="bg-maincolor shadow-md top-0 left-0 right-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
+                <div className="flex items-center justify-between">
                     {/* Left side - Navigation Dropdown */}
                     <div className="relative">
-                        <button
-                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                            className="inline-flex items-center justify-between w-40 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300  hover:bg-gray-50"
-                        >
-                            <span>{currentPage}</span>
-                            <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
-                        </button>
+                        <div className='flex flex-row items-center space-x-2'>
+                            <button
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                className="inline-flex items-center justify-between w-40 px-4 py-2 text-sm font-medium text-gray-400 bg-secondarycolor  h-12"
+                            >
+                                <span>{currentPage}</span>
+                                <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
+                            </button>
+                            <Image src={logo} alt="Logo" width={45} height={45} className='ml-8' />
+
+                        </div>
+                        
 
                         {/* Dropdown menu */}
                         {isDropdownOpen && (
-                            <div className="absolute z-10 w-40 mt-1 bg-white shadow-lg">
+                            <div className="absolute z-10 w-40 mt-0 bg-white shadow-lg">
                                 <div className="py-1">
                                     <button
                                         onClick={() => handleNavigate('/dashboard')}
@@ -67,7 +73,7 @@ export default function Header() {
                         <div className="relative">
                             <button
                                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                                className="flex items-center space-x-2 focus:outline-none"
+                                className="flex items-center space-x-1 focus:outline-none"
                             >
                                 <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
                                     {session?.user?.image ? (
@@ -92,7 +98,7 @@ export default function Header() {
 
                             {/* User dropdown menu */}
                             {isUserMenuOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg py-1 z-10">
                                     {session ? (
                                         <button
                                             onClick={() => {

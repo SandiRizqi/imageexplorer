@@ -9,6 +9,7 @@ import { useConfig } from '../context/ConfigProvider';
 import { usePolygon } from '../context/PolygonProvider';
 import { getSavedConfig } from '../Tools';
 import Alert from '../Alert';
+import { useAuth } from '../context/AuthProrider';
 
 
 interface SidebarProps {
@@ -21,12 +22,18 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
     const [activeTab, setActiveTab] = useState<'search' | 'account'>('search');
     const {setConfig, setFilters, setImageResults, setSelectedItem} = useConfig();
     const {setPolygon} = usePolygon();
+    const {session} = useAuth();
     const searchParams = useSearchParams();
     const configId = searchParams?.get('savedconfig');
     const [Error, setError] = useState<string|null>(null);
   
 
     function handleDashboard (path: string) {
+        if (session === null) {
+            setError("You need to Sign In to get into you dashboard.");
+            return;
+        };
+
         window.location.replace(path);
     }
 
@@ -78,13 +85,17 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
                 <div className="flex border-b border-gray-600 h-[50px] shadow-xl">
                     <button
                         onClick={() => setActiveTab('search')}
-                        className={`flex-1 text-center text-gray-300 text-xs py-4 font-semibold ${activeTab === 'search' ? 'bg-secondarycolor border-b' : 'bg-maincolor'}`}
+                        className={`flex-1 text-center text-gray-300 text-xs py-4 font-semibold ${session !== null ? 'bg-secondarycolor border-b' : 'bg-maincolor'}`}
                     >
                         SEARCH
                     </button>
                     <button
                         onClick={() => handleDashboard('/dashboard')}
-                        className={`flex-1 text-center py-4 text-xs font-semibold ${activeTab === 'account' ? 'bg-secondarycolor border-b' : 'bg-maincolor'}`}
+                        disabled={session === null} // or some condition like !isAuthenticated
+                        className={`flex-1 text-center py-4 text-xs font-semibold 
+                            ${activeTab === 'account' ? 'bg-secondarycolor border-b' : 'bg-maincolor'}
+                            ${session === null ? 'opacity-50 cursor-not-allowed' : 'hover:bg-secondarycolor'}
+                        `}
                     >
                         DASHBOARD
                     </button>

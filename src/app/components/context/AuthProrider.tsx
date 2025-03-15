@@ -50,7 +50,9 @@ function AuthProviderContent({ children }: { children: React.ReactNode }) {
 
   if (status === "loading") {
     return <LoadingScreen />;
-  }
+  };
+
+
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

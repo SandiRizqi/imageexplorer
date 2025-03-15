@@ -110,7 +110,7 @@ export default function MapPage() {
                             >
                                 <MapInstance
                                     id="map"
-                                    mapStyle="https://tiles.stadiamaps.com/styles/osm_bright.json"
+                                    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=whs17VUkPAj2svtEn9LL"
                                     mapView={mapView}
                                 />
                                 {/* <DeckGLOverlay {...deckProps} /> */}

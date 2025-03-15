@@ -11,8 +11,8 @@ const basemaps = [
     thumbnail: smmap,
   },
   {
-    name: "OSM Bright",
-    style: "https://tiles.stadiamaps.com/styles/osm_bright.json",
+    name: "OSM",
+    style: "https://api.maptiler.com/maps/streets/style.json?key=whs17VUkPAj2svtEn9LL",
     thumbnail: carto,
   },
 ];

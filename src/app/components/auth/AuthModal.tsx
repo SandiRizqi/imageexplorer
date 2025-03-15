@@ -2,76 +2,140 @@
 
 import { useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { useAuth } from "../context/AuthProrider";
+import { FcGoogle } from 'react-icons/fc';
+import Image from "next/image";
+import { ChevronDownIcon } from "lucide-react";
+
 
 export default function AuthModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login/signup
+  const { status, session, signIn, signOut } = useAuth();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
 
   return (
     <div>
       {/* Button to Open Modal */}
-      <button
-        className="bg-yellow-500 px-3 py-2 rounded-md text-gray-800 shadow-md text-xs font-semibold mr-4"
-        onClick={() => setIsOpen(true)}
-      >
-        LOGIN/SIGNUP
-      </button>
+      {status === "unauthenticated" ? (
+        <button
+          className="bg-yellow-500 px-4 py-2 rounded-md text-gray-800 shadow-md text-sm font-semibold mr-4
+                        hover:bg-yellow-400 transition-colors duration-200 flex items-center space-x-2"
+          onClick={() => setIsOpen(true)}
+        >
+          <span>Sign In</span>
+        </button>
+      ) : (
+        <div className="relative">
+          <button
+            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+            className="flex items-center space-x-1 focus:outline-none mr-4"
+          >
+            <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+              {session?.user?.image ? (
+                <Image
+                  src={session.user.image}
+                  alt="avatar"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+              ) : (
+                <span className="text-sm font-medium text-gray-600">
+                  {session?.user?.name?.[0] || 'U'}
+                </span>
+              )}
+            </div>
+            
+            <ChevronDownIcon className="w-4 h-4 text-gray-300" />
+          </button>
+
+          {/* User dropdown menu */}
+          {isUserMenuOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white  shadow-lg py-1 z-10">
+              {session ? (
+                  <>
+                    <div className="w-full text-left px-4 py-2 text-sm text-gray-400">
+                      Username : {session?.user?.name || 'Guest'}
+                    </div>
+                    <button
+                      onClick={() => {
+                        window.location.replace('/dashboard')
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Dashboard
+                    </button>
+                    <button
+                      onClick={() => {
+                        signOut();
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+              ) : (
+                <button
+                  onClick={() => {
+                    signIn();
+                    setIsUserMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Sign In with Google
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
+      )}
 
       {/* Modal */}
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
           <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
-            
-
             {/* Modal Header */}
-            <DialogTitle className="text-lg font-semibold text-yellow-500 text-center">
-              {isLogin ? "Login" : "Signup"}
+            <DialogTitle className="text-xl font-semibold text-yellow-500 text-center mb-6">
+              Welcome Back
             </DialogTitle>
 
-            {/* Toggle Login/Signup */}
-            <div className="flex mt-4 border-b border-gray-600 text-xs">
-              <button
-                className={`w-1/2 py-2 text-center ${
-                  isLogin ? "bg-secondarycolor text-white" : "text-gray-400"
-                }`}
-                onClick={() => setIsLogin(true)}
-              >
-                LOGIN
-              </button>
-              <button
-                className={`w-1/2 py-2 text-center ${
-                  !isLogin ? "bg-secondarycolor text-white" : "text-gray-400"
-                }`}
-                onClick={() => setIsLogin(false)}
-              >
-                SIGNUP
-              </button>
+            {/* Content */}
+            <div className="text-center text-gray-300 mb-8">
+              <p className="mb-2">Sign in to access your dashboard</p>
+              <p className="text-sm text-gray-400">Use your Google account to continue</p>
             </div>
 
-            {/* Form Fields */}
-            <form className="mt-4 text-sm">
-              {!isLogin && (
+            {/* Google Sign In Button */}
+            <button
+              onClick={signIn}
+              disabled={status === "loading"}
+              className="w-full bg-white text-gray-800 py-3 px-4 rounded-md shadow-md hover:bg-gray-100 
+                                     transition-colors duration-200 flex items-center justify-center space-x-3
+                                     disabled:bg-gray-200 disabled:cursor-not-allowed"
+            >
+              {status === "loading" ? (
+                <div className="w-5 h-5 border-t-2 border-b-2 border-gray-800 rounded-full animate-spin" />
+              ) : (
                 <>
-                  <div className="flex space-x-2">
-                    <input type="text" placeholder="First Name *" className="input-style w-1/2" />
-                    <input type="text" placeholder="Last Name *" className="input-style w-1/2" />
-                  </div>
-                  <input type="text" placeholder="Company" className="input-style mt-2" />
+                  <FcGoogle className="w-5 h-5" />
+                  <span className="font-medium">Continue with Google</span>
                 </>
               )}
-              <input type="email" placeholder="Email *" className="input-style mt-2" />
-              <input type="password" placeholder="Password *" className="input-style mt-2" />
-              {!isLogin && (
-                <input type="password" placeholder="Confirm Password *" className="input-style mt-2" />
-              )}
+            </button>
 
-              {isLogin && <p className="text-xs text-gray-400 mt-2 cursor-pointer">Forgot your password?</p>}
-
-              {/* Submit Button */}
-              <button className="w-full bg-yellow-500 text-gray-800 py-2 mt-4 rounded-md shadow-md">
-                {isLogin ? "LOGIN" : "SIGNUP"}
-              </button>
-            </form>
+            {/* Footer Text */}
+            <p className="mt-6 text-xs text-center text-gray-400">
+              By continuing, you agree to our{' '}
+              <a href="#" className="text-yellow-500 hover:text-yellow-400">Terms of Service</a>
+              {' '}and{' '}
+              <a href="#" className="text-yellow-500 hover:text-yellow-400">Privacy Policy</a>
+            </p>
           </DialogPanel>
         </div>
       </Dialog>

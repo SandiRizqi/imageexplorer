@@ -43,7 +43,7 @@ const Alert: React.FC<AlertProps> = ({ category, message, setClose, duration = 2
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className={`flex items-center p-4 border-l-4 max-w-[90%] rounded-lg shadow-md transition-all duration-500 transform ${fadeOut ? "opacity-0 translate-y-10" : "opacity-100 translate-y-0"} ${alertStyles[category]}`}> 
         {icons[category]}
         <span className="ml-3 flex-1 text-sm font-medium">{message}</span>
