@@ -9,7 +9,8 @@ export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const {session} = useAuth();
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const { session, signIn, signOut } = useAuth();
 
     const currentPage = pathname === '/explorer' ? 'Explorer' : 'Dashboard';
 
@@ -19,7 +20,7 @@ export default function Header() {
     };
 
     return (
-        <header className="bg-maincolor  shadow-md">
+        <header className="bg-maincolor shadow-md fixed top-0 left-0 right-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Left side - Navigation Dropdown */}
@@ -61,27 +62,73 @@ export default function Header() {
                         )}
                     </div>
 
-                    {/* Right side - User info and time */}
+                    {/* Right side - User info and menu */}
                     <div className="flex items-center space-x-6">
-                        <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                                <span className="text-sm font-medium text-gray-600">
-                                    <Image src={session?.user?.image || ''} alt='avatar' width={30} height={30} className='rounded-full'/>
-                                </span>
-                            </div>
-                            <div className="text-sm font-medium text-gray-300">
-                                {session?.user?.name}
-                            </div>
+                        <div className="relative">
+                            <button
+                                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                                className="flex items-center space-x-2 focus:outline-none"
+                            >
+                                <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                                    {session?.user?.image ? (
+                                        <Image
+                                            src={session.user.image}
+                                            alt="avatar"
+                                            width={32}
+                                            height={32}
+                                            className="rounded-full"
+                                        />
+                                    ) : (
+                                        <span className="text-sm font-medium text-gray-600">
+                                            {session?.user?.name?.[0] || 'U'}
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="text-sm font-medium text-gray-300">
+                                    {session?.user?.name || 'Guest'}
+                                </div>
+                                <ChevronDownIcon className="w-4 h-4 text-gray-300" />
+                            </button>
+
+                            {/* User dropdown menu */}
+                            {isUserMenuOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                                    {session ? (
+                                        <button
+                                            onClick={() => {
+                                                signOut();
+                                                setIsUserMenuOpen(false);
+                                            }}
+                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        >
+                                            Sign Out
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={() => {
+                                                signIn();
+                                                setIsUserMenuOpen(false);
+                                            }}
+                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        >
+                                            Sign In with Google
+                                        </button>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Click outside detector */}
-            {isDropdownOpen && (
+            {(isDropdownOpen || isUserMenuOpen) && (
                 <div
                     className="fixed inset-0 z-0"
-                    onClick={() => setIsDropdownOpen(false)}
+                    onClick={() => {
+                        setIsDropdownOpen(false);
+                        setIsUserMenuOpen(false);
+                    }}
                 />
             )}
         </header>

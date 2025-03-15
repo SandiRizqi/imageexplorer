@@ -1,11 +1,12 @@
 "use client"
 import React, { useState } from 'react';
-import { useAuth } from '../components/context/AuthProrider';
 import { Order, SavedSearch } from '../components/types';
 import Header from './Header';
 
 export default function Dashboard() {
-    const { status, signIn, signOut } = useAuth();
+    const [activeTab, setActiveTab] = useState<'orders' | 'searches'>('orders');
+    const [sortOrder, setSortOrder] = useState<'date' | 'name'>('date');
+    const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
     // Sample data - in real application, this would come from your API/database
     const [orders] = useState<Order[]>([
@@ -16,6 +17,111 @@ export default function Dashboard() {
             customerName: 'John Doe',
             total: 299.99,
             items: 3
+        },
+        {
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },
+        {
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },
+        {
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },
+        {
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },{
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        }
+        ,{
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },
+        {
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },
+        {
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },{
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },{
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },{
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },{
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },{
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
+        },{
+            id: '2',
+            status: 'completed',
+            date: '2025-03-14',
+            customerName: 'Jane Smith',
+            total: 199.99,
+            items: 2
         },
         {
             id: '2',
@@ -55,79 +161,184 @@ export default function Dashboard() {
         }
     };
 
+    const sortedOrders = [...orders].sort((a, b) => {
+        if (sortOrder === 'date') {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+        }
+        return a.customerName.localeCompare(b.customerName);
+    });
+
     return (
         <div className="min-h-screen bg-gray-50">
             <Header />
             
-            <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {/* Auth Status and Buttons */}
-                <div className="mb-8 flex items-center justify-between bg-white p-4 rounded-lg shadow">
-                    <div>Dashboard Status: {status}</div>
-                    <div className="space-x-4">
-                        <button
-                            onClick={() => signIn()}
-                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-                        >
-                            Sign In with Google
-                        </button>
-                        <button
-                            onClick={() => signOut()}
-                            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-                        >
-                            Sign Out
-                        </button>
-                    </div>
+            <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 mt-16">
+                {/* Current UTC Time */}
+                <div className="mb-6 text-right text-sm text-gray-500">
+                    Current UTC Time: 2025-03-15 05:48:05
                 </div>
 
                 {/* Main Content */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Orders Section */}
-                    <div className="bg-secondarycolor p-6 rounded-lg shadow">
-                        <h2 className="text-xl font-bold mb-4 text-yellow-400">Recent Orders</h2>
-                        <div className="space-y-4">
-                            {orders.map((order) => (
-                                <div key={order.id} className="border p-4 rounded-lg">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <span className="font-semibold text-yellow-400">Order #{order.id}</span>
-                                        <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(order.status)}`}>
-                                            {order.status}
-                                        </span>
-                                    </div>
-                                    <div className="text-sm text-gray-300">
-                                        <p>Name: {order.customerName}</p>
-                                        <p>Date: {order.date}</p>
-                                        <p>Items: {order.items}</p>
-                                        <p>Total: ${order.total.toFixed(2)}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                <div className="bg-secondarycolor rounded-lg shadow">
+                    {/* Tabs */}
+                    <div className="flex border-b border-gray-500">
+                        <button
+                            className={`px-6 py-3 text-sm font-medium ${
+                                activeTab === 'orders'
+                                    ? 'border-b-2 border-yellow-400 text-yellow-400'
+                                    : 'text-gray-400 hover:text-yellow-300'
+                            }`}
+                            onClick={() => setActiveTab('orders')}
+                        >
+                            Orders
+                        </button>
+                        <button
+                            className={`px-6 py-3 text-sm font-medium ${
+                                activeTab === 'searches'
+                                    ? 'border-b-2 border-yellow-400 text-yellow-400'
+                                    : 'text-gray-400 hover:text-yellow-300'
+                            }`}
+                            onClick={() => setActiveTab('searches')}
+                        >
+                            Saved Searches
+                        </button>
                     </div>
 
-                    {/* Saved Searches Section */}
-                    <div className="bg-white p-6 rounded-lg shadow">
-                        <h2 className="text-2xl font-bold mb-4">Saved Searches</h2>
-                        <div className="space-y-4">
-                            {savedSearches.map((search) => (
-                                <div key={search.id} className="border p-4 rounded-lg">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <span className="font-semibold">{search.queryName}</span>
-                                        <span className="text-sm text-gray-500">{search.date}</span>
-                                    </div>
-                                    <div className="text-sm text-gray-600">
-                                        <p>ID: {search.id}</p>
-                                        <a 
-                                            href={search.url}
-                                            className="text-blue-500 hover:text-blue-600 truncate block"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {search.url}
-                                        </a>
-                                    </div>
+                    {/* Content */}
+                    <div className="p-6">
+                        {activeTab === 'orders' ? (
+                            <>
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-xl font-bold text-yellow-400">Orders List</h2>
+                                    <select
+                                        value={sortOrder}
+                                        onChange={(e) => setSortOrder(e.target.value as 'date' | 'name')}
+                                        className="px-3 py-1 rounded-md text-sm bg-gray-700 text-gray-300 border border-gray-600"
+                                    >
+                                        <option value="date">Sort by Date</option>
+                                        <option value="name">Sort by Name</option>
+                                    </select>
                                 </div>
-                            ))}
-                        </div>
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full divide-y divide-gray-700">
+                                        <thead>
+                                            <tr>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    Order ID
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    Customer
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    Date
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    Status
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    Items
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-700">
+                                            {sortedOrders.map((order) => (
+                                                <tr
+                                                    key={order.id}
+                                                    className={`cursor-pointer transition-colors duration-150 ${
+                                                        selectedItem === order.id
+                                                            ? 'bg-maincolor'
+                                                            : 'hover:bg-gray-600'
+                                                    }`}
+                                                    onClick={() => setSelectedItem(order.id)}
+                                                >
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                        #{order.id}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                        {order.customerName}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                        {order.date}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                                                            {order.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                        {order.items}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                        ${order.total.toFixed(2)}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <h2 className="text-xl font-bold text-yellow-400 mb-4">Saved Searches</h2>
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full divide-y divide-gray-700">
+                                        <thead>
+                                            <tr>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    ID
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    Query Name
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    Date
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                                    URL
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-700">
+                                            {savedSearches.map((search) => (
+                                                <tr
+                                                    key={search.id}
+                                                    className={`cursor-pointer transition-colors duration-150 ${
+                                                        selectedItem === search.id
+                                                            ? 'bg-gray-800'
+                                                            : 'hover:bg-gray-700'
+                                                    }`}
+                                                    onClick={() => setSelectedItem(search.id)}
+                                                >
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                        #{search.id}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                        {search.queryName}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                        {search.date}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                        <a
+                                                            href={search.url}
+                                                            className="text-blue-400 hover:text-blue-300"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            {search.url}
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </main>
