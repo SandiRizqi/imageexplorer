@@ -18,6 +18,7 @@ import Image from 'next/image';
 import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
 import Cart from '../app/components/widget/Cart';
 import SearchLocation from '../app/components/widget/SeachLocation';
+import { AuthProviders } from '../app/components/context/AuthProrider';
 
 
 
@@ -64,6 +65,7 @@ export default function MapPage() {
 
     return (
         <Suspense fallback={<LoadingScreen />}>
+            <AuthProviders>
             <ConfigProvider>
                 <MapProvider>
                     <PolygonProvider>
@@ -124,6 +126,7 @@ export default function MapPage() {
                     </PolygonProvider>
                 </MapProvider>
             </ConfigProvider>
+            </AuthProviders>
         </Suspense>
     )
 }

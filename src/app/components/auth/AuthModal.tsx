@@ -10,7 +10,7 @@ import { ChevronDownIcon } from "lucide-react";
 
 export default function AuthModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const { status, session, signIn, signOut } = useAuth();
+  const { session, status, signIn, signOut } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
 
