@@ -15,19 +15,19 @@ export default function Header() {
     const currentPage = pathname === '/explorer' ? 'Explorer' : 'Dashboard';
 
     const handleNavigate = (path: string) => {
-        setIsDropdownOpen(false);
+        // setIsDropdownOpen(false);
         router.push(path);
     };
 
     return (
-        <header className="bg-maincolor shadow-md fixed top-0 left-0 right-0 z-50">
+        <header className="bg-maincolor shadow-md top-0 left-0 right-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Left side - Navigation Dropdown */}
                     <div className="relative">
                         <button
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                            className="inline-flex items-center justify-between w-40 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                            className="inline-flex items-center justify-between w-40 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300  hover:bg-gray-50"
                         >
                             <span>{currentPage}</span>
                             <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
@@ -35,7 +35,7 @@ export default function Header() {
 
                         {/* Dropdown menu */}
                         {isDropdownOpen && (
-                            <div className="absolute z-10 w-40 mt-1 bg-white rounded-md shadow-lg">
+                            <div className="absolute z-10 w-40 mt-1 bg-white shadow-lg">
                                 <div className="py-1">
                                     <button
                                         onClick={() => handleNavigate('/dashboard')}

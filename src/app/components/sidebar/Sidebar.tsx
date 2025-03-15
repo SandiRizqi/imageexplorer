@@ -24,6 +24,11 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
     const searchParams = useSearchParams();
     const configId = searchParams?.get('savedconfig');
     const [Error, setError] = useState<string|null>(null);
+  
+
+    function handleDashboard (path: string) {
+        window.location.replace(path);
+    }
 
 
     useEffect(() => {
@@ -78,10 +83,10 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
                         SEARCH
                     </button>
                     <button
-                        onClick={() => setActiveTab('account')}
+                        onClick={() => handleDashboard('/dashboard')}
                         className={`flex-1 text-center py-4 text-xs font-semibold ${activeTab === 'account' ? 'bg-secondarycolor border-b' : 'bg-maincolor'}`}
                     >
-                        ACCOUNT
+                        DASHBOARD
                     </button>
                 </div>
 

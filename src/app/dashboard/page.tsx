@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Order, SavedSearch } from '../components/types';
 import Header from './Header';
+import Footer from './Footer';
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState<'orders' | 'searches'>('orders');
@@ -169,17 +170,12 @@ export default function Dashboard() {
     });
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="h-screen overflow-hidden bg-gray-50">
             <Header />
             
-            <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 mt-16">
-                {/* Current UTC Time */}
-                <div className="mb-6 text-right text-sm text-gray-500">
-                    Current UTC Time: 2025-03-15 05:48:05
-                </div>
-
+            <main className="h-[calc(100vh-64px)] mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Main Content */}
-                <div className="bg-secondarycolor rounded-lg shadow">
+                <div className="bg-maincolor rounded-md shadow h-[80%]">
                     {/* Tabs */}
                     <div className="flex border-b border-gray-500">
                         <button
@@ -205,7 +201,7 @@ export default function Dashboard() {
                     </div>
 
                     {/* Content */}
-                    <div className="p-6">
+                    <div className="p-6 h-[calc(100%-48px)]">
                         {activeTab === 'orders' ? (
                             <>
                                 <div className="flex justify-between items-center mb-4">
@@ -219,129 +215,147 @@ export default function Dashboard() {
                                         <option value="name">Sort by Name</option>
                                     </select>
                                 </div>
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full divide-y divide-gray-700">
-                                        <thead>
-                                            <tr>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    Order ID
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    Customer
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    Date
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    Status
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    Items
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    Total
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-700">
-                                            {sortedOrders.map((order) => (
-                                                <tr
-                                                    key={order.id}
-                                                    className={`cursor-pointer transition-colors duration-150 ${
-                                                        selectedItem === order.id
-                                                            ? 'bg-maincolor'
-                                                            : 'hover:bg-gray-600'
-                                                    }`}
-                                                    onClick={() => setSelectedItem(order.id)}
-                                                >
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                                        #{order.id}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                                        {order.customerName}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                                        {order.date}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
-                                                            {order.status}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                                        {order.items}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                                        ${order.total.toFixed(2)}
-                                                    </td>
+                                <div className="h-[calc(100%-60px)]">
+                                    <div className="relative h-full">
+                                        {/* Fixed Header */}
+                                        <table className="min-w-full divide-y divide-gray-700 border-b border-gray-500">
+                                            <thead className="bg-maincolor">
+                                                <tr>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        Order ID
+                                                    </th>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        Customer
+                                                    </th>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        Date
+                                                    </th>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        Status
+                                                    </th>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        Items
+                                                    </th>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        Total
+                                                    </th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                        </table>
+                                        {/* Scrollable Body */}
+                                        <div className="overflow-y-auto h-[calc(100%-25px)]">
+                                            <table className="min-w-full divide-y divide-gray-700">
+                                                <tbody className="bg-maincolor divide-y divide-gray-700">
+                                                    {sortedOrders.map((order) => (
+                                                        <tr
+                                                            key={order.id}
+                                                            className={`cursor-pointer transition-colors duration-150 ${
+                                                                selectedItem === order.id
+                                                                    ? 'bg-secondarycolor'
+                                                                    : 'hover:bg-secondarycolor'
+                                                            }`}
+                                                            onClick={() => setSelectedItem(order.id)}
+                                                        >
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                                #{order.id}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                                {order.customerName}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                                {order.date}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                                                                    {order.status}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                                {order.items}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                                ${order.total.toFixed(2)}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </>
                         ) : (
                             <>
                                 <h2 className="text-xl font-bold text-yellow-400 mb-4">Saved Searches</h2>
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full divide-y divide-gray-700">
-                                        <thead>
-                                            <tr>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    ID
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    Query Name
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    Date
-                                                </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                                                    URL
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-700">
-                                            {savedSearches.map((search) => (
-                                                <tr
-                                                    key={search.id}
-                                                    className={`cursor-pointer transition-colors duration-150 ${
-                                                        selectedItem === search.id
-                                                            ? 'bg-gray-800'
-                                                            : 'hover:bg-gray-700'
-                                                    }`}
-                                                    onClick={() => setSelectedItem(search.id)}
-                                                >
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                                        #{search.id}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                                        {search.queryName}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                                        {search.date}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                        <a
-                                                            href={search.url}
-                                                            className="text-blue-400 hover:text-blue-300"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            onClick={(e) => e.stopPropagation()}
-                                                        >
-                                                            {search.url}
-                                                        </a>
-                                                    </td>
+                                <div className="h-[calc(100%-60px)]">
+                                    <div className="relative h-full">
+                                        {/* Fixed Header */}
+                                        <table className="min-w-full divide-y divide-gray-700">
+                                            <thead className="bg-maincolor">
+                                                <tr>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        ID
+                                                    </th>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        Query Name
+                                                    </th>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        Date
+                                                    </th>
+                                                    <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+                                                        URL
+                                                    </th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                        </table>
+                                        {/* Scrollable Body */}
+                                        <div className="overflow-y-auto h-full">
+                                            <table className="min-w-full divide-y divide-gray-700">
+                                                <tbody className="bg-maincolor divide-y divide-gray-700">
+                                                    {savedSearches.map((search) => (
+                                                        <tr
+                                                            key={search.id}
+                                                            className={`cursor-pointer transition-colors duration-150 ${
+                                                                selectedItem === search.id
+                                                                    ? 'bg-secondarycolor'
+                                                                    : 'hover:bg-secondarycolor'
+                                                            }`}
+                                                            onClick={() => setSelectedItem(search.id)}
+                                                        >
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                                #{search.id}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                                {search.queryName}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                                {search.date}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                                <a
+                                                                    href={search.url}
+                                                                    className="text-blue-400 hover:text-blue-300"
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    onClick={(e) => e.stopPropagation()}
+                                                                >
+                                                                    {search.url}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </>
                         )}
                     </div>
                 </div>
             </main>
+
+            <Footer />
         </div>
     );
 }
