@@ -102,3 +102,21 @@ export interface LocationData {
   display_name: string;
   boundingbox: [string, string, string, string];
 }
+
+
+
+export interface Order {
+  id: string;
+  status: 'pending' | 'completed' | 'cancelled';
+  date: string;
+  customerName: string;
+  total: number;
+  items: number;
+}
+
+export interface SavedSearch {
+  id: string;
+  date: string;
+  url: string;
+  queryName: string;
+}
