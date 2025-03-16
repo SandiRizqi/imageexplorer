@@ -95,7 +95,7 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
                         />
 
                         <div className="text-gray-300">
-                            Rupabumi
+                            Ruangbumi
                         </div>
                     </div>
 
