@@ -18,7 +18,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Image Explore | Map",
+  title: "Image Explore | a leading satellite imagery provider in the world with the most complete images collection.",
   description: "We provide high-quality satellite imagery data to empower businesses, researchers, and decision-makers with cutting-edge geospatial insights.",
 };
 
