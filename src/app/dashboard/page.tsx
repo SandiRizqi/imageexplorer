@@ -1,5 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
+import { Suspense } from 'react';
+import LoadingScreen from '../components/LoadingScreen';
 import { Order, SavedSearch } from '../components/types';
 import { useAuth } from '../components/context/AuthProrider';
 import Header from './Header';
@@ -91,7 +93,8 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="h-screen overflow-hidden bg-gray-50">
+        <Suspense fallback={<LoadingScreen />}>
+            <div className="h-screen overflow-hidden bg-gray-50">
             <Header />
             
             <main className="h-[calc(100vh-64px)] mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -134,5 +137,6 @@ export default function Dashboard() {
 
             <Footer />
         </div>
+        </Suspense>
     );
 }
