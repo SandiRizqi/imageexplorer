@@ -13,11 +13,12 @@ import { PolygonProvider } from '../app/components/context/PolygonProvider';
 import ToolsContainer from '../app/components/container/ToolsContainer';
 import MapFooter from '../app/components/MapFooter';
 import { Menu } from 'lucide-react';
-import logo from '../app/components/assets/logo_ie.webp';
-import Image from 'next/image';
+// import logo from '../app/components/assets/logo_ie.webp';
+// import Image from 'next/image';
 import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
 import Cart from '../app/components/widget/Cart';
 import SearchLocation from '../app/components/widget/SeachLocation';
+import DashboardSwitcher from './components/widget/DashboardSwitcher';
 
 
 
@@ -84,12 +85,12 @@ export default function MapPage() {
                                     {/* Toggle Button */}
                                     <button
                                         onClick={() => setMenuOpen(!menuOpen)}
-                                        className="text-white focus:outline-none mr-8"
+                                        className="text-white focus:outline-none mr-4"
                                     >
                                         <Menu />
                                     </button>
-                                    <Image src={logo} alt="Logo" width={50} height={50} className='mr-8' />
-                                    <SearchLocation />
+                                    <DashboardSwitcher />
+                                    {!isMobile && <SearchLocation />}
                                     <ToolsContainer />
                                 </div>
 

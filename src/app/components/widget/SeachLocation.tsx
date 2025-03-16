@@ -51,7 +51,7 @@ const SearchLocation = () => {
   };
 
   return (
-    <div className="relative w-full max-w-md">
+    <div className="relative w-full max-w-md px-4">
       {/* Input Pencarian */}
       <input
         type="text"
