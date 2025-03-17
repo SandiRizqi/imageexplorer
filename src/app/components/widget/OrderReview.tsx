@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { OrderData } from './OrderProcessing';
 import { useConfig } from '../context/ConfigProvider';
 import { ImageItem } from '../types';
+import { useAuth } from '../context/AuthProrider';
 
 interface OrderReviewProps {
     orderData: OrderData;
@@ -13,13 +14,14 @@ interface OrderReviewProps {
 interface UserFormData {
     name: string;
     email: string;
-    phone: string;
-    company: string;
+    phone?: string;
+    company?: string;
 }
 
 export default function OrderReviewModal({ orderData, selectedItems, onConfirm, onBack}: OrderReviewProps) {
     const [additionalNotes, setAdditionalNotes] = useState('');
     const {config} = useConfig();
+    const {session} = useAuth();
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [userData, setUserData] = useState<UserFormData>({
         name: '',
@@ -27,6 +29,9 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
         phone: '',
         company: ''
     });
+
+
+    console.log(session);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -49,7 +54,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
     const handleSubmit = async () => {
         try {
             const data = {
-                userData: userData,
+                userData: session?.user || userData,
                 processingTypes: orderData.processingTypes,
                 estimatedPrice: orderData.estimatedPrice,
                 additionalNotes: additionalNotes,
@@ -76,6 +81,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
         }
     };
 
+    const isValid = !agreedToTerms || !userData.name || !userData.email || !userData.phone;
 
     return (
         <>
@@ -119,7 +125,8 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 {/* Two-column grid layout for larger screens, single column for mobile */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Left column - Your Information */}
-                    <div className="bg-maincolor rounded-md p-4">
+                    {!session && (
+                        <div className="bg-maincolor rounded-md p-4">
                         <h3 className="text-sm font-medium text-yellow-500 mb-2">Your Information</h3>
 
                         <div className="space-y-3">
@@ -183,6 +190,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                             </div>
                         </div>
                     </div>
+                    )}
 
                     {/* Right column - Order Summary */}
                     <div className="bg-maincolor rounded-md p-4">
@@ -256,7 +264,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 <button
                     className="bg-green-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-500 disabled:bg-gray-600 disabled:text-gray-400 w-full sm:w-auto order-1 sm:order-2"
                     onClick={handleSubmit}
-                    disabled={!agreedToTerms || !userData.name || !userData.email || !userData.phone}
+                    disabled={session === null || !isValid}
                 >
                     Submit Order
                 </button>
