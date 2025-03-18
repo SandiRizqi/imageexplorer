@@ -43,8 +43,8 @@ const MapFooter: React.FC<MapFooterProps> = (props) => {
                 const area = turf.area(turfPolygon);
                 const kmarea = area/1000000;
                 setTotalArea(kmarea);
-                if (kmarea > 500) {
-                    setError("Area should not exceed 500 km²!");
+                if (kmarea > 5000) {
+                    setError("Area should not exceed 5000 km²!");
                 }
             }
         } else {

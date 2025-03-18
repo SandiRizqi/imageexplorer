@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// import { LayerSpecification, SourceSpecification } from "maplibre-gl";
 import { useMap } from "../context/MapProvider";
 import carto from '../assets/crto_map.webp';
 import smmap  from '../assets/sm_map.webp';
@@ -22,13 +23,64 @@ const BasemapSwitcher: React.FC = () => {
   const [activeBasemap, setActiveBasemap] = useState(basemaps[1].style);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const changeBasemap = (style: string) => {
-    if (map) {
-      map.setStyle(style, { diff: true });
-      setActiveBasemap(style);
-      setIsExpanded(false); // Tutup opsi setelah memilih
-    }
-  };
+
+
+//   const getLayersList = () => {
+//     if (!map) return [];
+    
+//     try {
+//         const style = map.getStyle(); 
+//         console.log(style)   
+//         return style.layers || []
+//     } catch  {
+//         return []
+//     }
+// };
+
+const changeBasemap = (style: string) => {
+  if (!map) return;
+
+  // const polygonLayers: LayerSpecification[] | [] = getLayersList();
+  //     const filteredLayers: LayerSpecification[] = polygonLayers.filter(
+  //         layer => layer.id === "polygon-fill" || layer.id === "polygon-border"
+  //     );
+  // const polySource = map.getStyle().sources?.polygon;
+
+  
+  // map.once('style.load', () => {
+  //   console.log(polySource)
+  //   if (polySource) {
+  //     if (!map.getSource("polygon")) {
+  //       map.addSource("polygon", polySource);
+  //     };
+  
+  //     filteredLayers.forEach(layer => {
+  //       try {
+  //         if (!map.getLayer(layer.id)) {
+  //           map.addLayer(layer);
+  
+  //         }
+  //         // Always move to top regardless if it was just added or already existed
+  //         map.moveLayer(layer.id);
+  //       } catch (error) {
+  //         console.error(`[2025-03-18 02:49:54] Error handling layer ${layer.id}:`, error);
+  //       }
+  //     });
+  //   }
+  // })
+
+
+  // Set the new style
+  map.setStyle(style, { diff: false });
+  setActiveBasemap(style);
+  setIsExpanded(false);
+
+};
+
+
+
+
+
 
   return (
     <div
