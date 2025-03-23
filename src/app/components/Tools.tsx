@@ -140,7 +140,7 @@ export const getOrdersByUser = async (setUserOrders: (orders: OrderType[]) => vo
         const response : AxiosResponse<OrdersResponse> = await axios.get(url, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization' : `Token ${session?.idToken as string}`
+            'Authorization' : `Token ${session?.accessToken as string}`
           },
         });
 
