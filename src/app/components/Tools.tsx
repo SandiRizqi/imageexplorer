@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AxiosResponse, CancelTokenSource } from "axios";
-import { SaveConfig, OrderType } from "./types";
+import { SaveConfig, OrderType, ConfigType } from "./types";
 import { getSession } from "next-auth/react";
 import * as turf from "@turf/turf";
 
@@ -14,6 +14,10 @@ interface PreviewRequest {
 
 interface OrdersResponse {
     items: OrderType[];
+};
+
+interface ConfigsResponse {
+    items: ConfigType[];
 }
   
 interface PreviewResponse {
@@ -145,6 +149,35 @@ export const getOrdersByUser = async (setUserOrders: (orders: OrderType[]) => vo
         });
 
         return setUserOrders(response.data.items)
+    
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(`API Error:`, {
+            status: error.response?.status,
+            message: error.response?.data?.message || error.message
+          });
+        } else {
+          console.error(`Error fetching orders:`, error);
+        }
+        throw error;
+      }
+}
+
+
+
+export const getConfigsByUser = async (setUserConfigs: (configs: ConfigType[]) => void) => {
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/configs-by-email`;
+    const session = await getSession();
+    
+    try {
+        const response : AxiosResponse<ConfigsResponse> = await axios.get(url, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Token ${session?.accessToken as string}`
+          },
+        });
+
+        return setUserConfigs(response.data.items)
     
       } catch (error) {
         if (axios.isAxiosError(error)) {
