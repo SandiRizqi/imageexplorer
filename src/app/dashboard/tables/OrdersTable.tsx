@@ -22,7 +22,7 @@ const typeColors: Record<string, string> = {
   };
 
 export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
-    const {session} = useAuth();
+    const { status} = useAuth();
     const [sortOrder, setSortOrder] = useState<'date' | 'name'>('date');
     const [userOrders, setUserOrders] = useState<OrderType[]>([]);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
@@ -31,11 +31,11 @@ export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
 
 
     useEffect(() => {
-        if (session) {
+        if (status === "authenticated") {
             getOrdersByUser(setUserOrders);
         }
 
-    }, [])
+    }, [status])
 
     const sortedOrders = [...userOrders].sort((a, b) => {
         if (sortOrder === 'date') {
