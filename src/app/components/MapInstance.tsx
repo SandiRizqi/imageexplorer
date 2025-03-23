@@ -6,8 +6,6 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 
 
-
-
 export type ViewOptions = {
   center?: [number, number];
   zoom?: number;
@@ -43,6 +41,8 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
 
 
 
+
+
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
@@ -69,6 +69,11 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
       map.jumpTo(mapView);
       map.on("load", setLoaded)
     }
+
+    
+    
+    
+
   }, [map]);
 
   useEffect(() => {
@@ -77,7 +82,9 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
     }
   }, [mapStyle, map]);
 
-    useEffect(() => {
+
+
+  useEffect(() => {
         if (map) {
             const handleResize = () => {
                 map.resize();
@@ -88,6 +95,9 @@ const MapInstance: React.FC<MapInstanceProps> = ({ id, className, style, mapStyl
             return () => window.removeEventListener("resize", handleResize);
         }
     }, []);
+
+
+  
 
 
 

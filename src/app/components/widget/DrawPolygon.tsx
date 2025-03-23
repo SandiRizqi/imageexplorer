@@ -63,10 +63,22 @@ const DrawTool: React.FC = () => {
         map.on("mousemove", handleMouseMove);
         map.once("dblclick", stopDrawing);
 
+        map.on("style.load", () => {
+            if (polygon.length > 3) {
+                drawPolygon(polygon);
+            }
+        })
+
         return () => {
             map.off("click", handleClick);
             map.off("mousemove", handleMouseMove);
             map.off("dblclick", stopDrawing);
+            map.on("style.load", () => {
+                if (polygon.length > 3) {
+                    drawPolygon(polygon);
+                    
+                }
+            })
         };
     }, [map, isDrawing, drawMode, polygon, startPoint, setPolygon, stopDrawing]);
 
@@ -139,6 +151,9 @@ const DrawTool: React.FC = () => {
                 },
             });
         }
+
+        map.moveLayer("polygon-fill");
+        map.moveLayer("polygon-border")
     };
 
     const generateRectangle = (start: [number, number], end: [number, number]): [number, number][] => {

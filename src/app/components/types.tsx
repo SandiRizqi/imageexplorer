@@ -120,3 +120,25 @@ export interface SavedSearch {
   url: string;
   queryName: string;
 }
+
+
+interface User {
+  name: string
+  image: string | null;
+  id: string;
+  email: string;
+}
+
+
+export interface OrderType {
+  configID: string;
+  selectedItems: ImageItem[];
+  status: string;
+  userData: User;
+  createdAt: string;
+  estimatedPrice: number;
+  userId: string;
+  orderId: string;
+  processingTypes: string[];
+  additionalNotes: string;
+}

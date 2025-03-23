@@ -100,8 +100,8 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
 
         const totalArea = checkTotalArea(polygon);
         
-        if (totalArea > 500) {
-            setError("Area should not exceed 500 km²!");
+        if (totalArea > 5000) {
+            setError("Area should not exceed 5000 km²!");
             return;
         }
 

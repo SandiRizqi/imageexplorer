@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { ShoppingCart, X } from "lucide-react";
 import { useConfig } from "../context/ConfigProvider";
+import { usePolygon } from "../context/PolygonProvider";
 import { motion, AnimatePresence } from "framer-motion";
 import ProcessingOptions from "./ProcessingOptions";
 import OrderReview from "./OrderReview";
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import { saveConfig } from "../Tools";
+import Alert from "../Alert";
+
 
 
 const StepIndicator = ({ currentStep, steps }: { currentStep: number; steps: string[] }) => {
@@ -47,8 +51,10 @@ interface OrderData {
 }
 
 export default function Cart({ isMobile }: CartProps) {
-    const { selectedItem, imageResult } = useConfig();
+    const { config, setConfig, filters, imageResult, selectedItem } = useConfig();
+    const {polygon} = usePolygon();
     const cartItem = imageResult.filter(item => selectedItem.includes(item.objectid));
+    const [loading, setLoading] = useState(false); 
     const [isOpen, setIsOpen] = useState(false);
     const [isProcessingModalOpen, setIsProcessingModalOpen] = useState(false);
     const [currentStep, setCurrentStep] = useState<OrderStep>('options');
@@ -56,6 +62,10 @@ export default function Cart({ isMobile }: CartProps) {
         processingTypes: [],
         estimatedPrice: 0
     });
+    const [Error, setError] = useState<string|null>(null);
+
+
+
     
     const handleProcessingSelect = (selectedOptions: ProcessingType[]) => {
         const basePrice = selectedItem.length * 50;
@@ -91,6 +101,32 @@ export default function Cart({ isMobile }: CartProps) {
             estimatedPrice: 0
         });
     };
+
+
+
+    const handleSaveConfig = async () => {
+            setLoading(true); // Start loading
+    
+            const configData = {
+                filter: filters,
+                polygon: polygon,
+                results: imageResult,
+                selected: selectedItem
+            };
+    
+            try {
+                const savedConfigID = await saveConfig(configData, setError, config.configID);
+                if (savedConfigID) {
+                    setConfig(prev => ({...prev, configID: savedConfigID}));
+                    setIsProcessingModalOpen(true);
+                    setIsOpen(false);
+                }
+            } catch {
+                setError("Failed to save configuration.");
+            }
+    
+            setLoading(false); // Stop loading
+        };
 
     return (
         <>
@@ -172,13 +208,18 @@ export default function Cart({ isMobile }: CartProps) {
                             {cartItem.length > 0 && (
                                 <div className="p-4 bg-maincolor">
                                     <button 
-                                        className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md hover:bg-yellow-400 transition"
-                                        onClick={() => {
-                                            setIsProcessingModalOpen(true);
-                                            setIsOpen(false);
-                                        }}
+                                        className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md hover:bg-yellow-400 transition justify-center flex"
+                                        onClick={() => handleSaveConfig()}
                                     >
-                                        Create Quote
+                                        {!loading ? "Create Quote" : (
+                                        <div className="flex items-center">
+                                            <svg className="animate-spin h-4 w-4 text-gray-900 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0H4z"></path>
+                                            </svg>
+                                            <span>Creating...</span>
+                                        </div>
+                                    )}
                                     </button>
                                 </div>
                             )}
@@ -245,6 +286,7 @@ export default function Cart({ isMobile }: CartProps) {
                 </DialogPanel>
             </div>
             </Dialog>
+            {Error && <Alert category={"error"} message={Error} setClose={setError} />}
         </>
     );
 }
