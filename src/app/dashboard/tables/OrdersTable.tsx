@@ -1,34 +1,56 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { Order } from '../../components/types';
+import { getOrdersByUser } from '../../components/Tools';
+import { useAuth } from '../../components/context/AuthProrider';
+import { OrderType } from '../../components/types';
+
+
 
 const ITEMS_PER_PAGE = 15;
 
 interface OrdersTableProps {
-    orders: Order[];
     onOrderSelect?: (orderId: string) => void;
 }
 
-export default function OrdersTable({ orders, onOrderSelect }: OrdersTableProps) {
+
+const typeColors: Record<string, string> = {
+    "rawdata": "bg-blue-500",
+    "imageprocessing": "bg-green-500",
+    "imageanalysis": "bg-yellow-500",
+    "layouting": "bg-purple-500"
+  };
+
+export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
+    const {session} = useAuth();
     const [sortOrder, setSortOrder] = useState<'date' | 'name'>('date');
+    const [userOrders, setUserOrders] = useState<OrderType[]>([]);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+  
 
-    const sortedOrders = [...orders].sort((a, b) => {
-        if (sortOrder === 'date') {
-            return new Date(b.date).getTime() - new Date(a.date).getTime();
+
+    useEffect(() => {
+        if (session) {
+            getOrdersByUser(setUserOrders);
         }
-        return a.customerName.localeCompare(b.customerName);
+
+    }, [])
+
+    const sortedOrders = [...userOrders].sort((a, b) => {
+        if (sortOrder === 'date') {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }
+        return a.orderId.localeCompare(b.orderId);
     });
 
     const totalPages = Math.ceil(sortedOrders.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const currentOrders = sortedOrders.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-    const getStatusColor = (status: Order['status']) => {
+    const getStatusColor = (status: string) => {
         switch (status) {
-            case 'pending': return 'bg-yellow-100 text-yellow-800';
+            case 'processing': return 'bg-yellow-100 text-yellow-800';
             case 'completed': return 'bg-green-100 text-green-800';
             case 'cancelled': return 'bg-red-100 text-red-800';
             default: return 'bg-gray-100 text-gray-800';
@@ -49,7 +71,7 @@ export default function OrdersTable({ orders, onOrderSelect }: OrdersTableProps)
                         <option value="name">Sort by Name</option>
                     </select>
                     <span className="text-sm text-gray-400">
-                        Total Orders: {orders.length}
+                        Total Orders: {userOrders.length}
                     </span>
                 </div>
             </div>
@@ -72,7 +94,7 @@ export default function OrdersTable({ orders, onOrderSelect }: OrdersTableProps)
                                 Status
                             </th>
                             <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
-                                Items
+                                Tasks
                             </th>
                             <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
                                 Total
@@ -87,36 +109,45 @@ export default function OrdersTable({ orders, onOrderSelect }: OrdersTableProps)
                         <tbody className="bg-maincolor divide-y divide-gray-700">
                             {currentOrders.map((order) => (
                                 <tr
-                                    key={order.id}
+                                    key={order.orderId}
                                     className={`cursor-pointer transition-colors duration-150 ${
-                                        selectedItem === order.id
+                                        selectedItem === order.orderId
                                             ? 'bg-secondarycolor'
                                             : 'hover:bg-secondarycolor'
                                     }`}
                                     onClick={() => {
-                                        setSelectedItem(order.id);
-                                        onOrderSelect?.(order.id);
+                                        setSelectedItem(order.orderId);
+                                        onOrderSelect?.(order.orderId);
                                     }}
                                 >
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        #{order.id}
+                                        {order.orderId.slice(0, 20) + "..."}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        {order.customerName}
+                                        {order.userData.name}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        {order.date}
+                                    {new Date(order.createdAt).toLocaleDateString()}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
-                                            {order.status}
+                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order?.status)}`}>
+                                            {order?.status}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        {order.items}
+                                    <div className="flex flex-col space-y-2">
+                                        {order.processingTypes.map((type: string, index: number) => (
+                                        <span
+                                            key={index}
+                                            className={`px-2 py-1 text-xs font-semibold text-white rounded-lg ${typeColors[type] || "bg-gray-400"}`}
+                                        >
+                                            {type}
+                                        </span>
+                                        ))}
+                                    </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        ${order.total.toFixed(2)}
+                                        ${order.estimatedPrice.toFixed(2)}
                                     </td>
                                 </tr>
                             ))}

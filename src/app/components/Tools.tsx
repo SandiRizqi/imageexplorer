@@ -1,7 +1,9 @@
 import axios from "axios";
 import { AxiosResponse, CancelTokenSource } from "axios";
-import { SaveConfig } from "./types";
+import { SaveConfig, OrderType } from "./types";
+import { getSession } from "next-auth/react";
 import * as turf from "@turf/turf";
+
 
 
 interface PreviewRequest {
@@ -9,6 +11,10 @@ interface PreviewRequest {
     satelliteShortName: string;
     forceHighestQuality: boolean;
   }
+
+interface OrdersResponse {
+    items: OrderType[];
+}
   
 interface PreviewResponse {
     presigned_url: string;
@@ -122,4 +128,33 @@ export const checkTotalArea = (polygon: [number, number][]) : number => {
     const area = turf.area(turfPolygon);
     const kmarea = area/1000000;
     return kmarea;
+}
+
+
+
+export const getOrdersByUser = async (setUserOrders: (orders: OrderType[]) => void) => {
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/orders-by-email`;
+    const session = await getSession();
+    
+    try {
+        const response : AxiosResponse<OrdersResponse> = await axios.get(url, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Token ${session?.idToken as string}`
+          },
+        });
+
+        return setUserOrders(response.data.items)
+    
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(`API Error:`, {
+            status: error.response?.status,
+            message: error.response?.data?.message || error.message
+          });
+        } else {
+          console.error(`Error fetching orders:`, error);
+        }
+        throw error;
+      }
 }

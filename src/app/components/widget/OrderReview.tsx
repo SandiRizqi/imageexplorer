@@ -31,7 +31,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
     });
 
 
-    console.log(session);
+    // console.log(session);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -264,7 +264,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 <button
                     className="bg-green-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-500 disabled:bg-gray-600 disabled:text-gray-400 w-full sm:w-auto order-1 sm:order-2"
                     onClick={handleSubmit}
-                    disabled={session === null || !isValid}
+                    disabled={session === null && !isValid}
                 >
                     Submit Order
                 </button>

@@ -2,12 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { Suspense } from 'react';
 import LoadingScreen from '../components/LoadingScreen';
-import { Order, SavedSearch } from '../components/types';
+import { SavedSearch } from '../components/types';
 import { useAuth } from '../components/context/AuthProrider';
 import Header from './Header';
 import Footer from './Footer';
 import OrdersTable from './tables/OrdersTable';
 import SavedSearchesTable from './tables/SavedSearchesTable';
+
+
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState<'orders' | 'searches'>('orders');
@@ -15,30 +17,6 @@ export default function Dashboard() {
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
     const {session} = useAuth(); 
 
-    // Sample data - in real application, this would come from your API/database
-    const [orders] = useState<Order[]>([
-        { id: '1', status: 'pending', date: '2025-03-15', customerName: 'John Doe', total: 299.99, items: 3 },
-        { id: '2', status: 'completed', date: '2025-03-14', customerName: 'Jane Smith', total: 199.99, items: 2 },
-        { id: '3', status: 'completed', date: '2025-03-13', customerName: 'Alice Johnson', total: 399.99, items: 5 },
-        { id: '4', status: 'pending', date: '2025-03-12', customerName: 'Bob Brown', total: 159.99, items: 1 },
-        { id: '5', status: 'completed', date: '2025-03-11', customerName: 'Charlie Davis', total: 249.99, items: 4 },
-        { id: '6', status: 'completed', date: '2025-03-10', customerName: 'Eve White', total: 119.99, items: 2 },
-        { id: '7', status: 'pending', date: '2025-03-09', customerName: 'Frank Green', total: 299.99, items: 3 },
-        { id: '8', status: 'completed', date: '2025-03-08', customerName: 'Grace Lee', total: 499.99, items: 6 },
-        { id: '9', status: 'pending', date: '2025-03-07', customerName: 'Hank Scott', total: 349.99, items: 5 },
-        { id: '10', status: 'completed', date: '2025-03-06', customerName: 'Ivy Clark', total: 199.99, items: 2 },
-        { id: '11', status: 'completed', date: '2025-03-05', customerName: 'Jack Harris', total: 229.99, items: 3 },
-        { id: '12', status: 'pending', date: '2025-03-04', customerName: 'Kara Adams', total: 159.99, items: 1 },
-        { id: '13', status: 'completed', date: '2025-03-03', customerName: 'Leo Walker', total: 389.99, items: 4 },
-        { id: '14', status: 'pending', date: '2025-03-02', customerName: 'Mona Martinez', total: 249.99, items: 3 },
-        { id: '15', status: 'completed', date: '2025-03-01', customerName: 'Nathan Perez', total: 499.99, items: 7 },
-        { id: '16', status: 'completed', date: '2025-02-28', customerName: 'Olivia Young', total: 179.99, items: 2 },
-        { id: '17', status: 'pending', date: '2025-02-27', customerName: 'Paul King', total: 289.99, items: 4 },
-        { id: '18', status: 'completed', date: '2025-02-26', customerName: 'Quinn Hill', total: 399.99, items: 5 },
-        { id: '19', status: 'pending', date: '2025-02-25', customerName: 'Rachel Nelson', total: 229.99, items: 3 },
-        { id: '20', status: 'completed', date: '2025-02-24', customerName: 'Steve Carter', total: 269.99, items: 4 }
-    ]);
-    
 
     const [savedSearches] = useState<SavedSearch[]>([
         { id: '1', date: '2025-03-15', url: 'https://example.com/search?q=products', queryName: 'Popular Products' },
@@ -127,7 +105,7 @@ export default function Dashboard() {
                     {/* Content */}
                     <div className="p-6 h-[calc(100%-48px)]">
                         {activeTab === 'orders' ? (
-                            <OrdersTable orders={orders} onOrderSelect={setSelectedItem}/>
+                            <OrdersTable onOrderSelect={setSelectedItem}/>
                         ) : (
                             <SavedSearchesTable searches={savedSearches} onSearchSelect={setSelectedItem}/>
                         )}
