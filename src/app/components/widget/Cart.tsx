@@ -8,6 +8,7 @@ import OrderReview from "./OrderReview";
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { saveConfig } from "../Tools";
 import Alert from "../Alert";
+import { getSession } from "next-auth/react";
 
 
 
@@ -106,8 +107,10 @@ export default function Cart({ isMobile }: CartProps) {
 
     const handleSaveConfig = async () => {
             setLoading(true); // Start loading
+            const session = await getSession();
     
             const configData = {
+                userData: session?.user,
                 filter: filters,
                 polygon: polygon,
                 results: imageResult,

@@ -142,3 +142,11 @@ export interface OrderType {
   processingTypes: string[];
   additionalNotes: string;
 }
+
+
+export interface ConfigType {
+  id: string;
+  timestamp: number;
+  userData?: User;
+  config_url? : string;
+}

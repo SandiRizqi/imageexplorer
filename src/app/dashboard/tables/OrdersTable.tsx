@@ -21,18 +21,31 @@ const typeColors: Record<string, string> = {
     "layouting": "bg-purple-500"
   };
 
+
+const LoadingComponent = () => {
+    return (
+        <tr>
+            <td colSpan={6} className="text-center py-6 text-gray-400">
+                Loading orders...
+            </td>
+        </tr>
+    )
+}
+
 export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
     const { status} = useAuth();
     const [sortOrder, setSortOrder] = useState<'date' | 'name'>('date');
     const [userOrders, setUserOrders] = useState<OrderType[]>([]);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState<boolean>(false);
   
 
 
     useEffect(() => {
         if (status === "authenticated") {
-            getOrdersByUser(setUserOrders);
+            setLoading(true); // Start loading
+            getOrdersByUser(setUserOrders).finally(() => setLoading(false));
         }
 
     }, [status])
@@ -41,7 +54,7 @@ export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
         if (sortOrder === 'date') {
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         }
-        return a.orderId.localeCompare(b.orderId);
+        return a.userData.name.localeCompare(b.userData.name);
     });
 
     const totalPages = Math.ceil(sortedOrders.length / ITEMS_PER_PAGE);
@@ -107,50 +120,55 @@ export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
                 <div className="overflow-y-auto h-[calc(100%-100px)]">
                     <table className="min-w-full divide-y divide-gray-700">
                         <tbody className="bg-maincolor divide-y divide-gray-700">
-                            {currentOrders.map((order) => (
-                                <tr
-                                    key={order.orderId}
-                                    className={`cursor-pointer transition-colors duration-150 ${
-                                        selectedItem === order.orderId
-                                            ? 'bg-secondarycolor'
-                                            : 'hover:bg-secondarycolor'
-                                    }`}
-                                    onClick={() => {
-                                        setSelectedItem(order.orderId);
-                                        onOrderSelect?.(order.orderId);
-                                    }}
-                                >
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        {order.orderId.slice(0, 20) + "..."}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        {order.userData.name}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                    {new Date(order.createdAt).toLocaleDateString()}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order?.status)}`}>
-                                            {order?.status}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                    <div className="flex flex-col space-y-2">
-                                        {order.processingTypes.map((type: string, index: number) => (
-                                        <span
-                                            key={index}
-                                            className={`px-2 py-1 text-xs font-semibold text-white rounded-lg ${typeColors[type] || "bg-gray-400"}`}
-                                        >
-                                            {type}
-                                        </span>
-                                        ))}
-                                    </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        ${order.estimatedPrice.toFixed(2)}
-                                    </td>
-                                </tr>
-                            ))}
+                        {loading ? ( // Show loading indicator when loading
+                                <LoadingComponent />
+                            ) : (
+                                currentOrders.map((order) => (
+                                    <tr
+                                        key={order.orderId}
+                                        className={`cursor-pointer transition-colors duration-150 ${
+                                            selectedItem === order.orderId
+                                                ? 'bg-secondarycolor'
+                                                : 'hover:bg-secondarycolor'
+                                        }`}
+                                        onClick={() => {
+                                            setSelectedItem(order.orderId);
+                                            onOrderSelect?.(order.orderId);
+                                        }}
+                                    >
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            {order.orderId.slice(0, 20) + "..."}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            {order.userData.name}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            {new Date(order.createdAt).toLocaleDateString()}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order?.status)}`}>
+                                                {order?.status}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            <div className="flex flex-col space-y-2">
+                                                {order.processingTypes.map((type: string, index: number) => (
+                                                    <span
+                                                        key={index}
+                                                        className={`px-2 py-1 text-xs font-semibold text-white rounded-lg ${typeColors[type] || "bg-gray-400"}`}
+                                                    >
+                                                        {type}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            ${order.estimatedPrice.toFixed(2)}
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+
                         </tbody>
                     </table>
                 </div>

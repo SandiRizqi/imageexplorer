@@ -1,22 +1,47 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../components/context/AuthProrider';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { SavedSearch } from '../../components/types';
+import { getConfigsByUser } from '../../components/Tools';
+import { ConfigType } from '../../components/types';
+
 
 const ITEMS_PER_PAGE = 15;
 
 interface SavedSearchesTableProps {
-    searches: SavedSearch[];
     onSearchSelect?: (searchId: string) => void;
 }
 
-export default function SavedSearchesTable({ searches, onSearchSelect }: SavedSearchesTableProps) {
+
+const LoadingComponent = () => {
+    return (
+        <tr>
+            <td colSpan={6} className="text-center py-6 text-gray-400">
+                Loading orders...
+            </td>
+        </tr>
+    )
+}
+
+export default function SavedSearchesTable({ onSearchSelect }: SavedSearchesTableProps) {
+    const {status} = useAuth();
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [userConfigs, setUserConfigs] = useState<ConfigType[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const totalPages = Math.ceil(searches.length / ITEMS_PER_PAGE);
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            setLoading(true); // Start loading
+            getConfigsByUser(setUserConfigs).finally(() => setLoading(false));
+        }
+
+    },[])
+
+    const totalPages = Math.ceil(userConfigs.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const currentSearches = searches.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    const currentSearches = userConfigs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
     return (
         <>
@@ -49,41 +74,47 @@ export default function SavedSearchesTable({ searches, onSearchSelect }: SavedSe
                 <div className="overflow-y-auto h-[calc(100%-100px)]">
                     <table className="min-w-full divide-y divide-gray-700">
                         <tbody className="bg-maincolor divide-y divide-gray-700">
-                            {currentSearches.map((search) => (
-                                <tr
-                                    key={search.id}
-                                    className={`cursor-pointer transition-colors duration-150 ${
-                                        selectedItem === search.id
-                                            ? 'bg-secondarycolor'
-                                            : 'hover:bg-secondarycolor'
-                                    }`}
-                                    onClick={() => {
-                                        setSelectedItem(search.id);
-                                        onSearchSelect?.(search.id);
-                                    }}
-                                >
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        #{search.id}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        {search.queryName}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        {search.date}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                        <a
-                                            href={search.url}
-                                            className="text-blue-400 hover:text-blue-300"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            {search.url}
-                                        </a>
-                                    </td>
-                                </tr>
-                            ))}
+                            {loading ? (
+                                <LoadingComponent /> 
+                            ) : (
+                                currentSearches.map((search, idx) => (
+                                    <tr
+                                        key={search.id}
+                                        className={`cursor-pointer transition-colors duration-150 ${
+                                            selectedItem === search.id
+                                                ? 'bg-secondarycolor'
+                                                : 'hover:bg-secondarycolor'
+                                        }`}
+                                        onClick={() => {
+                                            setSelectedItem(search.id);
+                                            onSearchSelect?.(search.id);
+                                        }}
+                                    >
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            #{idx + 1}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            {search?.userData?.name}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            {new Date(search.timestamp * 1000).toLocaleDateString()}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                            <a
+                                                href={`${process.env.NEXT_PUBLIC_HOST}/?savedconfig=${search.id}`}
+                                                className="text-blue-400 hover:text-blue-300"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                {`${process.env.NEXT_PUBLIC_HOST}/?savedconfig=${search.id}`}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                ))
+                                    
+                            )
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -91,7 +122,7 @@ export default function SavedSearchesTable({ searches, onSearchSelect }: SavedSe
                 {/* Pagination */}
                 <div className="absolute bottom-0 left-0 right-0 bg-maincolor border-t border-gray-700 px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center text-sm text-gray-400">
-                        Showing {startIndex + 1} to {Math.min(startIndex + ITEMS_PER_PAGE, searches.length)} of {searches.length}
+                        Showing {startIndex + 1} to {Math.min(startIndex + ITEMS_PER_PAGE, userConfigs.length)} of {userConfigs.length}
                     </div>
                     <div className="flex items-center space-x-2">
                         <button

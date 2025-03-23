@@ -3,6 +3,7 @@ import { usePolygon } from '../context/PolygonProvider';
 import { useConfig } from '../context/ConfigProvider';
 import { saveConfig } from '../Tools';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import { getSession } from 'next-auth/react';
 
 export default function SaveConfigButton() {
     const { polygon } = usePolygon();
@@ -19,7 +20,10 @@ export default function SaveConfigButton() {
         setCopied(false);
         setLoading(true); // Start loading
 
+        const session = await getSession();
+
         const configData = {
+            userData: session?.user,
             filter: filters,
             polygon: polygon,
             results: imageResult,
