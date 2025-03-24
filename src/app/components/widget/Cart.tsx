@@ -9,6 +9,11 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { saveConfig } from "../Tools";
 import Alert from "../Alert";
 import { getSession } from "next-auth/react";
+import { getEstimatedPrice } from "../Tools";
+import { ImageItem } from "../types";
+
+
+
 
 
 
@@ -44,6 +49,11 @@ interface CartProps {
 type OrderStep = 'options' | 'review' | 'confirmation';
 type ProcessingType = 'rawdata' | 'imageprocessing' | 'imageanalysis' | 'layouting';
 
+interface OrderDataType {
+    processingTypes: ProcessingType[];
+    items: ImageItem[];
+  }
+
 interface OrderData {
   processingTypes: ProcessingType[];
   estimatedPrice: number;
@@ -68,22 +78,21 @@ export default function Cart({ isMobile }: CartProps) {
 
 
     
-    const handleProcessingSelect = (selectedOptions: ProcessingType[]) => {
-        const basePrice = selectedItem.length * 50;
-        let processingMultiplier = 1;
-        
-        if (selectedOptions.includes('rawdata')) processingMultiplier += 0.5;
-        if (selectedOptions.includes('imageprocessing')) processingMultiplier += 1;
-        if (selectedOptions.includes('imageanalysis')) processingMultiplier += 2;
-        if (selectedOptions.includes('layouting')) processingMultiplier += 1.5;
-        
-        const estimatedPrice = Math.round(basePrice * processingMultiplier);
-        
-        setOrderData({
+    const handleProcessingSelect = async (selectedOptions: ProcessingType[]) => {
+
+        const data : OrderDataType = {
             processingTypes: selectedOptions,
-            estimatedPrice: estimatedPrice
-        });
-        
+            items : cartItem
+        };
+
+        const price = await getEstimatedPrice(data);
+        // console.log(price)
+        setOrderData(prev => ({
+            ...prev,
+            estimatedPrice: price?.estimatedPrice || 0, 
+            processingTypes: price?.processingTypes || []
+          }));
+
         setCurrentStep('review');
     };
 
@@ -101,6 +110,7 @@ export default function Cart({ isMobile }: CartProps) {
             processingTypes: [],
             estimatedPrice: 0
         });
+        window.location.replace("/");
     };
 
 
