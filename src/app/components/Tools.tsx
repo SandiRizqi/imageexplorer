@@ -3,6 +3,7 @@ import { AxiosResponse, CancelTokenSource } from "axios";
 import { SaveConfig, OrderType, ConfigType } from "./types";
 import { getSession } from "next-auth/react";
 import * as turf from "@turf/turf";
+import { ImageItem } from "./types";
 
 
 
@@ -18,6 +19,19 @@ interface OrdersResponse {
 
 interface ConfigsResponse {
     items: ConfigType[];
+}
+
+type ProcessingType = 'rawdata' | 'imageprocessing' | 'imageanalysis' | 'layouting';
+
+interface OrderDataType {
+  processingTypes: ProcessingType[];
+  items: ImageItem[];
+}
+
+interface PriceResponse {
+  estimatedPrice: number;
+  processingTypes: ProcessingType[];
+  items: ImageItem[];
 }
   
 interface PreviewResponse {
@@ -190,4 +204,33 @@ export const getConfigsByUser = async (setUserConfigs: (configs: ConfigType[]) =
         }
         throw error;
       }
+}
+
+
+export const getEstimatedPrice = async (orderData: OrderDataType ) => {
+
+  const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/calculate-price`;
+    
+    try {
+        const response : AxiosResponse<PriceResponse> = await axios.post(url, orderData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        return response.data;
+    
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(`API Error:`, {
+            status: error.response?.status,
+            message: error.response?.data?.message || error.message
+          });
+        } else {
+          console.error(`Error fetching orders:`, error);
+        }
+        return null;
+      }
+
+
 }
