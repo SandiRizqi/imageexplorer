@@ -11,6 +11,7 @@ import Alert from "../Alert";
 import { getSession } from "next-auth/react";
 import { getEstimatedPrice } from "../Tools";
 import { ImageItem } from "../types";
+import * as turf from "@turf/turf";
 
 
 
@@ -64,7 +65,42 @@ interface OrderData {
 export default function Cart({ isMobile }: CartProps) {
     const { config, setConfig, filters, imageResult, selectedItem } = useConfig();
     const {polygon} = usePolygon();
-    const cartItem = imageResult.filter(item => selectedItem.includes(item.objectid));
+    const cartItem = imageResult
+                    .filter((item) => selectedItem.includes(item.objectid))
+                    .map((item) => {
+                        // Define the image polygon coordinates
+                        const coords: [number, number][] = [
+                        [item.topleft.x, item.topleft.y],
+                        [item.bottomright.x, item.topleft.y],
+                        [item.bottomright.x, item.bottomright.y],
+                        [item.topleft.x, item.bottomright.y],
+                        [item.topleft.x, item.topleft.y], // Ensure polygon is closed
+                        ];
+
+                        // Create Turf.js polygons
+                        const imagePolygon = turf.polygon([coords]); // Use polygon directly, not featureCollection
+                        const regionPolygon = turf.polygon([polygon]);
+
+                        // Initialize intersection area
+                        let intersectionArea = 0;
+
+                        // Ensure polygons intersect before computing
+                        if (turf.booleanIntersects(imagePolygon, regionPolygon)) {
+                        const intersection = turf.intersect(turf.featureCollection([imagePolygon, regionPolygon]));
+                        if (intersection) {
+                            intersectionArea = turf.area(intersection);
+                        }
+                        }
+
+                        // Compute coverage percentage
+                        const polyArea = turf.area(regionPolygon);
+                        const coverage = intersectionArea > 0 ? (intersectionArea / polyArea) * 100 : 0;
+
+                        return {
+                        ...item,
+                        coverage,
+                        };
+                    });
     const [loading, setLoading] = useState(false); 
     const [isOpen, setIsOpen] = useState(false);
     const [isProcessingModalOpen, setIsProcessingModalOpen] = useState(false);
@@ -73,6 +109,9 @@ export default function Cart({ isMobile }: CartProps) {
         processingTypes: [],
         estimatedPrice: 0
     });
+
+
+    
     const [Error, setError] = useState<string|null>(null);
 
 
@@ -208,6 +247,7 @@ export default function Cart({ isMobile }: CartProps) {
                                                     <p className="text-gray-300"><strong>Time:</strong> {item.acq_time || "N/A"}</p>
                                                     <p className="text-gray-300"><span className="font-bold">Resolution:</span> {item.resolution}</p>
                                                     <p className="text-gray-300"><span className="font-bold">Cloud coverage:</span> {item.cloud_cover_percent}%</p>
+                                                    <p className="text-gray-300"><span className="font-bold">Polygon coverage:</span> {item.coverage.toFixed(2)}%</p>
                                                 </li>
                                             ))}
                                         </ul>

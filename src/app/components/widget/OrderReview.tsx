@@ -104,6 +104,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                     <th scope="col" className="py-2 px-3 text-gray-400">Res.</th>
                                     <th scope="col" className="py-2 px-3 text-gray-400">Cloud</th>
                                     <th scope="col" className="py-2 px-3 text-gray-400">Off-nadir</th>
+                                    <th scope="col" className="py-2 px-3 text-gray-400">Coverage</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,6 +121,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                                     ? `${parseFloat(scene.offnadir[0]).toFixed(1)}°`
                                                     : scene.offnadir || ""}
                                         </td>
+                                        <td className="py-2 px-3">{scene.coverage?.toFixed(2)}%</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -269,7 +271,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 <button
                     className="bg-green-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-500 disabled:bg-gray-600 disabled:text-gray-400 w-full sm:w-auto order-1 sm:order-2"
                     onClick={handleSubmit}
-                    disabled={session === null && !isValid}
+                    disabled={session === null ? isValid : !agreedToTerms }
                 >
                     {!loading ? "Submit Order" : (
                         <div className="flex items-center">
