@@ -49,6 +49,7 @@ export interface ImageItem {
     target_az_max: number | null;
     target_az_min: number | null;
     topleft: Coordinates;
+    coverage? : number
 }
 
 interface DateFilter {
