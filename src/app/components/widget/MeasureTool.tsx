@@ -85,10 +85,7 @@ export default function MeasureTool() {
     map.getCanvas().style.cursor = "crosshair";
 
 
-    if (marker) {
-      marker.remove();
-      setMarker(null);
-    }
+   
 
   };
 
@@ -120,6 +117,11 @@ export default function MeasureTool() {
       // console.log("clicked")
       const newPoint: [number, number] = [e.lngLat.lng, e.lngLat.lat];
       setCoordinates((prev) => [...prev, newPoint]);
+
+      if (!marker) {
+        const newMarker = new Marker()
+        setMarker(newMarker);
+      }
     };
 
     const handleMouseMove = (e: MapMouseEvent) => {
@@ -148,6 +150,11 @@ export default function MeasureTool() {
 
     const handleDoubleClick = () => {
       completeMeasurement();
+      if (marker) {
+        marker.remove();
+        setMarker(null);
+      }
+      
       // drawShape(coordinates); // Finalize the shape
       removeShape();
       map.getCanvas().style.cursor = "grab";

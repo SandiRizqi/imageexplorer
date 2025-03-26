@@ -7,7 +7,7 @@ import MeasureTool from '../widget/MeasureTool';
 
 export default function ToolsContainer() {
     const [active, setActive] = useState<string | null>(null);
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(true);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const settingsRef = useRef<HTMLDivElement | null>(null); // NEW: Separate ref for modal
 
