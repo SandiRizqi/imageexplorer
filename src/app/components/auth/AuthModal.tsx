@@ -132,9 +132,7 @@ export default function AuthModal() {
             {/* Footer Text */}
             <p className="mt-6 text-xs text-center text-gray-400">
               By continuing, you agree to our{' '}
-              <a href="#" className="text-yellow-500 hover:text-yellow-400">Terms of Service</a>
-              {' '}and{' '}
-              <a href="#" className="text-yellow-500 hover:text-yellow-400">Privacy Policy</a>
+              <a href="/privacy-policy" className="text-yellow-500 hover:text-yellow-400">Privacy Policy</a>
             </p>
           </DialogPanel>
         </div>
