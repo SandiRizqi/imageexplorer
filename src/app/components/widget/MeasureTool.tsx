@@ -3,48 +3,54 @@ import { MapMouseEvent, GeoJSONSource } from "maplibre-gl";
 import { useMap } from "../context/MapProvider";
 import { useConfig } from "../context/ConfigProvider";
 import * as turf from "@turf/turf";
+import { PencilRuler} from "lucide-react";
+import { Marker } from "maplibre-gl";
 
-interface MeasureToolProps {
-  isMeasure: boolean;
-}
 
-export default function MeasureTool({ isMeasure }: MeasureToolProps) {
+// interface MeasureToolProps {
+//   isMeasure: boolean;
+// }
+
+export default function MeasureTool() {
   const { map } = useMap();
   const { config } = useConfig();
   const [coordinates, setCoordinates] = useState<[number, number][]>([]);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [marker, setMarker] = useState<Marker | null>(null);
+  // const [distance, setDistance] = useState<number | null>(null);
+
 
 
   // Function to draw the shape dynamically
-  const drawShape = (coords: [number, number][], temp?: [number, number]) => {
-    if (!map) return;
+  // const drawShape = (coords: [number, number][], temp?: [number, number]) => {
+  //   if (!map) return;
 
-    const finalCoords = temp ? [...coords, temp] : coords;
+  //   const finalCoords = temp ? [...coords, temp] : coords;
 
-    const geojson: GeoJSON.Feature = {
-      type: "Feature",
-      geometry: {
-        type: "LineString",
-        coordinates:  finalCoords,
-      },
-      properties: {},
-    };
+  //   const geojson: GeoJSON.Feature = {
+  //     type: "Feature",
+  //     geometry: {
+  //       type: "LineString",
+  //       coordinates:  finalCoords,
+  //     },
+  //     properties: {},
+  //   };
 
-    if (map.getSource("measure-shape")) {
-      (map.getSource("measure-shape") as GeoJSONSource).setData({
-        type: "FeatureCollection",
-        features: [geojson],
-      });
-    } else {
-      map.addSource("measure-shape", { type: "geojson", data: geojson });
-      map.addLayer({
-        id: "measure-shape",
-        type:  "line",
-        source: "measure-shape",
-        paint: { "line-color": config.defaultAOIColor || "#ff0000", "line-width": 3, "line-dasharray": [2, 1] },
-      });
-    }
-  };
+  //   if (map.getSource("measure-shape")) {
+  //     (map.getSource("measure-shape") as GeoJSONSource).setData({
+  //       type: "FeatureCollection",
+  //       features: [geojson],
+  //     });
+  //   } else {
+  //     map.addSource("measure-shape", { type: "geojson", data: geojson });
+  //     map.addLayer({
+  //       id: "measure-shape",
+  //       type:  "line",
+  //       source: "measure-shape",
+  //       paint: { "line-color": config.defaultAOIColor || "#ff0000", "line-width": 3, "line-dasharray": [2, 1] },
+  //     });
+  //   }
+  // };
 
 
   const drawLine = (coords: [number, number][]) => {
@@ -77,6 +83,13 @@ export default function MeasureTool({ isMeasure }: MeasureToolProps) {
     setCoordinates([]);
     setIsDrawing(true);
     map.getCanvas().style.cursor = "crosshair";
+
+
+    if (marker) {
+      marker.remove();
+      setMarker(null);
+    }
+
   };
 
   // Complete measurement
@@ -87,38 +100,60 @@ export default function MeasureTool({ isMeasure }: MeasureToolProps) {
   };
 
   // Remove drawn shape
-  // const removeShape = () => {
-  //   if (!map) return;
-  //   if (map.getLayer("measure-shape")) {
-  //     map.removeLayer("measure-shape");
-  //     map.removeSource("measure-shape");
-  //   }
-  // };
+  const removeShape = () => {
+    if (!map) return;
+    if (map.getLayer("measure-shape")) {
+      map.removeLayer("measure-shape");
+      map.removeSource("measure-shape");
+    }
+    if (map.getLayer("measure-line")) {
+      map.removeLayer("measure-line");
+      map.removeSource("measure-line");
+    }
+  };
 
   // Handle map events
   useEffect(() => {
     if (!map) return;
 
     const handleClick = (e: MapMouseEvent) => {
-      console.log("clicked")
+      // console.log("clicked")
       const newPoint: [number, number] = [e.lngLat.lng, e.lngLat.lat];
       setCoordinates((prev) => [...prev, newPoint]);
     };
 
     const handleMouseMove = (e: MapMouseEvent) => {
-      console.log("moved")
+      // console.log("moved")
       if (!isDrawing || coordinates.length === 0) return;
+
+
+      // Hitung jarak menggunakan turf.js
+      const line = turf.lineString([...coordinates, [e.lngLat.lng, e.lngLat.lat]]);
+      const calculatedDistance = turf.length(line, { units: "meters" });
+      // setDistance(calculatedDistance);
       drawLine([...coordinates, [e.lngLat.lng, e.lngLat.lat]]);
+
+      if (marker) {
+        marker.setLngLat(e.lngLat);
+        marker.getElement().innerHTML = `<div class="bg-white text-black text-xs px-2 py-1 rounded shadow-md">${calculatedDistance.toFixed(2)} m</div>`;
+        marker.addTo(map);
+    } else {
+        const el = document.createElement("div");
+        el.innerHTML = `<div class="bg-white text-black text-xs px-2 py-1 rounded shadow-md">${calculatedDistance.toFixed(2)} m</div>`;
+        const newMarker = new Marker(el).setLngLat(e.lngLat)
+        setMarker(newMarker);
+    }
+
     };
 
     const handleDoubleClick = () => {
       completeMeasurement();
-      drawShape(coordinates); // Finalize the shape
-      // removeShape();
+      // drawShape(coordinates); // Finalize the shape
+      removeShape();
       map.getCanvas().style.cursor = "grab";
     };
 
-    startMeasurement();
+
     map.on("click", handleClick);
     map.on("mousemove", handleMouseMove);
     map.once("dblclick", handleDoubleClick);
@@ -128,24 +163,34 @@ export default function MeasureTool({ isMeasure }: MeasureToolProps) {
       map.off("mousemove", handleMouseMove);
       map.off("dblclick", handleDoubleClick);
     };
-  }, [map, isMeasure, isDrawing, completeMeasurement, coordinates, drawLine, drawShape, startMeasurement]);
+  }, [map, isDrawing,  coordinates]);
 
   // Calculate measurements using Turf.js
-  let distance;
-  let area;
-  if (coordinates.length > 2) {
-    const line = turf.lineString(coordinates);
-    distance = turf.length(line, { units: "meters" });
+  
     
-  } else if (coordinates.length > 3) {
-    const polygon = turf.polygon([coordinates]);
-    area = turf.area(polygon);
-  }
+  // } else if (coordinates.length > 3) {
+  //   const polygon = turf.polygon([coordinates]);
+  //   area = turf.area(polygon);
+  // }
 
   return (
-    <div className="absolute bottom-4 left-4 bg-white p-2 rounded-lg shadow-md">
-      {coordinates.length > 1 && <p>Distance: {distance?.toFixed(2)} meters</p>}
-      {coordinates.length > 2 && <p>Area: {area?.toFixed(2)} square meters</p>}
-    </div>
+    <div className="relative">
+            <div className="flex items-center justify-center gap-1 py-1">
+                <div className="relative group">
+                    <button
+                        onClick={() => startMeasurement()}
+                        className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                            isDrawing ? "bg-yellow-600" : "bg-maincolor"
+                        } hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
+                    >
+                        <PencilRuler color="white" />
+                        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
+                            Distance
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
   );
 }
