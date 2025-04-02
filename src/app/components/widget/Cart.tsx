@@ -163,7 +163,8 @@ export default function Cart({ isMobile }: CartProps) {
                 filter: filters,
                 polygon: polygon,
                 results: imageResult,
-                selected: selectedItem
+                selected: selectedItem,
+                status: "quoted"
             };
     
             try {
