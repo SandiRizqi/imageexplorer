@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
+import { AdapterUser } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
 
 // Extend JWT type
@@ -11,6 +12,9 @@ interface ExtendedJWT extends JWT {
   accessTokenExpires?: number;
   error?: string;
 }
+
+
+
 
 // Function to refresh access token
 async function refreshAccessToken(token: ExtendedJWT): Promise<ExtendedJWT> {
@@ -46,6 +50,25 @@ async function refreshAccessToken(token: ExtendedJWT): Promise<ExtendedJWT> {
 };
 
 
+async function saveUser(user: AdapterUser, id: string) {
+  try {
+    const response = await fetch(`https://gpj8t6ikq1.execute-api.ap-southeast-1.amazonaws.com/v1/saveuser?id=${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to save user");
+    }
+  } catch (err) {
+    console.error("Error saving user:", err);
+  }
+}
+
+
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -64,6 +87,7 @@ export const authOptions: NextAuthOptions = {
       // console.log(token)
       // Initial sign in
       if (account && user) {
+        await saveUser(user as AdapterUser, user.id)
         return {
           ...token,
           accessToken: account.access_token,
