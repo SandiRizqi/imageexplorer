@@ -67,7 +67,9 @@ export default function SearchContainer() {
         const data = {
             catid: item['objectid'],
             satelliteShortName: item['collection_vehicle_short'],
-            forceHighestQuality: false
+            forceHighestQuality: false,
+            api: item['api'] || null,
+            preview_url: item['preview_url'] || null,
         }
         const response: string = await getPresignedUrl(data, setError);
         const bbox: [[number, number], [number, number], [number, number], [number, number]] = [
