@@ -10,7 +10,7 @@ interface Coordinates {
 export interface ImageItem {
     acq_time: string;
     alt_productid: string;
-    api: string | null;
+    api?: string | null;
     azimuth_angle: number | null;
     bottomright: Coordinates;
     cloud_cover_percent: number;
