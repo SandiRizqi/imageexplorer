@@ -31,10 +31,10 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({ isOpen, onClose, image
                 <div className="grid grid-cols-2 gap-2 text-sm text-left">
                     <p><strong>Date:</strong> {imageData.collection_date}</p>
                     <p><strong>Time:</strong> {imageData.acq_time || "N/A"}</p>
-                    <p><strong>Resolution:</strong> {imageData.resolution}</p>
+                    <p><strong>Resolution:</strong> {imageData.resolution || "N/A"}</p>
                     <p><strong>Cloud Cover:</strong> {imageData.cloud_cover_percent} %</p>
                     <p><strong>Sensor :</strong> {imageData.satellite || imageData.collection_vehicle_short || "N/A"}</p>
-                    <p><strong>Resolution:</strong> {imageData.resolution || "N/A"}</p>
+                    
                     <p><strong>ImageBand Type:</strong> {imageData.imageBand || "N/A"}</p>
                     <p><strong>Band Count:</strong> {imageData.imageBandCount || "N/A"} </p>
                     <p><strong>Sun Azimuth:</strong> {imageData.sun_az || "N/A"} </p>
