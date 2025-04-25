@@ -60,7 +60,7 @@ export default function ToolsContainer() {
                         {/* Button */}
                         <button
                             className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                                active === obj.name ? "bg-secondarycolor" : "hover:bg-secondarycolor"
+                                active === obj.name ? "bg-secondarycolor" : "hover:bg-greensecondarycolor"
                             } bg-maincolor transition-colors duration-200`}
                         >
                             {obj.icon}

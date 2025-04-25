@@ -42,7 +42,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({ isOpen, onClose, image
 
                 {/* Close Button */}
                 <div className="flex justify-end mt-4">
-                    <button onClick={onClose} className="bg-yellow-600 px-3 py-2 text-white hover:bg-yellow-700">
+                    <button onClick={onClose} className="bg-gray-600 px-3 py-2 text-white hover:bg-red-600">
                         Close
                     </button>
                 </div>

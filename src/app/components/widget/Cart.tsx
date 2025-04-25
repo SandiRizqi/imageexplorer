@@ -26,16 +26,16 @@ const StepIndicator = ({ currentStep, steps }: { currentStep: number; steps: str
             <div className="flex flex-col items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center 
-                  ${currentStep >= index ? 'bg-yellow-500 text-gray-900' : 'bg-gray-700 text-gray-300'}`}
+                  ${currentStep >= index ? 'bg-greenmaincolor text-gray-900' : 'bg-gray-700 text-gray-300'}`}
               >
                 {currentStep > index ? '✓' : index + 1}
               </div>
-              <span className={`text-xs mt-2 ${currentStep >= index ? 'text-yellow-500' : 'text-gray-400'}`}>
+              <span className={`text-xs mt-2 ${currentStep >= index ? 'text-white' : 'text-gray-400'}`}>
                 {step}
               </span>
             </div>
             {index < steps.length - 1 && (
-              <div className={`h-1 w-16 mx-2 ${currentStep > index ? 'bg-yellow-500' : 'bg-gray-700'}`} />
+              <div className={`h-1 w-16 mx-2 ${currentStep > index ? 'bg-greenmaincolor' : 'bg-gray-700'}`} />
             )}
           </React.Fragment>
         ))}
@@ -186,7 +186,7 @@ export default function Cart({ isMobile }: CartProps) {
             {/* Cart Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="relative flex items-center gap-2 p-2 text-white hover:text-gray-300 w-10 h-10 rounded-full hover:bg-secondarycolor transition"
+                className="relative flex items-center gap-2 p-2 text-white hover:text-black w-10 h-10 rounded-full hover:bg-greensecondarycolor transition"
             >
                 <ShoppingCart className="w-5 h-5" size={14} />
 
@@ -262,7 +262,7 @@ export default function Cart({ isMobile }: CartProps) {
                             {cartItem.length > 0 && (
                                 <div className="p-4 bg-maincolor">
                                     <button 
-                                        className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md hover:bg-yellow-400 transition justify-center flex"
+                                        className="w-full bg-greenmaincolor text-gray-800 py-2 rounded-md hover:bg-greensecondarycolor transition justify-center flex"
                                         onClick={() => handleSaveConfig()}
                                     >
                                         {!loading ? "Create Quote" : (
@@ -292,7 +292,7 @@ export default function Cart({ isMobile }: CartProps) {
                 />
                 
                 <div className="border border-gray-700 p-2 rounded-lg">
-                    <DialogTitle className="text-lg font-semibold text-yellow-500 text-center mb-4">
+                    <DialogTitle className="text-lg font-semibold text-whaite text-center mb-4">
                     {currentStep === 'options' ? "Select Processing Options" : 
                     currentStep === 'review' ? "Review Your Order" : 
                     "Order Confirmation"}
@@ -328,7 +328,7 @@ export default function Cart({ isMobile }: CartProps) {
                             Your order has been successfully processed. We will contact you shortly.
                         </p>
                         <button
-                            className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md shadow-md hover:bg-yellow-400"
+                            className="w-full bg-greenmaincolor text-gray-800 py-2 rounded-md shadow-md hover:bg-greensecondarycolor"
                             onClick={resetOrderProcess}
                         >
                             Close

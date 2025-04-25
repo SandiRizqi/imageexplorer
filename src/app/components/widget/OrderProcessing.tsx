@@ -129,7 +129,7 @@ export default function OrderProcessingButton() {
             <Dialog open={modalOpen} onClose={() => setModalOpen(false)} className="relative z-50">
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
                     <DialogPanel className="bg-maincolor text-white rounded-lg  w-[100%] max-w-2xl shadow-xl max-h-[90vh] flex flex-col">
-                        <DialogTitle className="text-lg font-semibold text-yellow-500 text-center">
+                        <DialogTitle className="text-lg font-semibold text-greenmaincolor text-center">
                             {error ? "Error" :
                                 currentStep === 'options' ? "Processing Options" :
                                     currentStep === 'review' ? "Order Review" :
@@ -142,9 +142,9 @@ export default function OrderProcessingButton() {
                                 <div className="flex items-center space-x-4">
                                     {['options', 'review', 'confirmation'].map((step, index) => (
                                         <React.Fragment key={step}>
-                                            <div className={`flex flex-col items-center ${currentStep === step ? 'text-yellow-500' : 'text-gray-400'}`}>
+                                            <div className={`flex flex-col items-center ${currentStep === step ? 'text-greenmaincolor' : 'text-gray-400'}`}>
                                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center 
-                                        ${currentStep === step ? 'bg-yellow-500 text-white' : 'bg-gray-700'}`}>
+                                        ${currentStep === step ? 'bg-greenmaincolor text-white' : 'bg-gray-700'}`}>
                                                     {index + 1}
                                                 </div>
                                                 <span className="text-xs mt-1 capitalize">{step}</span>
@@ -187,7 +187,7 @@ export default function OrderProcessingButton() {
                                         <div className="flex items-center justify-between bg-gray-800 px-3 py-2 rounded-md mt-4">
                                             <span className="text-sm text-gray-300 truncate">{`${process.env.NEXT_PUBLIC_HOST}/?savedconfig=${configID}`}</span>
                                             <button
-                                                className="bg-yellow-500 text-gray-800 px-3 py-1 text-xs rounded-md shadow-md hover:bg-yellow-400"
+                                                className="bg-greenmaincolor text-gray-800 px-3 py-1 text-xs rounded-md shadow-md hover:bg-greensecondarycolor"
                                                 onClick={handleCopy}
                                             >
                                                 {copied ? "Copied!" : "Copy"}
@@ -197,7 +197,7 @@ export default function OrderProcessingButton() {
 
                                     <div className="flex justify-end mt-6">
                                         <button
-                                            className="w-full bg-yellow-500 text-gray-800 py-2 rounded-md shadow-md hover:bg-yellow-400"
+                                            className="w-full bg-greenmaincolor text-gray-800 py-2 rounded-md shadow-md hover:bg-greensecondarycolor"
                                             onClick={resetOrderProcess}
                                         >
                                             Done

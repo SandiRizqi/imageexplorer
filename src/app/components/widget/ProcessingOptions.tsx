@@ -85,19 +85,19 @@ export default function ProcessingOptions({ onSelect, selectedItems }: Processin
                     key={option.id}
                     className={`p-4 rounded-lg border-2 transition-all
                         ${selectedOptions.includes(option.id) 
-                            ? 'border-yellow-500 bg-yellow-500/10' 
+                            ? 'border-greenmaincolor bg-greenmaincolor/10' 
                             : 'border-gray-700'}
                         ${option.id === 'rawdata' 
                             ? 'cursor-not-allowed opacity-75' 
-                            : 'cursor-pointer hover:border-gray-500'}`}
+                            : 'cursor-pointer hover:border-greenmaincolor'}`}
                     onClick={() => option.id !== 'rawdata' && toggleOption(option.id)}
                 >
                 <div className="flex items-start">
-                <div className={`p-2 rounded-lg ${selectedOptions.includes(option.id) ? 'bg-yellow-500' : 'bg-gray-700'}`}>
+                <div className={`p-2 rounded-lg ${selectedOptions.includes(option.id) ? 'bg-greensecondarycolor' : 'bg-gray-700'}`}>
                     {option.icon}
                 </div>
                 <div className="ml-4">
-                    <h3 className={`font-medium ${selectedOptions.includes(option.id) ? 'text-yellow-500' : 'text-white'}`}>
+                    <h3 className={`font-medium ${selectedOptions.includes(option.id) ? 'text-white' : 'text-white'}`}>
                     {option.name}
                     </h3>
                     <p className="text-xs text-gray-400 mt-1">{option.description}</p>
@@ -111,13 +111,13 @@ export default function ProcessingOptions({ onSelect, selectedItems }: Processin
         <div className="flex justify-between mt-8">
             <div className="space-x-4">
             <button
-                className="px-6 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition"
+                className="px-6 py-2 bg-gray-700 rounded-md hover:bg-red-600 transition"
                 onClick={() => setSelectedOptions(['rawdata'])}
             >
                 Clear
             </button>
             <button
-                className="px-6 py-2 bg-yellow-500 text-gray-900 rounded-md hover:bg-yellow-400 transition disabled:opacity-50"
+                className="px-6 py-2 bg-greenmaincolor text-gray-900 rounded-md hover:bg-greensecondarycolor transition disabled:opacity-50"
                 onClick={() => onSelect(selectedOptions)}
                 disabled={selectedOptions.length === 0}
             >

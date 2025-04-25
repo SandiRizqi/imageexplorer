@@ -19,8 +19,8 @@ export default function AuthModal() {
       {/* Button to Open Modal */}
       {status === "unauthenticated" ? (
         <button
-          className="bg-yellow-500 px-4 py-2 rounded-md text-gray-800 shadow-md text-sm font-semibold mr-4
-                        hover:bg-yellow-400 transition-colors duration-200 flex items-center space-x-2"
+          className="bg-greenmaincolor px-4 py-2 rounded-md text-gray-800 shadow-md text-sm font-semibold mr-4
+                        hover:bg-greensecondarycolor transition-colors duration-200 flex items-center space-x-2"
           onClick={() => setIsOpen(true)}
         >
           <span>Sign In</span>
@@ -55,7 +55,7 @@ export default function AuthModal() {
             <div className="absolute right-0 mt-2 w-48 bg-white  shadow-lg py-1 z-10">
               {session ? (
                   <>
-                    <div className="w-full text-left px-4 py-2 text-sm text-gray-400">
+                    <div className="w-full text-left px-4 py-2 text-sm text-gray-900">
                       Username : {session?.user?.name || 'Guest'}
                     </div>
                     <button
@@ -101,7 +101,7 @@ export default function AuthModal() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
           <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
             {/* Modal Header */}
-            <DialogTitle className="text-xl font-semibold text-yellow-500 text-center mb-6">
+            <DialogTitle className="text-xl font-semibold text-greenmaincolor text-center mb-6">
               Welcome Back
             </DialogTitle>
 
@@ -132,7 +132,7 @@ export default function AuthModal() {
             {/* Footer Text */}
             <p className="mt-6 text-xs text-center text-gray-400">
               By continuing, you agree to our{' '}
-              <a href="/privacy-policy" className="text-yellow-500 hover:text-yellow-400">Privacy Policy</a>
+              <a href="/privacy-policy" className="text-greenmaincolor hover:text-greensecondarycolor">Privacy Policy</a>
             </p>
           </DialogPanel>
         </div>

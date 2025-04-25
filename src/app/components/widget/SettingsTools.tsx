@@ -39,7 +39,7 @@ const SettingsTools: React.FC<AOISettingsModalProps> = ({ isOpen, onClose }) => 
         className="bg-maincolor p-6 rounded-md text-center text-white w-[90%] max-w-md"
         onMouseDown={(e) => e.stopPropagation()} 
       >
-        <DialogTitle className="text-lg font-bold text-yellow-400">Settings</DialogTitle>
+        <DialogTitle className="text-lg font-bold text-greensecondarycolor">Settings</DialogTitle>
         <p className="text-sm my-2">Customize the appearance of your AOI.</p>
         
         {/* Two-column layout */}
@@ -83,7 +83,7 @@ const SettingsTools: React.FC<AOISettingsModalProps> = ({ isOpen, onClose }) => 
 
         {/* Buttons */}
         <div className="flex justify-end mt-4 space-x-2">
-          <button onClick={handleSave} className="bg-yellow-600 px-3 py-1 text-white rounded-sm">Save</button>
+          <button onClick={handleSave} className="bg-greensecondarycolor px-3 py-1 text-white rounded-sm">Save</button>
         </div>
       </DialogPanel>
     </Dialog>

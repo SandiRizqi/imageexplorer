@@ -163,7 +163,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                             type="range" 
                             min="0" 
                             max="100" 
-                            className="w-full accent-yellow-400 h-[5px]"  
+                            className="w-full accent-greenmaincolor h-[5px]"  
                             value={filters.cloudcover_max} 
                             onChange={(e) => handleChangeSlider(e, "cloudcover_max")}
                         />
@@ -176,7 +176,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                             type="range" 
                             min="0" 
                             max="60" 
-                            className="w-full accent-yellow-400 h-[5px]" 
+                            className="w-full accent-greenmaincolor h-[5px]" 
                             value={filters.offnadir_max} 
                             onChange={(e) => handleChangeSlider(e, "offnadir_max")}
                         />
@@ -189,7 +189,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                             type="range" 
                             min="0" 
                             max="30" 
-                            className="w-full accent-yellow-400 h-[5px]" 
+                            className="w-full accent-greenmaincolor h-[5px]" 
                             value={filters.resolution_max} 
                             onChange={(e) => handleChangeSlider(e, "resolution_max")}
                         />
@@ -206,7 +206,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                             type="checkbox"
                             checked={selected === "stereo"}
                             onChange={() => handleCheckboxChange("stereo")}
-                            className="accent-yellow-400"
+                            className="accent-greenmaincolor"
                         />
                         <span className='text-xs'>Stereo</span>
                     </label>
@@ -215,7 +215,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                             type="checkbox"
                             checked={selected === "color"}
                             onChange={() => handleCheckboxChange("color")}
-                            className="accent-yellow-400"
+                            className="accent-greenmaincolor"
                         />
                         <span className='text-xs'>Color</span>
                     </label>
@@ -224,7 +224,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                             type="checkbox"
                             checked={selected === "dem"}
                             onChange={() => handleCheckboxChange("dem")}
-                            className="accent-yellow-400"
+                            className="accent-greenmaincolor"
                         />
                         <span className='text-xs'>DEM</span>
                     </label>
@@ -233,7 +233,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                             type="checkbox"
                             checked={selected === "sar"}
                             onChange={() => handleCheckboxChange("sar")}
-                            className="accent-yellow-400"
+                            className="accent-greenmaincolor"
                         />
                         <span className='text-xs'>SAR</span>
                     </label>
@@ -244,16 +244,16 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
 
             {/* Footer - Stays at Bottom */}
             <div className="mt-2 pb-2">
-                <button className="bg-yellow-500 text-black w-full py-2 rounded-md  hover:bg-yellow-400"
+                <button className="bg-greenmaincolor text-black w-full py-2 rounded-md  hover:bg-greensecondarycolor"
                 onClick={()=> setIsOpenDataSelector(true)}
                 >
                     SELECT DATASETS
                 </button>
-                <span className='text-yellow-500 text-xs flex p-1 flex-row w-full justify-center'>{filters.satellites.length} of 58 datasets selected</span>
+                <span className='text-greenmaincolor text-xs flex p-1 flex-row w-full justify-center'>{filters.satellites.length} of 58 datasets selected</span>
                 <div className="flex justify-between items-center text-sm mt-2">
                     <div></div>
                     <button className="text-gray-300 bg-red-600 py-2 px-4 rounded-md hover:bg-red-500" onClick={resetFilter}>RESET</button>
-                    <button className="bg-buttonmaincolor px-4 py-2 rounded-md text-white hover:bg-buttonsecondarycolor" onClick={handleSubmit}>APPLY</button>
+                    <button className="bg-greensecondarycolor px-4 py-2 rounded-md text-white hover:bg-greensecondarycolor2" onClick={handleSubmit}>APPLY</button>
                 </div>
             </div>
             {Error && <Alert category={"error"} message={Error} setClose={setError} />}
