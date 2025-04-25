@@ -89,15 +89,15 @@ export default function ProcessingOptions({ onSelect, selectedItems }: Processin
                             : 'border-gray-700'}
                         ${option.id === 'rawdata' 
                             ? 'cursor-not-allowed opacity-75' 
-                            : 'cursor-pointer hover:border-gray-500'}`}
+                            : 'cursor-pointer hover:border-greenmaincolor'}`}
                     onClick={() => option.id !== 'rawdata' && toggleOption(option.id)}
                 >
                 <div className="flex items-start">
-                <div className={`p-2 rounded-lg ${selectedOptions.includes(option.id) ? 'bg-greenmaincolor' : 'bg-gray-700'}`}>
+                <div className={`p-2 rounded-lg ${selectedOptions.includes(option.id) ? 'bg-greensecondarycolor' : 'bg-gray-700'}`}>
                     {option.icon}
                 </div>
                 <div className="ml-4">
-                    <h3 className={`font-medium ${selectedOptions.includes(option.id) ? 'text-greenmaincolor' : 'text-white'}`}>
+                    <h3 className={`font-medium ${selectedOptions.includes(option.id) ? 'text-white' : 'text-white'}`}>
                     {option.name}
                     </h3>
                     <p className="text-xs text-gray-400 mt-1">{option.description}</p>
@@ -111,7 +111,7 @@ export default function ProcessingOptions({ onSelect, selectedItems }: Processin
         <div className="flex justify-between mt-8">
             <div className="space-x-4">
             <button
-                className="px-6 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition"
+                className="px-6 py-2 bg-gray-700 rounded-md hover:bg-red-600 transition"
                 onClick={() => setSelectedOptions(['rawdata'])}
             >
                 Clear

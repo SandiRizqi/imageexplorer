@@ -384,7 +384,7 @@ export default function SearchContainer() {
                                                 </td>
                                                 <td className="p-2 whitespace-nowrap">
                                                     <FaInfoCircle
-                                                        className="text-gray-400 hover:text-gray-200 cursor-pointer"
+                                                        className="text-black hover:text-greensecondarycolor cursor-pointer"
                                                         onClick={(e) => {
                                                             e.stopPropagation(); // Prevent row click event
                                                             setInfoDetail(row);
@@ -414,7 +414,7 @@ export default function SearchContainer() {
             <div className="absolute bottom-0 w-full bg-maincolor p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[100px]">
                 <p className="text-xs text-gray-200">{selectedItem.length} / {imageResult.length} selected</p>
                 <div className="flex gap-2 w-full mt-2">
-                    <button className="flex-1 bg-greenmaincolor text-gray-900 py-2 px-2 rounded-md text-xs hover:bg-greensecondarycolor"
+                    <button className="flex-1 bg-gray-700 hover:bg-red-600 transition text-gray-100 py-2 px-2 rounded-md text-xs "
                         onClick={handleReset}
                     >
                         CLEAR

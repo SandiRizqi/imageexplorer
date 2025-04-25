@@ -181,7 +181,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
 
                 {/* Fixed Title */}
                 <div className="sticky top-0 bg-maincolor pb-4 z-10">
-                    <DialogTitle className="text-lg font-bold text-greensecondarycolor text-center">Dataset Selector</DialogTitle>
+                    <DialogTitle className="text-lg font-bold text-white text-center">Dataset Selector</DialogTitle>
                 </div>
 
                 {/* Scrollable Content */}
@@ -236,7 +236,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
                 {/* Fixed Footer */}
                 <div className="sticky bottom-0 bg-maincolor pt-4 z-10">
                     <div className="flex justify-end">
-                        <button onClick={onClose} className="bg-yellow-600 px-3 py-1">
+                        <button onClick={onClose} className="bg-gray-700 rounded-md hover:bg-red-600 transition px-3 py-1">
                             Close
                         </button>
                     </div>

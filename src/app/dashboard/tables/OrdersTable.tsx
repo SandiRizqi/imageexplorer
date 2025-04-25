@@ -73,7 +73,7 @@ export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
     return (
         <>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-greensecondarycolor">Orders List</h2>
+                <h2 className="text-xl font-bold text-white">Orders List</h2>
                 <div className="flex items-center space-x-4">
                     <select
                         value={sortOrder}

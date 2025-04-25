@@ -30,7 +30,7 @@ const StepIndicator = ({ currentStep, steps }: { currentStep: number; steps: str
               >
                 {currentStep > index ? '✓' : index + 1}
               </div>
-              <span className={`text-xs mt-2 ${currentStep >= index ? 'text-greenmaincolor' : 'text-gray-400'}`}>
+              <span className={`text-xs mt-2 ${currentStep >= index ? 'text-white' : 'text-gray-400'}`}>
                 {step}
               </span>
             </div>
@@ -186,7 +186,7 @@ export default function Cart({ isMobile }: CartProps) {
             {/* Cart Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="relative flex items-center gap-2 p-2 text-white hover:text-gray-300 w-10 h-10 rounded-full hover:bg-secondarycolor transition"
+                className="relative flex items-center gap-2 p-2 text-white hover:text-black w-10 h-10 rounded-full hover:bg-greensecondarycolor transition"
             >
                 <ShoppingCart className="w-5 h-5" size={14} />
 
@@ -292,7 +292,7 @@ export default function Cart({ isMobile }: CartProps) {
                 />
                 
                 <div className="border border-gray-700 p-2 rounded-lg">
-                    <DialogTitle className="text-lg font-semibold text-greenmaincolor text-center mb-4">
+                    <DialogTitle className="text-lg font-semibold text-whaite text-center mb-4">
                     {currentStep === 'options' ? "Select Processing Options" : 
                     currentStep === 'review' ? "Review Your Order" : 
                     "Order Confirmation"}

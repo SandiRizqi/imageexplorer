@@ -45,7 +45,7 @@ export default function SavedSearchesTable({ onSearchSelect }: SavedSearchesTabl
 
     return (
         <>
-            <h2 className="text-xl font-bold text-greensecondarycolor mb-4">
+            <h2 className="text-xl font-bold text-white mb-4">
                 Saved Searches
             </h2>
 

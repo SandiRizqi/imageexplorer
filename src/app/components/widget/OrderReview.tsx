@@ -263,13 +263,13 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
             </div>
             <div className="flex flex-col sm:flex-row justify-between mt-6 gap-2">
                 <button
-                    className="bg-gray-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-gray-600 w-full sm:w-auto order-2 sm:order-1"
+                    className="bg-gray-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 w-full sm:w-auto order-2 sm:order-1"
                     onClick={onBack}
                 >
                     Back
                 </button>
                 <button
-                    className="bg-green-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-500 disabled:bg-gray-600 disabled:text-gray-400 w-full sm:w-auto order-1 sm:order-2"
+                    className="bg-greenmaincolor text-black px-4 py-2 rounded-md shadow-md hover:bg-greensecondarycolor disabled:bg-gray-600 disabled:text-gray-400 w-full sm:w-auto order-1 sm:order-2"
                     onClick={handleSubmit}
                     disabled={session === null ? isValid : !agreedToTerms }
                 >
