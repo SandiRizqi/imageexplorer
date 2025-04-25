@@ -159,7 +159,7 @@ const PolygonDownloadModal: React.FC<PolygonDownloadModalProps> = ({ isOpen, onC
                 {error && <p className="text-red-500 text-xs">{error}</p>}
 
                 <div className="flex justify-end mt-4">
-                    <button onClick={handleDownload} className="bg-yellow-600 px-3 py-1 rounded-sm">
+                    <button onClick={handleDownload} className="bg-greenmaincolor text-black px-3 py-1 rounded-sm">
                         Download
                     </button>
                 </div>
@@ -235,7 +235,7 @@ const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose
         {error && <p className="text-red-400 mt-2 text-xs">{error}</p>}
 
         <div className="flex justify-end mt-4">
-          <button onClick={onClose} className="bg-yellow-600 px-3 py-1 rounded-sm">
+          <button onClick={onClose} className="bg-gray-600 text-white px-3 py-1 rounded-sm hover:bg-red-600 transition">
             Close
           </button>
         </div>
