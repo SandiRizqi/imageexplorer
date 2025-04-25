@@ -134,7 +134,7 @@ const PolygonDownloadModal: React.FC<PolygonDownloadModalProps> = ({ isOpen, onC
     return (
         <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <DialogPanel className="bg-maincolor p-6 rounded-md text-center text-white w-[90%] max-w-md">
-                <DialogTitle className="text-lg font-bold text-yellow-400">Save Your Polygon</DialogTitle>
+                <DialogTitle className="text-lg font-bold text-greensecondarycolor">Save Your Polygon</DialogTitle>
                 <p className="text-sm my-2 text-xs">Choose which format you would like to receive and your download will begin immediately.</p>
                 <br />
                 <form className="mt-4 text-sm">
@@ -226,7 +226,7 @@ const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose
   return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <DialogPanel className="bg-maincolor p-6 rounded-md text-center text-white w-[90%] max-w-md">
-        <DialogTitle className="text-lg font-bold text-yellow-400">Upload Polygon</DialogTitle>
+        <DialogTitle className="text-lg font-bold text-greensecondarycolor">Upload Polygon</DialogTitle>
         <p className="text-sm my-2 text-xs">You can define an area by uploading a KML/KMZ, GeoJSON or zipped shapefile.</p>
         <p className="text-sm my-2 text-xs">All files must contain a single polygon.</p>
 
@@ -387,7 +387,7 @@ export default function UploadDownloadPolygon() {
             <div className="relative group">
                 <button
                     onClick={() => setMode("upload")}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full ${mode === "upload" ? 'bg-yellow-600' : 'bg-maincolor'} hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${mode === "upload" ? 'bg-yellow-600' : 'bg-maincolor'} hover:bg-greenmaincolor transition-colors duration-200 shadow-xl`}
                 >
                     <Upload color="white" />
                     <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
@@ -401,7 +401,7 @@ export default function UploadDownloadPolygon() {
                 <button
                     onClick={() => setMode("download")}
                     disabled={!isPolygon}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full ${mode === "download" ? 'bg-yellow-600' : 'bg-maincolor' } ${isPolygon ? "hover:bg-yellow-500 bg-maincolor" : "bg-white"} transition-colors duration-200 shadow-xl`}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full ${mode === "download" ? 'bg-yellow-600' : 'bg-maincolor' } ${isPolygon ? "hover:bg-greenmaincolor bg-maincolor" : "bg-white"} transition-colors duration-200 shadow-xl`}
                 >
                     <Download color="white" />
                     <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">

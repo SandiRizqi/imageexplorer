@@ -33,7 +33,7 @@ const Alert: React.FC<AlertProps> = ({ category, message, setClose, duration = 2
   const alertStyles: Record<AlertProps["category"], string> = {
     success: "bg-green-100 border-green-500 text-green-700",
     error: "bg-red-100 border-red-500 text-red-700",
-    warning: "bg-yellow-100 border-yellow-500 text-yellow-700",
+    warning: "bg-yellow-100 border-greenmaincolor text-yellow-700",
   };
 
   const icons: Record<AlertProps["category"], JSX.Element> = {

@@ -42,7 +42,7 @@ export default function DashboardSwitcher() {
                             <button
                                 onClick={() => handleNavigate('/dashboard')}
                                 className={`${pathname === '/dashboard'
-                                        ? 'bg-gray-100 text-gray-900'
+                                        ? 'bg-greenmaincolor text-gray-900'
                                         : 'text-gray-700'
                                     } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
                             >
@@ -51,7 +51,7 @@ export default function DashboardSwitcher() {
                             <button
                                 onClick={() => handleNavigate('/')}
                                 className={`${pathname === '/'
-                                        ? 'bg-gray-100 text-gray-900'
+                                        ? 'bg-greenmaincolor text-gray-900'
                                         : 'text-gray-700'
                                     } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
                             >

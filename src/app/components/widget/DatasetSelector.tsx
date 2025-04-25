@@ -181,7 +181,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
 
                 {/* Fixed Title */}
                 <div className="sticky top-0 bg-maincolor pb-4 z-10">
-                    <DialogTitle className="text-lg font-bold text-yellow-400 text-center">Dataset Selector</DialogTitle>
+                    <DialogTitle className="text-lg font-bold text-greensecondarycolor text-center">Dataset Selector</DialogTitle>
                 </div>
 
                 {/* Scrollable Content */}
@@ -193,7 +193,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
                                 onClick={() => toggleSection(category.name)}
                             >
                                 <div className="flex items-center space-x-2">
-                                    <Folder className="text-yellow-400 w-5 h-5" />
+                                    <Folder className="text-greensecondarycolor w-5 h-5" />
                                     <span>{category.name}</span>
                                 </div>
                                 {expandedSections[category.name] ? (
@@ -216,7 +216,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
                                                     onClick={() => handleClick(dataset.value)}
                                                 >
                                                     {isChecked ? (
-                                                        <CheckSquare className="text-yellow-400 w-5 h-5" />
+                                                        <CheckSquare className="text-greensecondarycolor w-5 h-5" />
                                                     ) : (
                                                         <Square className="text-gray-500 w-5 h-5" />
                                                     )}

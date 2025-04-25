@@ -4,7 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '../components/context/AuthProrider';
 import Image from 'next/image';
-import logo from "../components/assets/logo_ie.webp";
+import logo from "../components/assets/SIE.png";
 
 export default function Header() {
     const router = useRouter();
@@ -34,7 +34,7 @@ export default function Header() {
                                 <span>{currentPage}</span>
                                 <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
                             </button>
-                            <Image src={logo} alt="Logo" width={45} height={45} className='ml-8' />
+                            <Image src={logo} alt="Logo" width={45} height={45} className='ml-8  p-[10px]' />
 
                         </div>
                         
@@ -47,7 +47,7 @@ export default function Header() {
                                         onClick={() => handleNavigate('/dashboard')}
                                         className={`${
                                             pathname === '/dashboard'
-                                                ? 'bg-gray-100 text-gray-900'
+                                                ? 'bg-greenmaincolor text-gray-900'
                                                 : 'text-gray-700'
                                         } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
                                     >
@@ -57,7 +57,7 @@ export default function Header() {
                                         onClick={() => handleNavigate('/')}
                                         className={`${
                                             pathname === '/'
-                                                ? 'bg-gray-100 text-gray-900'
+                                                ? 'bg-greenmaincolor text-gray-900'
                                                 : 'text-gray-700'
                                         } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
                                     >

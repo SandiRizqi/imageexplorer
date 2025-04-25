@@ -15,10 +15,10 @@ interface OrdersTableProps {
 
 
 const typeColors: Record<string, string> = {
-    "rawdata": "bg-blue-500",
-    "imageprocessing": "bg-green-500",
-    "imageanalysis": "bg-yellow-500",
-    "layouting": "bg-purple-500"
+    "rawdata": "bg-pink-700",
+    "imageprocessing": "bg-lime-600",
+    "imageanalysis": "bg-green-600",
+    "layouting": "bg-cyan-600"
   };
 
 
@@ -73,7 +73,7 @@ export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
     return (
         <>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-yellow-400">Orders List</h2>
+                <h2 className="text-xl font-bold text-greensecondarycolor">Orders List</h2>
                 <div className="flex items-center space-x-4">
                     <select
                         value={sortOrder}

@@ -54,8 +54,8 @@ export default function SaveConfigButton() {
     return (
         <>
             <button
-                className="flex-1 bg-yellow-500 text-gray-900 py-2 px-2 rounded-md text-xs 
-                        hover:bg-yellow-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed flex items-center justify-center"
+                className="flex-1 bg-greenmaincolor text-gray-900 py-2 px-2 rounded-md text-xs 
+                        hover:bg-greensecondarycolor disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed flex items-center justify-center"
                 onClick={handleSaveConfig}
                 disabled={selectedItem.length <= 0 || loading}
             >
@@ -71,7 +71,7 @@ export default function SaveConfigButton() {
             <Dialog open={modalOpen} onClose={() => setModalOpen(false)} className="relative z-50">
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
                     <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
-                        <DialogTitle className="text-lg font-semibold text-yellow-500 text-center">
+                        <DialogTitle className="text-lg font-semibold text-greenmaincolor text-center">
                             {error ? "Error" : "Configuration Saved"}
                         </DialogTitle>
 
@@ -83,7 +83,7 @@ export default function SaveConfigButton() {
                             <div className="flex items-center justify-between bg-gray-800 px-3 py-2 rounded-md mt-4">
                                 <span className="text-sm text-gray-300 truncate">{`${process.env.NEXT_PUBLIC_HOST}/?savedconfig=${configID}`}</span>
                                 <button
-                                    className="bg-yellow-500 text-gray-800 px-3 py-1 text-xs rounded-md shadow-md hover:bg-yellow-400"
+                                    className="bg-greenmaincolor text-gray-800 px-3 py-1 text-xs rounded-md shadow-md hover:bg-greensecondarycolor"
                                     onClick={handleCopy}
                                 >
                                     {copied ? "Copied!" : "Copy"}
@@ -92,7 +92,7 @@ export default function SaveConfigButton() {
                         )}
 
                         <button
-                            className="w-full bg-yellow-500 text-gray-800 py-2 mt-4 rounded-md shadow-md hover:bg-yellow-400"
+                            className="w-full bg-greenmaincolor text-gray-800 py-2 mt-4 rounded-md shadow-md hover:bg-greensecondarycolor"
                             onClick={() => setModalOpen(false)}
                         >
                             OK

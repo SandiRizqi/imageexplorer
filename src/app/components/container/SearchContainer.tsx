@@ -305,7 +305,7 @@ export default function SearchContainer() {
                         <table className="w-full table-fixed text-left text-sm max-w-full">
                             <thead className="bg-gray-300 text-maincolor sticky top-0 h-[50px] shadow-lg">
                                 <tr className="text-xs">
-                                    <th className="p-2  w-[30px]"><input type="checkbox" className='accent-yellow-400' /></th>
+                                    <th className="p-2  w-[30px]"><input type="checkbox" className='accent-greenmaincolor' /></th>
                                     <th className="p-2 min-w-[20px] cursor-pointer" onClick={() => handleSort('collection_vehicle_short')} >Sat</th>
                                     <th className="p-2 w-[80px] cursor-pointer" onClick={() => handleSort('collection_date')}>Date</th>
                                     <th className="p-2 min-w-[40px] cursor-pointer" onClick={() => handleSort('resolution')}>Res</th>
@@ -338,7 +338,7 @@ export default function SearchContainer() {
                                                 <td className="p-2">
                                                     <input
                                                         type="checkbox"
-                                                        className="accent-yellow-400"
+                                                        className="accent-greenmaincolor"
                                                         checked={selectedItem.includes(row.objectid)}
                                                         readOnly
                                                     />
@@ -414,7 +414,7 @@ export default function SearchContainer() {
             <div className="absolute bottom-0 w-full bg-maincolor p-2 flex flex-col items-center justify-end border-t border-gray-300 pb-6 h-[100px]">
                 <p className="text-xs text-gray-200">{selectedItem.length} / {imageResult.length} selected</p>
                 <div className="flex gap-2 w-full mt-2">
-                    <button className="flex-1 bg-yellow-500 text-gray-900 py-2 px-2 rounded-md text-xs hover:bg-yellow-400"
+                    <button className="flex-1 bg-greenmaincolor text-gray-900 py-2 px-2 rounded-md text-xs hover:bg-greensecondarycolor"
                         onClick={handleReset}
                     >
                         CLEAR

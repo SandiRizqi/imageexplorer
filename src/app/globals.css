@@ -28,7 +28,7 @@ body {
 
 
 .input-style {
-  @apply w-full bg-transparent border-b border-gray-600 p-2 focus:outline-none focus:border-yellow-500;
+  @apply w-full bg-transparent border-b border-gray-600 p-2 focus:outline-none focus:border-greenmaincolor;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

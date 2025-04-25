@@ -9,25 +9,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        maincolor: "#1B1F3B",
-        secondarycolor: "#2F334D",
-        buttonmaincolor: "#F4A100",
-        buttonsecondarycolor: "#FFCE54",
-
+        maincolor: "#000400",
+        secondarycolor: "#141313",
+        greenmaincolor: "#c6f832",
+        greensecondarycolor: "#6cda00",
+        greensecondarycolor1: "#fffa00",
+        greensecondarycolor2: "#8fd33f",
+        textmaincolor: "#c6f832",
 
         background: "var(--background)",
         foreground: "var(--foreground)",
         gray: {
-          50: "#f8f9fa",  // Lightest gray
+          50: "#f8f9fa", // Lightest gray
           100: "#e9ecef",
           200: "#dee2e6",
           300: "#ced4da",
           400: "#adb5bd",
-          500: "#6c757d",  // Default Tailwind gray-500
+          500: "#6c757d", // Default Tailwind gray-500
           600: "#495057",
           700: "#343a40",
           800: "#212529",
-          900: "#121416",  // Darkest gray
+          900: "#121416", // Darkest gray
         },
       },
     },

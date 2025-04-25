@@ -188,7 +188,7 @@ export default function MeasureTool() {
                         onClick={() => startMeasurement()}
                         className={`flex items-center justify-center w-10 h-10 rounded-full ${
                             isDrawing ? "bg-yellow-600" : "bg-maincolor"
-                        } hover:bg-yellow-500 transition-colors duration-200 shadow-xl`}
+                        } hover:bg-greenmaincolor transition-colors duration-200 shadow-xl`}
                     >
                         <PencilRuler color="white" />
                         <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">

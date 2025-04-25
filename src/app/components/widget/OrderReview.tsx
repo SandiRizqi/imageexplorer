@@ -93,7 +93,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
             {/* Selected Scenes Section */}
             <div className="space-y-6">
                 <div className="bg-maincolor rounded-md p-4 mb-4">
-                    <h3 className="text-sm font-medium text-yellow-500 mb-2">Your selected scenes</h3>
+                    <h3 className="text-sm font-medium text-greenmaincolor mb-2">Your selected scenes</h3>
 
                     <div className="overflow-x-auto max-h-[200px] overflow-y-auto">
                         <table className="min-w-full text-sm text-left">
@@ -110,7 +110,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                             <tbody>
                                 {selectedItems.map((scene) => (
                                     <tr key={scene.objectid} className="border-b border-gray-700 hover:bg-gray-700">
-                                        <td className="py-2 px-3 text-yellow-500">{scene.collection_vehicle_short}</td>
+                                        <td className="py-2 px-3 text-greenmaincolor">{scene.collection_vehicle_short}</td>
                                         <td className="py-2 px-3">{scene.collection_date}</td>
                                         <td className="py-2 px-3">{scene.resolution}</td>
                                         <td className="py-2 px-3">{scene.cloud_cover_percent}%</td>
@@ -134,7 +134,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                     {/* Left column - Your Information */}
                     {!session && (
                         <div className="bg-maincolor rounded-md p-4">
-                        <h3 className="text-sm font-medium text-yellow-500 mb-2">Your Information</h3>
+                        <h3 className="text-sm font-medium text-greenmaincolor mb-2">Your Information</h3>
 
                         <div className="space-y-3">
                             <div>
@@ -201,7 +201,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
                     {/* Right column - Order Summary */}
                     <div className="bg-maincolor rounded-md p-4">
-                        <h3 className="text-sm font-medium text-yellow-500 mb-2">Order Summary</h3>
+                        <h3 className="text-sm font-medium text-greenmaincolor mb-2">Order Summary</h3>
 
                         <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
@@ -226,7 +226,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
                             <div className="border-t border-gray-700 my-2 pt-2 flex justify-between font-medium">
                                 <span className="text-gray-300">Estimated Price:</span>
-                                <span className="text-yellow-400">${orderData.estimatedPrice.toLocaleString()}</span>
+                                <span className="text-greensecondarycolor">${orderData.estimatedPrice.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>
@@ -240,7 +240,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                     <textarea
                         id="notes"
                         rows={3}
-                        className="w-full px-3 py-2 bg-maincolor border border-gray-700 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                        className="w-full px-3 py-2 bg-maincolor border border-gray-700 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-greenmaincolor"
                         placeholder="Add any specific requirements or notes for your order..."
                         value={additionalNotes}
                         onChange={(e) => setAdditionalNotes(e.target.value)}
@@ -252,7 +252,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                     <input
                         type="checkbox"
                         id="terms"
-                        className="mt-1 accent-yellow-500"
+                        className="mt-1 accent-greenmaincolor"
                         checked={agreedToTerms}
                         onChange={(e) => setAgreedToTerms(e.target.checked)}
                     />

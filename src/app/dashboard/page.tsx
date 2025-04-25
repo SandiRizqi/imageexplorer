@@ -59,8 +59,8 @@ export default function Dashboard() {
                         <button
                             className={`px-6 py-3 text-sm font-medium ${
                                 activeTab === 'orders'
-                                    ? 'border-b-2 border-yellow-400 text-yellow-400'
-                                    : 'text-gray-400 hover:text-yellow-300'
+                                    ? 'border-b-2 border-greensecondarycolor text-greensecondarycolor'
+                                    : 'text-gray-400 hover:text-greenmaincolor'
                             }`}
                             onClick={() => setActiveTab('orders')}
                         >
@@ -69,8 +69,8 @@ export default function Dashboard() {
                         <button
                             className={`px-6 py-3 text-sm font-medium ${
                                 activeTab === 'searches'
-                                    ? 'border-b-2 border-yellow-400 text-yellow-400'
-                                    : 'text-gray-400 hover:text-yellow-300'
+                                    ? 'border-b-2 border-greensecondarycolor text-greensecondarycolor'
+                                    : 'text-gray-400 hover:text-greenmaincolor'
                             }`}
                             onClick={() => setActiveTab('searches')}
                         >
