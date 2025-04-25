@@ -10,7 +10,7 @@ import { getSavedConfig } from '../Tools';
 import Alert from '../Alert';
 // import { useAuth } from '../context/AuthProrider';
 import Image from 'next/image';
-import logo from '../assets/logo_ie.webp';
+import logo from '../assets/SIE.png';
 
 
 interface SidebarProps {
@@ -91,11 +91,11 @@ export default function Sidebar({ isMobile, menuOpen, onClose }: SidebarProps) {
                             alt="Logo"
                             width={50}
                             height={50}
-                            className='bg-maincolor'
+                            className='bg-maincolor p-[10px]'
                         />
 
-                        <div className="text-gray-300">
-                            Ruangbumi
+                        <div className="text-gray-300 font-bold text-sm uppercase tracking-widest">
+                            RUANG BUMI EXPLORER
                         </div>
                     </div>
 

@@ -34,7 +34,7 @@ export default function NotFound() {
             <main className="flex-grow flex items-center justify-center p-4">
                 <div className="text-center space-y-6">
                     <div className="space-y-2">
-                        <h1 className="text-6xl font-bold text-yellow-400">404</h1>
+                        <h1 className="text-6xl font-bold text-greensecondarycolor">404</h1>
                         <h2 className="text-2xl text-gray-300">Page Not Found</h2>
                     </div>
                     <p className="text-gray-400 max-w-md mx-auto">
@@ -42,8 +42,8 @@ export default function NotFound() {
                     </p>
                     <Link 
                         href="/"
-                        className="inline-flex items-center px-6 py-3 bg-yellow-500 text-gray-900 rounded-lg
-                                 hover:bg-yellow-400 transition-colors duration-200 font-semibold space-x-2"
+                        className="inline-flex items-center px-6 py-3 bg-greenmaincolor text-gray-900 rounded-lg
+                                 hover:bg-greensecondarycolor transition-colors duration-200 font-semibold space-x-2"
                     >
                         <Home className="w-5 h-5" />
                         <span>Back to Home</span>

@@ -55,7 +55,7 @@ const SearchLocation = () => {
       {/* Input Pencarian */}
       <input
         type="text"
-        className="w-full bg-maincolor text-gray-300 placeholder-gray-500 border-b border-white focus:outline-none focus:border-yellow-500 px-2 py-2"
+        className="w-full bg-maincolor text-gray-300 placeholder-gray-500 border-b border-white focus:outline-none focus:border-greenmaincolor px-2 py-2"
         placeholder="Search"
         value={searchTerm}
         onChange={handleInputChange}

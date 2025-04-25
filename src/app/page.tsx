@@ -13,7 +13,7 @@ import { PolygonProvider } from '../app/components/context/PolygonProvider';
 import ToolsContainer from '../app/components/container/ToolsContainer';
 import MapFooter from '../app/components/MapFooter';
 import { Menu } from 'lucide-react';
-// import logo from '../app/components/assets/logo_ie.webp';
+// import logo from '../app/components/assets/SIE.png';
 // import Image from 'next/image';
 import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
 import Cart from '../app/components/widget/Cart';
