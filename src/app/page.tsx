@@ -19,6 +19,7 @@ import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
 import Cart from '../app/components/widget/Cart';
 import SearchLocation from '../app/components/widget/SeachLocation';
 import DashboardSwitcher from './components/widget/DashboardSwitcher';
+import WelcomePopup from './components/WelcomePopup';
 
 
 
@@ -66,6 +67,7 @@ export default function MapPage() {
 
     return (
         <Suspense fallback={<LoadingScreen />}>
+            <WelcomePopup />
             
             <ConfigProvider>
                 <MapProvider>

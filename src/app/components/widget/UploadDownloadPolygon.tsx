@@ -178,6 +178,49 @@ interface PolygonUploadModalProps {
 
 const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose, onUpload }) => {
   const [error, setError] = useState<string | null>(null);
+
+
+    const extractCoordinates = (geojson: FeatureCollection<Geometry, GeoJsonProperties>): [number, number][] => {
+      if (!geojson.features || geojson.features.length === 0) return [];
+
+      if (geojson.features.length > 1){
+        setError("The record must contain only one feature.");
+        return [];
+      };
+      
+      return geojson.features
+        .filter((feature) : feature is Feature<Polygon | MultiPolygon, GeoJsonProperties> => feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")
+        .flatMap((feature) =>
+          feature.geometry.type === "Polygon"
+            ? feature.geometry.coordinates.flat() as [number,number][]
+            : feature.geometry.coordinates.flat(2) as [number,number][]
+        );
+    };
+
+  const readFileAsText = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsText(file);
+    });
+  };
+
+  const parseShapefileZip = async (file: File): Promise<[number, number][]> => {
+    const zip = new JSZip();
+    const unzipped = await zip.loadAsync(file);
+    const shpFile = Object.keys(unzipped.files).find((name) => name.endsWith(".shp"));
+    const dbfFile = Object.keys(unzipped.files).find((name) => name.endsWith(".dbf"));
+
+    if (!shpFile || !dbfFile) throw new Error("Missing .shp or .dbf file in ZIP.");
+
+    const shpBuffer = await unzipped.files[shpFile].async("arraybuffer");
+    const dbfBuffer = await unzipped.files[dbfFile].async("arraybuffer");
+
+    const geojson = await shapefile.read(shpBuffer, dbfBuffer);
+    return extractCoordinates(geojson);
+  };
+
   
 
   const onDrop = async (acceptedFiles: File[]) => {
@@ -208,8 +251,10 @@ const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose
         setError("Unsupported file format.");
       }
 
-      onUpload(coordinates);
-      setError(null);
+      if (coordinates.length > 0) {
+        onUpload(coordinates);
+        setError(null);
+      }
     } catch (err) {
       setError("Error processing file: " + (err as Error).message);
     }
@@ -257,45 +302,6 @@ const Dropzone: React.FC<{ onDrop: (files: File[]) => void }> = ({ onDrop }) => 
     </div>
   );
 };
-
-const extractCoordinates = (geojson: FeatureCollection<Geometry, GeoJsonProperties>): [number, number][] => {
-    if (!geojson.features || geojson.features.length === 0) return [];
-    
-    return geojson.features
-      .filter((feature) : feature is Feature<Polygon | MultiPolygon, GeoJsonProperties> => feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")
-      .flatMap((feature) =>
-        feature.geometry.type === "Polygon"
-          ? feature.geometry.coordinates.flat() as [number,number][]
-          : feature.geometry.coordinates.flat(2) as [number,number][]
-      );
-  };
-
-const readFileAsText = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsText(file);
-  });
-};
-
-const parseShapefileZip = async (file: File): Promise<[number,number][]> => {
-  const zip = new JSZip();
-  const unzipped = await zip.loadAsync(file);
-  const shpFile = Object.keys(unzipped.files).find((name) => name.endsWith(".shp"));
-  const dbfFile = Object.keys(unzipped.files).find((name) => name.endsWith(".dbf"));
-
-  if (!shpFile || !dbfFile) throw new Error("Missing .shp or .dbf file in ZIP.");
-
-  const shpBuffer = await unzipped.files[shpFile].async("arraybuffer");
-  const dbfBuffer = await unzipped.files[dbfFile].async("arraybuffer");
-
-  const geojson = await shapefile.read(shpBuffer, dbfBuffer);
-  return extractCoordinates(geojson);
-};
-
-
-
 
 
 type Mode = "upload" | "download" | null;
