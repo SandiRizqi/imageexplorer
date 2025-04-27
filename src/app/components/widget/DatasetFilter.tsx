@@ -44,9 +44,9 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
             }
     
             // Check if the date range exceeds 10 years
-            const tenYearsInMs = 10 * 365 * 24 * 60 * 60 * 1000; // 10 years in milliseconds
+            const tenYearsInMs = 20 * 365 * 24 * 60 * 60 * 1000; // 10 years in milliseconds
             if (endDate.getTime() - startDate.getTime() > tenYearsInMs) {
-                setError("Date range cannot exceed 10 years!");
+                setError("Date range cannot exceed 20 years!");
                 return prev; // Prevent updating the state
             }
     
