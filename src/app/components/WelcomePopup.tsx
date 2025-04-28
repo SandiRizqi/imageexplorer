@@ -29,7 +29,7 @@ const WelcomePopup: FC = () => {
             {/* Overlay */}
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
                 {/* Modal Panel */}
-                <DialogPanel className="bg-maincolor text-white rounded-lg p-8 w-[90%] max-w-lg shadow-2xl relative animate-pop">
+                <DialogPanel className="bg-maincolor text-white rounded-lg p-8 w-[90%] max-w-2xl shadow-2xl relative animate-pop">
                     {/* Close Button */}
                     <button
                         onClick={handleClose}
@@ -81,10 +81,74 @@ const WelcomePopup: FC = () => {
                         <p className="text-sm text-gray-400 leading-relaxed">
                             Sign up for a free Ruang Bumi Explorer account today to save searches, track orders, and access exclusive features.
                         </p>
+
+                        {/* Process Flow Section */}
+                        <div className="mt-8">
+                        <p className="font-semibold text-gray-200 text-center mb-14 mt-16">HOW TO ORDER</p>
+                        <div className="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0 md:space-x-6">
+                            
+                            {/* Step 1 */}
+                            <div className="flex flex-col items-center">
+                            <div className="bg-greensecondarycolor rounded-full p-4 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                </svg>
+                            </div>
+                            <p className="text-sm text-center font-bold">DEFINE / UPLOAD AOI</p>
+                            </div>
+
+                            {/* Arrow */}
+                            <div className="hidden md:block">
+                            <span className="text-white">&rarr;</span>
+                            </div>
+
+                            {/* Step 2 */}
+                            <div className="flex flex-col items-center">
+                            <div className="bg-greensecondarycolor rounded-full p-4 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <p className="text-sm font-bold text-center">SEARCH IMAGERY</p>
+                            </div>
+
+                            {/* Arrow */}
+                            <div className="hidden md:block">
+                            <span className="text-white">&rarr;</span>
+                            </div>
+
+                            {/* Step 3 */}
+                            <div className="flex flex-col items-center">
+                            <div className="bg-greensecondarycolor rounded-full p-4 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12H8m0 0l-4 4m4-4l-4-4" />
+                                </svg>
+                            </div>
+                            <p className="text-sm font-bold text-center">CHOOSE IMAGERY PROCESSING</p>
+                            </div>
+
+                            {/* Arrow */}
+                            <div className="hidden md:block">
+                            <span className="text-white">&rarr;</span>
+                            </div>
+
+                            {/* Step 4 */}
+                            <div className="flex flex-col items-center">
+                            <div className="bg-greensecondarycolor rounded-full p-4 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                </svg>
+                            </div>
+                            <p className="text-sm font-bold text-center">RAPID DELIVERY</p>
+                            </div>
+
+                        </div>
+                        </div>
+
                     </div>
 
                     {/* Explore Button */}
-                    <div className="flex justify-center mt-8 space-x-2">
+                    <div className="flex justify-center mt-14 mb-6 space-x-6">
                         <button
                             onClick={handleDontShow}
                             className="px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold rounded-lg transition-colors duration-200 shadow-md"
