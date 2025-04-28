@@ -142,7 +142,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
             {loading && <LoadingScreen />}
             <div className="flex-grow space-y-4 mt-4">
                 {/* Date Inputs */}
-                <div className="flex justify-between">
+                <div className="flex justify-between filter-daterange">
                     <div className="flex flex-col w-1/2 pr-2">
                         <label className="text-sm text-gray-400">Start Date</label>
                         <input type="date" className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style" value={defaultStartDate} onChange={(e) => handleChangeDate(e, 'startDate')} />
@@ -155,7 +155,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
 
                 {/* Sliders */}
                 <div className="flex-grow flex flex-col justify-between space-y-1">
-                    <div>
+                    <div className='filter-cloudcover'>
                         <label className="text-sm text-gray-400 flex justify-between">
                             Cloud Cover: <span className="text-gray-300">{filters.cloudcover_max}%</span>
                         </label>
@@ -244,7 +244,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
 
             {/* Footer - Stays at Bottom */}
             <div className="mt-2 pb-2">
-                <button className="bg-greenmaincolor text-black w-full py-2 rounded-md  hover:bg-greensecondarycolor"
+                <button className="bg-greenmaincolor text-black w-full py-2 rounded-md  hover:bg-greensecondarycolor dataset-filter"
                 onClick={()=> setIsOpenDataSelector(true)}
                 >
                     SELECT DATASETS
@@ -253,7 +253,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                 <div className="flex justify-between items-center text-sm mt-2">
                     <div></div>
                     <button className="text-gray-300 bg-red-600 py-2 px-4 rounded-md hover:bg-red-500" onClick={resetFilter}>RESET</button>
-                    <button className="bg-greensecondarycolor px-4 py-2 rounded-md text-white hover:bg-greensecondarycolor2" onClick={handleSubmit}>APPLY</button>
+                    <button className="bg-greensecondarycolor px-4 py-2 rounded-md text-white hover:bg-greensecondarycolor2 apply-search" onClick={handleSubmit}>APPLY</button>
                 </div>
             </div>
             {Error && <Alert category={"error"} message={Error} setClose={setError} />}

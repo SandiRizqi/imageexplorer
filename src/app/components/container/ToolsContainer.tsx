@@ -41,7 +41,7 @@ export default function ToolsContainer() {
     }, []);
 
     const Tools = [
-        { icon: <Waypoints color="white" size={22} />, name: 'drawtool', content: <DrawTool /> },
+        { icon: <Waypoints color="white" className="drawtool" size={22} />, name: 'drawtool', content: <DrawTool /> },
         { icon: <Save color="white" size={22} />, name: 'save', content: <UploadDownloadPolygon /> },
         { icon: <Ruler color="white" size={22} />, name: 'measure', content: <MeasureTool /> },
         { icon: <Settings color="white" size={22} />, name: 'settings', content: null },
@@ -56,7 +56,7 @@ export default function ToolsContainer() {
                 className={`flex ${isMobile ? "flex-col fixed right-4 top-1/4 z-10" : "flex-row"} items-center justify-center gap-2 py-1`}
             >
                 {Tools.map((obj, idx) => (
-                    <div key={idx} className="relative" onClick={() => handleClick(obj.name)}>
+                    <div key={idx} className={`relative`} onClick={() => handleClick(obj.name)}>
                         {/* Button */}
                         <button
                             className={`flex items-center justify-center w-10 h-10 rounded-full ${

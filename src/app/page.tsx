@@ -53,6 +53,7 @@ export default function MapPage() {
     //     ],
     // };
 
+   
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth <= 768); // Mobile if width ≤ 768px
@@ -69,66 +70,68 @@ export default function MapPage() {
         <Suspense fallback={<LoadingScreen />}>
             <WelcomePopup />
             
-            <ConfigProvider>
-                <MapProvider>
-                    <PolygonProvider>
-                        <div className="relative w-screen h-screen">
-                            {/* Sidebar */}
-                            <Sidebar isMobile={isMobile} menuOpen={menuOpen} onClose={() => setMenuOpen(false)}/>
-                            {/* Navbar */}
-                            <div
-                                className={`absolute top-0 left-0 bg-maincolor h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-xl`} // Added shadow-lg
-                                style={{
-                                    width: isMobile ? "100%" : menuOpen ? "calc(100% - 400px)" : "100%",
-                                    marginLeft: isMobile ? "0" : menuOpen ? "400px" : "0",
-                                }}
-                            >
-                                <div className='flex flex-row items-center pl-4'>
-                                    {/* Toggle Button */}
-                                    <button
-                                        onClick={() => setMenuOpen(!menuOpen)}
-                                        className="text-white focus:outline-none mr-4"
-                                    >
-                                        <Menu />
-                                    </button>
-                                    <DashboardSwitcher />
-                                    {!isMobile && <SearchLocation />}
-                                    <ToolsContainer />
+            
+                <ConfigProvider>
+                    <MapProvider>
+                        <PolygonProvider>
+                            <div className="relative w-screen h-screen">
+                                {/* Sidebar */}
+                                <Sidebar isMobile={isMobile} menuOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+                                {/* Navbar */}
+                                <div
+                                    className={`absolute top-0 left-0 bg-maincolor h-[50px] text-white flex items-center justify-between z-10 transition-all duration-300 pr-2 shadow-xl`} // Added shadow-lg
+                                    style={{
+                                        width: isMobile ? "100%" : menuOpen ? "calc(100% - 400px)" : "100%",
+                                        marginLeft: isMobile ? "0" : menuOpen ? "400px" : "0",
+                                    }}
+                                >
+                                    <div className='flex flex-row items-center pl-4'>
+                                        {/* Toggle Button */}
+                                        <button
+                                            onClick={() => setMenuOpen(!menuOpen)}
+                                            className="text-white focus:outline-none mr-4"
+                                        >
+                                            <Menu />
+                                        </button>
+                                        <DashboardSwitcher />
+                                        {!isMobile && <SearchLocation />}
+                                        <ToolsContainer />
+                                    </div>
+
+
+
+                                    {/* Login/Signup Button */}
+                                    <div className="flex items-center gap-4">
+                                        <Cart isMobile={isMobile} />
+                                        <AuthModal />
+                                    </div>
                                 </div>
 
-
-
-                                {/* Login/Signup Button */}
-                                <div className="flex items-center gap-4">
-                                    <Cart isMobile={isMobile} />
-                                    <AuthModal />
+                                {/* Map Container */}
+                                <div
+                                    className={`transition-all duration-300 h-screen`}
+                                    style={{
+                                        width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
+                                        marginLeft: menuOpen && isMobile ? "0" : menuOpen ? "400px" : "0",
+                                    }}
+                                >
+                                    <MapInstance
+                                        id="map"
+                                        mapStyle="https://api.maptiler.com/maps/streets/style.json?key=whs17VUkPAj2svtEn9LL"
+                                        mapView={mapView}
+                                    />
+                                    {/* <DeckGLOverlay {...deckProps} /> */}
+                                    <BasemapSwitcher />
+                                    <MapFooter style={{
+                                        width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
+                                        marginLeft: menuOpen && !isMobile ? "400px" : "0",
+                                    }} />
                                 </div>
-                             </div>
-
-                            {/* Map Container */}
-                            <div
-                                className={`transition-all duration-300 h-screen`}
-                                style={{
-                                    width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
-                                    marginLeft: menuOpen && isMobile ? "0" : menuOpen ? "400px" : "0",
-                                }}
-                            >
-                                <MapInstance
-                                    id="map"
-                                    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=whs17VUkPAj2svtEn9LL"
-                                    mapView={mapView}
-                                />
-                                {/* <DeckGLOverlay {...deckProps} /> */}
-                                <BasemapSwitcher />
-                                <MapFooter style={{
-                                    width: menuOpen && !isMobile ? "calc(100% - 400px)" : "100%",
-                                    marginLeft: menuOpen && !isMobile ? "400px" : "0",
-                                }} />
                             </div>
-                        </div>
-                    </PolygonProvider>
-                </MapProvider>
-            </ConfigProvider>
+                        </PolygonProvider>
+                    </MapProvider>
+                </ConfigProvider>
+            
            
         </Suspense>
     )

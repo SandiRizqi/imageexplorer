@@ -3,9 +3,41 @@
 import { useState, useEffect, FC } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X } from "lucide-react";
+import Tour from "./Tour";
 
 const WelcomePopup: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [tourOpen, setTourOpen] = useState<boolean>(false);
+
+
+   const steps = [
+          {
+            target: '.drawtool',
+            content: 'Draw or upload your polygon',
+            disableBeacon: true, 
+          },
+          {
+            target: '.filter-daterange',
+            content: 'Filter your the daterange.',
+            disableBeacon: true, 
+          },
+          {
+            target: '.filter-cloudcover',
+            content: 'Filter the maximum cloudcover percentage.',
+            disableBeacon: true, 
+          },
+          {
+            target: '.dataset-filter',
+            content: 'Filter your dataset.',
+            disableBeacon: true, 
+          },
+          {
+            target: '.apply-search',
+            content: 'Search your data.',
+            disableBeacon: true, 
+          },
+        ];
+  
 
   useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisited");
@@ -19,13 +51,20 @@ const WelcomePopup: FC = () => {
     // localStorage.setItem("hasVisited", "true"); // Mark as visited after close
   };
 
+  const handleTour = () => {
+    setIsOpen(false);
+    setTourOpen(true);
+    // localStorage.setItem("hasVisited", "true"); // Mark as visited after close
+  };
+
   const handleDontShow = () => {
     localStorage.setItem("hasVisited", "true");
     setIsOpen(false);
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
+    <Tour steps={steps} isOpen={tourOpen}>
+      <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
       {/* Overlay */}
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
         {/* Modal Panel */}
@@ -214,7 +253,7 @@ const WelcomePopup: FC = () => {
           </div>
 
           {/* Explore Button */}
-          <div className="flex justify-center mt-14 mb-6 space-x-6">
+          <div className="flex justify-center mt-14 mb-6 space-x-3">
             <button
               onClick={handleDontShow}
               className="px-6 py-2 bg-gray-700 hover:bg-red-600 text-white font-bold rounded-lg transition-colors duration-200 shadow-md"
@@ -223,11 +262,21 @@ const WelcomePopup: FC = () => {
             </button>
 
             <button
+              onClick={handleTour}
+              className="px-6 py-2 bg-greenmaincolor hover:bg-greensecondarycolor text-gray-900 font-bold rounded-lg transition-colors duration-200 shadow-md"
+            >
+              Tour
+            </button>
+
+            <button
               onClick={handleClose}
               className="px-6 py-2 bg-greenmaincolor hover:bg-greensecondarycolor text-gray-900 font-bold rounded-lg transition-colors duration-200 shadow-md"
             >
               Let`s Explore
             </button>
+
+            
+
           </div>
         </DialogPanel>
       </div>
@@ -249,6 +298,7 @@ const WelcomePopup: FC = () => {
         }
       `}</style>
     </Dialog>
+    </Tour>
   );
 };
 
