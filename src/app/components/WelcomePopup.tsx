@@ -9,35 +9,33 @@ const WelcomePopup: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tourOpen, setTourOpen] = useState<boolean>(false);
 
-
-   const steps = [
-          {
-            target: '.drawtool',
-            content: 'Draw or upload your polygon',
-            disableBeacon: true, 
-          },
-          {
-            target: '.filter-daterange',
-            content: 'Filter your the daterange.',
-            disableBeacon: true, 
-          },
-          {
-            target: '.filter-cloudcover',
-            content: 'Filter the maximum cloudcover percentage.',
-            disableBeacon: true, 
-          },
-          {
-            target: '.dataset-filter',
-            content: 'Filter your dataset.',
-            disableBeacon: true, 
-          },
-          {
-            target: '.apply-search',
-            content: 'Search your data.',
-            disableBeacon: true, 
-          },
-        ];
-  
+  const steps = [
+    {
+      target: '.drawtool',
+      content: 'Draw or upload your polygon',
+      disableBeacon: true, 
+    },
+    {
+      target: '.filter-daterange',
+      content: 'Filter your the daterange.',
+      disableBeacon: true, 
+    },
+    {
+      target: '.filter-cloudcover',
+      content: 'Filter the maximum cloudcover percentage.',
+      disableBeacon: true, 
+    },
+    {
+      target: '.dataset-filter',
+      content: 'Filter your dataset.',
+      disableBeacon: true, 
+    },
+    {
+      target: '.apply-search',
+      content: 'Search your data.',
+      disableBeacon: true, 
+    },
+  ];
 
   useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisited");
@@ -57,13 +55,17 @@ const WelcomePopup: FC = () => {
     // localStorage.setItem("hasVisited", "true"); // Mark as visited after close
   };
 
+  const handleTourClose = () => {
+    setTourOpen(false);
+  };
+
   const handleDontShow = () => {
     localStorage.setItem("hasVisited", "true");
     setIsOpen(false);
   };
 
   return (
-    <Tour steps={steps} isOpen={tourOpen}>
+    <Tour steps={steps} isOpen={tourOpen} onClose={handleTourClose}>
       <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
       {/* Overlay */}
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
