@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Head from "next/head";
 import localFont from "next/font/local";
-// import { getServerSession } from "next-auth";
-// import { authOptions } from "./components/auth/auth";
 import { AuthProviders } from "./components/context/AuthProrider";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css";
 
 const geistSans = localFont({
@@ -29,8 +29,6 @@ export default function RootLayout({
 }>) {
 
 
-  // const session = await getServerSession(authOptions);
-
   return (
     <html lang="en">
       <Head>
@@ -40,6 +38,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <SpeedInsights />
+        <Analytics />
         <AuthProviders >
           {children}
         </AuthProviders>
