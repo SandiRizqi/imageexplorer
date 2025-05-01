@@ -2,8 +2,9 @@ import React, { useState } from "react";
 // import { LayerSpecification, SourceSpecification } from "maplibre-gl";
 import { useMap } from "../context/MapProvider";
 import carto from '../assets/crto_map.webp';
-import smmap  from '../assets/sm_map.webp';
+import smmap from '../assets/sm_map.webp';
 import Image from "next/image";
+import WhatsAppButton from "../WhatsappButton";
 
 const basemaps = [
   {
@@ -74,7 +75,6 @@ const changeBasemap = (style: string) => {
   map.setStyle(style, { diff: false });
   setActiveBasemap(style);
   setIsExpanded(false);
-
 };
 
 
@@ -82,15 +82,22 @@ const changeBasemap = (style: string) => {
 
 
 
-  return (
+return (
+  <div className="absolute bottom-8 right-4 flex flex-col items-end gap-2">
+    {/* WhatsApp Component */}
+    <WhatsAppButton 
+    phoneNumber={process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}
+    message={process.env.NEXT_PUBLIC_WHATSAPP_DEFAULT_MESSAGE}
+    />
+
+    {/* Basemap Switcher */}
     <div
-      className="absolute bottom-8 right-4 flex flex-col items-end bg-white p-1 rounded-lg shadow-md transition-all bg-opacity-30"
+      className="flex flex-col items-end bg-white p-1 rounded-lg shadow-md transition-all bg-opacity-30"
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      {/* Saat tidak di-hover, hanya tombol aktif yang terlihat */}
       {!isExpanded ? (
-        <button className="w-16 h-16 border  rounded-md overflow-hidden shadow-lg">
+        <button className="w-16 h-16 border rounded-md overflow-hidden shadow-lg">
           <Image
             src={basemaps.find((b) => b.style === activeBasemap)?.thumbnail || ""}
             alt="Active Basemap"
@@ -98,7 +105,6 @@ const changeBasemap = (style: string) => {
           />
         </button>
       ) : (
-        /* Saat hover atau klik, semua opsi muncul */
         <div className="flex flex-col gap-2">
           {basemaps.map((basemap, index) => (
             <button
@@ -120,7 +126,8 @@ const changeBasemap = (style: string) => {
         </div>
       )}
     </div>
-  );
+  </div>
+);
 };
 
 export default BasemapSwitcher;
