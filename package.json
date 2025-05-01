@@ -21,6 +21,8 @@
     "@types/geojson": "^7946.0.16",
     "@types/next-auth": "^3.13.0",
     "@types/shpjs": "^3.4.7",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.8.1",
     "express": "^5.0.1",
     "framer-motion": "^12.4.7",
