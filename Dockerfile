@@ -1,14 +1,18 @@
 # Install dependencies
 FROM node:18-alpine AS builder
 
-#  ini akan menyimpan nilai env saat build, bukan runtime
-ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
-ENV NEXT_PUBLIC_MAIN_COLOR=${NEXT_PUBLIC_MAIN_COLOR}
-ENV NEXT_PUBLIC_HOST=${NEXT_PUBLIC_HOST}
-ENV NEXT_PUBLIC_VERSION=${NEXT_PUBLIC_VERSION}
+
 
 WORKDIR /app
 COPY . .
+
+# Inject environment variables into .env.local
+RUN echo "NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}" >> .env.local && \
+    echo "NEXT_PUBLIC_MAIN_COLOR=${NEXT_PUBLIC_MAIN_COLOR}" >> .env.local && \
+    echo "NEXT_PUBLIC_HOST=${NEXT_PUBLIC_HOST}" >> .env.local && \
+    echo "NEXT_PUBLIC_VERSION=${NEXT_PUBLIC_VERSION}" >> .env.local
+
+    
 RUN npm install
 RUN npm run build
 
