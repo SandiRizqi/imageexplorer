@@ -6,6 +6,7 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import ProcessingOptions from './ProcessingOptions';
 import OrderReview from './OrderReview';
 import { ImageItem } from '../types';
+import * as turf from "@turf/turf";
 
 
 type OrderStep = 'options' | 'review' | 'confirmation';
@@ -14,6 +15,7 @@ type ProcessingType = 'rawdata' | 'imageprocessing' | 'imageanalysis' | 'layouti
 export interface OrderData {
     processingTypes: ProcessingType[];
     estimatedPrice: number;
+    totalArea?: number;
     orderDetails?: string;
     configID?: string;
 }
@@ -32,10 +34,10 @@ export default function OrderProcessingButton() {
         estimatedPrice: 0
     });
 
-    const cartItems: ImageItem[] = imageResult.filter(item => 
+    const cartItems: ImageItem[] = imageResult.filter(item =>
         selectedItem.includes(item.collection_vehicle_short)
     );
-    
+
     const handleSaveConfig = async () => {
         setError(null);
         setConfigID(null);
@@ -68,23 +70,52 @@ export default function OrderProcessingButton() {
         setModalOpen(true);
     };
 
-    const handleProcessingSelection = (selectedOptions: ProcessingType[]) => {
-        const basePrice = selectedItem.length * 50;
-        let processingMultiplier = 1;
+    const calculateTotalArea = () => {
+        if (polygon.length >= 3) {
+            const isClosed = polygon[0][0] === polygon[polygon.length - 1][0] &&
+                polygon[0][1] === polygon[polygon.length - 1][1];
 
-        if (selectedOptions.includes('rawdata')) processingMultiplier += 0.5;
-        if (selectedOptions.includes('imageprocessing')) processingMultiplier += 1;
-        if (selectedOptions.includes('imageanalysis')) processingMultiplier += 2;
-        if (selectedOptions.includes('layouting')) processingMultiplier += 1.5;
+            if (isClosed) {
+                const turfPolygon = turf.polygon([polygon]);
+                const area = turf.area(turfPolygon);
+                return area / 1000000; // Convert to km²
+            }
+        }
+        return 0;
+    };
 
-        const estimatedPrice = Math.round(basePrice * processingMultiplier);
+    const handleProcessingSelection = async (selectedOptions: ProcessingType[]) => {
+        const totalAreaKm2 = calculateTotalArea();
 
-        setOrderData({
+        // Siapkan data untuk calculate price
+        const orderData = {
+            selectedItems: cartItems,
             processingTypes: selectedOptions,
-            estimatedPrice: estimatedPrice
-        });
+            totalArea: totalAreaKm2 // Tambahkan total area AOI
+        };
 
-        setCurrentStep('review');
+        try {
+            // Panggil API calculate-price
+            const response = await fetch('/api/calculate-price', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            const result = await response.json();
+
+            setOrderData({
+                processingTypes: selectedOptions,
+                estimatedPrice: result.estimatedPrice,
+                totalArea: totalAreaKm2
+            });
+
+            setCurrentStep('review');
+        } catch (error) {
+            console.error('Error calculating price:', error);
+        }
     };
 
     const handleConfirmOrder = async () => {
