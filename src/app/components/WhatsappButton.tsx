@@ -32,7 +32,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
       className={`w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors ${className}`}
       title="Contact via WhatsApp"
       aria-label="WhatsApp contact button"
-      disabled={!phoneNumber}  // Disable if no number
+      disabled={!phoneNumber}
     >
       <FaWhatsapp size={size} />
     </button>
