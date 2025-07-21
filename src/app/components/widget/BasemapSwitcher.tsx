@@ -5,6 +5,7 @@ import carto from '../assets/crto_map.webp';
 import smmap from '../assets/sm_map.webp';
 import Image from "next/image";
 import WhatsAppButton from "../WhatsappButton";
+import FeedbackButton from "../FeedbackButton";
 
 const basemaps = [
   {
@@ -84,6 +85,8 @@ const changeBasemap = (style: string) => {
 
 return (
   <div className="absolute bottom-8 right-4 flex flex-col items-end gap-2">
+
+    <FeedbackButton />
     {/* WhatsApp Component */}
     <WhatsAppButton 
     phoneNumber={process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}
