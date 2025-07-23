@@ -59,7 +59,7 @@ export default function MapPage() {
                 <ConfigProvider>
                     <MapProvider>
                         <PolygonProvider>
-                            <div className="relative w-screen h-screen">
+                            <div className="relative w-screen h-screen overflow-hidden">
                                 {/* Sidebar */}
                                 <Sidebar isMobile={isMobile} menuOpen={menuOpen} onClose={() => setMenuOpen(false)} />
                                 {/* Navbar */}
