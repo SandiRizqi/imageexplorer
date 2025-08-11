@@ -387,6 +387,8 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                         onChange={(e) => setAdditionalNotes(e.target.value)}
                     ></textarea>
                 </div>
+                
+                <h3 className="text-sm font-medium text-greensecondarycolor mb-2">*) The prices listed on our platform are initial estimates. We guarantee that the final price you receive will be lower than the estimate, ensuring you always get the best deal.</h3>
 
                 {/* Terms and buttons - Full width */}
                 <div className="mt-4 flex items-start">
