@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import LoadingScreen from '../LoadingScreen';
 
 type ProcessingType = 'rawdata' | 'imageprocessing' | 'imageanalysis' | 'layouting';
 
@@ -16,9 +17,7 @@ interface ProcessingOptionsProps {
 
 export default function ProcessingOptions({ onSelect, selectedItems }: ProcessingOptionsProps) {
     const [selectedOptions, setSelectedOptions] = useState<ProcessingType[]>(['rawdata']);
-
-
-   
+    const [isLoading, setIsLoading] = useState(false);
 
     const options: ProcessingOption[] = [
         {
@@ -72,59 +71,63 @@ export default function ProcessingOptions({ onSelect, selectedItems }: Processin
         }
     };
 
-    // Di bagian return
+    const handleContinue = () => {
+        setIsLoading(true);
+        onSelect(selectedOptions);
+    };
+
     return (
         <div className="space-y-6">
-        <p className="text-sm text-center mb-4 text-gray-300">
-            Select processing options for your {selectedItems} selected image{selectedItems !== 1 ? 's' : ''}
-        </p>
-    
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {options.map((option) => (
-                <div 
-                    key={option.id}
-                    className={`p-4 rounded-lg border-2 transition-all
-                        ${selectedOptions.includes(option.id) 
-                            ? 'border-greenmaincolor bg-greenmaincolor/10' 
-                            : 'border-gray-700'}
-                        ${option.id === 'rawdata' 
-                            ? 'cursor-not-allowed opacity-75' 
-                            : 'cursor-pointer hover:border-greenmaincolor'}`}
-                    onClick={() => option.id !== 'rawdata' && toggleOption(option.id)}
-                >
-                <div className="flex items-start">
-                <div className={`p-2 rounded-lg ${selectedOptions.includes(option.id) ? 'bg-greensecondarycolor' : 'bg-gray-700'}`}>
-                    {option.icon}
-                </div>
-                <div className="ml-4">
-                    <h3 className={`font-medium ${selectedOptions.includes(option.id) ? 'text-white' : 'text-white'}`}>
-                    {option.name}
-                    </h3>
-                    <p className="text-xs text-gray-400 mt-1">{option.description}</p>
-                </div>
+            {isLoading && <LoadingScreen />}
+
+            <p className="text-sm text-center mb-4 text-gray-300">
+                Select processing options for your {selectedItems} selected image{selectedItems !== 1 ? 's' : ''}
+            </p>
+        
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {options.map((option) => (
+                    <div 
+                        key={option.id}
+                        className={`p-4 rounded-lg border-2 transition-all
+                            ${selectedOptions.includes(option.id) 
+                                ? 'border-greenmaincolor bg-greenmaincolor/10' 
+                                : 'border-gray-700'}
+                            ${option.id === 'rawdata' 
+                                ? 'cursor-not-allowed opacity-75' 
+                                : 'cursor-pointer hover:border-greenmaincolor'}`}
+                        onClick={() => option.id !== 'rawdata' && toggleOption(option.id)}
+                    >
+                        <div className="flex items-start">
+                            <div className={`p-2 rounded-lg ${selectedOptions.includes(option.id) ? 'bg-greensecondarycolor' : 'bg-gray-700'}`}>
+                                {option.icon}
+                            </div>
+                            <div className="ml-4">
+                                <h3 className="font-medium text-white">{option.name}</h3>
+                                <p className="text-xs text-gray-400 mt-1">{option.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        
+            {/* Tombol */}
+            <div className="flex justify-between mt-8">
+                <div className="space-x-4">
+                    <button
+                        className="px-6 py-2 bg-gray-700 rounded-md hover:bg-red-600 transition"
+                        onClick={() => setSelectedOptions(['rawdata'])}
+                    >
+                        Clear
+                    </button>
+                    <button
+                        className="px-6 py-2 bg-greenmaincolor text-gray-900 rounded-md hover:bg-greensecondarycolor transition disabled:opacity-50"
+                        onClick={handleContinue}
+                        disabled={selectedOptions.length === 0}
+                    >
+                        Continue
+                    </button>
                 </div>
             </div>
-            ))}
-        </div>
-    
-        {/* Tombol */}
-        <div className="flex justify-between mt-8">
-            <div className="space-x-4">
-            <button
-                className="px-6 py-2 bg-gray-700 rounded-md hover:bg-red-600 transition"
-                onClick={() => setSelectedOptions(['rawdata'])}
-            >
-                Clear
-            </button>
-            <button
-                className="px-6 py-2 bg-greenmaincolor text-gray-900 rounded-md hover:bg-greensecondarycolor transition disabled:opacity-50"
-                onClick={() => onSelect(selectedOptions)}
-                disabled={selectedOptions.length === 0}
-            >
-                Continue
-            </button>
-            </div>
-        </div>
         </div>
     );
 }
