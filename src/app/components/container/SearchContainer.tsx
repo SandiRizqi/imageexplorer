@@ -336,12 +336,19 @@ export default function SearchContainer() {
                                                 className="border-b border-gray-700 text-xs hover:bg-gray-100 h-[40px] text-left"
                                             >
                                                 <td className="p-2">
-                                                    <input
+                                                    {/* <input
                                                         type="checkbox"
                                                         className="accent-greenmaincolor"
                                                         checked={selectedItem.includes(row.objectid)}
                                                         readOnly
+                                                    /> */}
+                                                    <input
+                                                        type="checkbox"
+                                                        className="accent-greenmaincolor"
+                                                        checked={selectedItem.includes(row.objectid)}
+                                                        onChange={() => selectItem(row)}
                                                     />
+
                                                 </td>
                                                 <td
                                                     className="p-2 whitespace-nowrap cursor-pointer"
