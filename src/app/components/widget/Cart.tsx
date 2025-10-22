@@ -79,6 +79,13 @@ export default function Cart({ isMobile }: CartProps) {
 
                         // Create Turf.js polygons
                         const imagePolygon = turf.polygon([coords]); // Use polygon directly, not featureCollection
+
+                        // Pastikan polygon memiliki minimal 4 koordinat
+                        if (!polygon || polygon.length < 4) {
+                        console.error("Polygon tidak valid:", polygon);
+                        return { ...item, coverage: 0 };
+                        }
+
                         const regionPolygon = turf.polygon([polygon]);
 
                         // Initialize intersection area
