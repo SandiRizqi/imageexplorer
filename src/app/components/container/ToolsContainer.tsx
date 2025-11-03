@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Waypoints, Save, Ruler, Settings } from 'lucide-react';
+import { Waypoints, Ruler, Settings, HardDriveUpload} from 'lucide-react';
 import DrawTool from '../widget/DrawPolygon';
 import UploadDownloadPolygon from '../widget/UploadDownloadPolygon';
 import SettingsTools from '../widget/SettingsTools';
 import MeasureTool from '../widget/MeasureTool';
+// import UploadAOIPolygon from '../widget/UploadAOIPolygon';
 
 export default function ToolsContainer() {
     const [active, setActive] = useState<string | null>(null);
@@ -42,9 +43,10 @@ export default function ToolsContainer() {
 
     const Tools = [
         { icon: <Waypoints color="white" className="drawtool" size={22} />, name: 'drawtool', content: <DrawTool /> },
-        { icon: <Save color="white" size={22} />, name: 'save', content: <UploadDownloadPolygon /> },
+        { icon: <HardDriveUpload color="white" size={22} />, name: 'save', content: <UploadDownloadPolygon /> },
         { icon: <Ruler color="white" size={22} />, name: 'measure', content: <MeasureTool /> },
         { icon: <Settings color="white" size={22} />, name: 'settings', content: null },
+        // { icon: <UploadAOIPolygon />, name: 'uploadaoi', content: null },
     ];
 
     // console.log(active)
@@ -80,10 +82,15 @@ export default function ToolsContainer() {
                 ))}
             </div>
 
+            {/* <div className="whitespace-nowrap mx-2">
+                Upload AOI
+            </div> */}
             {/* Separate Settings Modal (Outside Floating Menu) */}
             <div ref={settingsRef}>
                 <SettingsTools isOpen={active === 'settings'} onClose={() => setActive(null)} />
             </div>
+
+            {/* <UploadAOIPolygon /> */}
         </>
     );
 }

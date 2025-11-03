@@ -8,6 +8,7 @@ import { useMap } from '../context/MapProvider';
 import axios from 'axios';
 import Alert from '../Alert';
 import { checkTotalArea } from '../Tools';
+import UploadAOIPolygon from '../widget/UploadAOIPolygon';
 
 
 
@@ -153,6 +154,28 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                     </div>
                 </div>
 
+                           <div className="mt-2">
+                <UploadAOIPolygon />
+            </div>
+            
+
+            <DatasetSelector isOpen={isOpenDataSelector} onClose={() => setIsOpenDataSelector(false)}/>
+
+            {/* Footer - Stays at Bottom */}
+            <div className="mt-2 pb-2">
+                <button className="bg-greenmaincolor text-gray-800 shadow-md text-sm font-semibold w-full py-2 rounded-md hover:bg-greensecondarycolor dataset-filter"
+                onClick={()=> setIsOpenDataSelector(true)}
+                >
+                    SELECT DATASETS
+                </button>
+                <span className='text-white text-xs flex p-1 mt-2 flex-row w-full justify-center'>{filters.satellites.length} of 58 datasets selected</span>
+                {/* <div className="flex justify-end text-sm mt-4">
+                    <div></div>
+                    <button className="text-gray-300 bg-red-600 py-2 px-4 rounded-md hover:bg-red-500 mx-4" onClick={resetFilter}>RESET</button>
+                    <button className="bg-greensecondarycolor px-4 py-2 rounded-md text-white hover:bg-greensecondarycolor2 apply-search" onClick={handleSubmit}>APPLY</button>
+                </div> */}
+            </div>
+
                 {/* Sliders */}
                 <div className="flex-grow flex flex-col justify-between space-y-1">
                     <div className='filter-cloudcover'>
@@ -239,20 +262,13 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                     </label>
                 </div> */}
 
-            </div> 
-            <DatasetSelector isOpen={isOpenDataSelector} onClose={() => setIsOpenDataSelector(false)}/>
+            </div>
+            
 
-            {/* Footer - Stays at Bottom */}
             <div className="mt-2 pb-2">
-                <button className="bg-greenmaincolor text-black w-full py-2 rounded-md  hover:bg-greensecondarycolor dataset-filter"
-                onClick={()=> setIsOpenDataSelector(true)}
-                >
-                    SELECT DATASETS
-                </button>
-                <span className='text-greenmaincolor text-xs flex p-1 flex-row w-full justify-center'>{filters.satellites.length} of 58 datasets selected</span>
-                <div className="flex justify-between items-center text-sm mt-2">
+                <div className="flex justify-end text-sm mt-4">
                     <div></div>
-                    <button className="text-gray-300 bg-red-600 py-2 px-4 rounded-md hover:bg-red-500" onClick={resetFilter}>RESET</button>
+                    <button className="text-gray-300 bg-red-600 py-2 px-4 rounded-md hover:bg-red-500 mx-4" onClick={resetFilter}>RESET</button>
                     <button className="bg-greensecondarycolor px-4 py-2 rounded-md text-white hover:bg-greensecondarycolor2 apply-search" onClick={handleSubmit}>APPLY</button>
                 </div>
             </div>

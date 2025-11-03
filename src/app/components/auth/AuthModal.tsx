@@ -23,7 +23,7 @@ export default function AuthModal() {
                         hover:bg-greensecondarycolor transition-colors duration-200 flex items-center space-x-2"
           onClick={() => setIsOpen(true)}
         >
-          <span>Sign In</span>
+          <span>LOGIN</span>
         </button>
       ) : (
         <div className="relative">
