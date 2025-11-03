@@ -153,7 +153,7 @@ export default function UploadAOIPolygon() {
       {/* <span className="whitespace-nowrap">UPLOAD AOI</span> */}
         <button
             className="bg-greenmaincolor px-2 py-2 rounded text-gray-800 shadow-md text-sm font-semibold mr-4
-                        hover:bg-greensecondarycolor transition-colors duration-200 flex items-center space-x-2 whitespace-nowrap w-full justify-center"
+                        hover:bg-greensecondarycolor transition-colors duration-200 flex items-center space-x-2 whitespace-nowrap w-full justify-center upload-aoi"
             onClick={() => setIsOpen(true)}
         >
             <Upload size="15"/><span>UPLOAD AOI</span>

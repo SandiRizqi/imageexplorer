@@ -287,7 +287,7 @@ export default function SearchContainer() {
 
             {/* Expanding Filter Section */}
             <div
-                className={`overflow-hidden transition-all duration-300 ${config.isFilterOpen ? "h-[calc(55%-50px)]" : "h-0"
+                className={`overflow-hidden transition-all duration-300 ${config.isFilterOpen ? "h-[calc(60%-50px)]" : "h-0"
                     }`}
             >
                 <div className="p-2 px-4 bg-maincolor h-full flex flex-col overflow-y-auto">
@@ -299,7 +299,7 @@ export default function SearchContainer() {
 
 
             {/* Main Content (Table) */}
-            <div className={`flex-grow overflow-hidden bg-white transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(45%-150px)]" : "max-h-[calc(100%-200px)]"}`}>
+            <div className={`flex-grow overflow-hidden bg-white transition-all duration-300  ${config.isFilterOpen ? "max-h-[calc(40%-150px)]" : "max-h-[calc(100%-200px)]"}`}>
                 <div className="h-full">
                     <div className="max-h-full overflow-y-auto">
                         <table className="w-full table-fixed text-left text-sm max-w-full">

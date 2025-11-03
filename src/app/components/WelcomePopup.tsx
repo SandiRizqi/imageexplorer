@@ -11,8 +11,13 @@ const WelcomePopup: FC = () => {
 
   const steps = [
     {
-      target: '.drawtool',
-      content: 'Draw or upload your polygon',
+      target: '.upload-aoi',
+      content: 'Upload or draw your polygon',
+      disableBeacon: true, 
+    },
+    {
+      target: '.dataset-filter',
+      content: 'Filter your dataset.',
       disableBeacon: true, 
     },
     {
@@ -23,11 +28,6 @@ const WelcomePopup: FC = () => {
     {
       target: '.filter-cloudcover',
       content: 'Filter the maximum cloudcover percentage.',
-      disableBeacon: true, 
-    },
-    {
-      target: '.dataset-filter',
-      content: 'Filter your dataset.',
       disableBeacon: true, 
     },
     {

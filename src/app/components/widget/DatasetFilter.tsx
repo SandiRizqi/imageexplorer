@@ -141,20 +141,10 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
         <>
             {/* Main Content */}
             {loading && <LoadingScreen />}
-            <div className="flex-grow space-y-4 mt-4">
+            <div className="flex-grow space-y-4 mt-2">
                 {/* Date Inputs */}
-                <div className="flex justify-between filter-daterange">
-                    <div className="flex flex-col w-1/2 pr-2">
-                        <label className="text-sm text-gray-400">Start Date</label>
-                        <input type="date" className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style" value={defaultStartDate} onChange={(e) => handleChangeDate(e, 'startDate')} />
-                    </div>
-                    <div className="flex flex-col w-1/2 pl-2">
-                        <label className="text-sm text-gray-400">End Date</label>
-                        <input type="date" className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style" value={defaultEndDate} onChange={(e) => handleChangeDate(e, 'endDate')}/>
-                    </div>
-                </div>
 
-                           <div className="mt-2">
+            <div className="mt-2">
                 <UploadAOIPolygon />
             </div>
             
@@ -175,6 +165,19 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                     <button className="bg-greensecondarycolor px-4 py-2 rounded-md text-white hover:bg-greensecondarycolor2 apply-search" onClick={handleSubmit}>APPLY</button>
                 </div> */}
             </div>
+
+            <hr className="border-gray-600" />
+
+            <div className="flex justify-between filter-daterange">
+                    <div className="flex flex-col w-1/2 pr-2">
+                        <label className="text-sm text-gray-400">Start Date</label>
+                        <input type="date" className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style" value={defaultStartDate} onChange={(e) => handleChangeDate(e, 'startDate')} />
+                    </div>
+                    <div className="flex flex-col w-1/2 pl-2">
+                        <label className="text-sm text-gray-400">End Date</label>
+                        <input type="date" className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style" value={defaultEndDate} onChange={(e) => handleChangeDate(e, 'endDate')}/>
+                    </div>
+                </div>
 
                 {/* Sliders */}
                 <div className="flex-grow flex flex-col justify-between space-y-1">
