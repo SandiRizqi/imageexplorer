@@ -134,6 +134,13 @@ const datasetCategories: DatasetCategory[] = [
             { name: "Landsat 8 (LS8) - 15-m 7-band", value: "LS8" },
         ],
     },
+        {
+        name: "KGS Space Technologies",
+        datasets: [
+            { name: "KazEOSat-1 (KZ1) - 1-m 4-band", value: "KZ1" },
+            { name: "KazEOSat-2 (KZ2) - 6.5-m 5-band", value: "KZ2" },
+        ],
+    },
 ];
 
 
