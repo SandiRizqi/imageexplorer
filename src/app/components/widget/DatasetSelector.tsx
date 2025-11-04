@@ -181,7 +181,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
 
                 {/* Fixed Title */}
                 <div className="sticky top-0 bg-maincolor pb-4 z-10">
-                    <DialogTitle className="text-lg font-bold text-white text-center">Dataset Selector</DialogTitle>
+                    <DialogTitle className="text-lg font-bold text-white text-center">Satellite Imagery Datasets</DialogTitle>
                 </div>
 
                 {/* Scrollable Content */}

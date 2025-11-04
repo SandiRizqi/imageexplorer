@@ -17,7 +17,7 @@ const WelcomePopup: FC = () => {
     },
     {
       target: '.dataset-filter',
-      content: 'Filter your dataset.',
+      content: 'Filter your satellite imagery datasets.',
       disableBeacon: true, 
     },
     {

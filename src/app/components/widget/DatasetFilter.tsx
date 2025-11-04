@@ -156,7 +156,7 @@ export default function DatasetFilter({onLoading} : DatasetFilterProps) {
                 <button className="bg-greenmaincolor text-gray-800 shadow-md text-sm font-semibold w-full py-2 rounded-md hover:bg-greensecondarycolor dataset-filter"
                 onClick={()=> setIsOpenDataSelector(true)}
                 >
-                    SELECT DATASETS
+                    SELECT IMAGERIES
                 </button>
                 <span className='text-white text-xs flex p-1 mt-2 flex-row w-full justify-center'>{filters.satellites.length} of 58 datasets selected</span>
                 {/* <div className="flex justify-end text-sm mt-4">
