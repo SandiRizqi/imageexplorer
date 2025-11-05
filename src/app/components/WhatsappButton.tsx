@@ -10,8 +10,8 @@ interface WhatsAppButtonProps {
 }
 
 const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
-  phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '',
-  message = process.env.NEXT_PUBLIC_WHATSAPP_DEFAULT_MESSAGE || '',
+  phoneNumber = "6281298735585",
+  // message = process.env.NEXT_PUBLIC_WHATSAPP_DEFAULT_MESSAGE || '',
   size = 24,
   className = "",
 }) => {
@@ -21,8 +21,8 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
       return;
     }
     
-    const encodedMessage = encodeURIComponent(message);
-    const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    // const encodedMessage = encodeURIComponent(message);
+    const url = `https://wa.me/${phoneNumber}`;
     window.open(url, "_blank");
   };
 
