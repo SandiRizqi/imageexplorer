@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Waypoints, Ruler, Settings, HardDriveUpload} from 'lucide-react';
+import { Waypoints, Ruler, Settings, HardDriveUpload, Image} from 'lucide-react';
 import DrawTool from '../widget/DrawPolygon';
 import UploadDownloadPolygon from '../widget/UploadDownloadPolygon';
 import SettingsTools from '../widget/SettingsTools';
 import MeasureTool from '../widget/MeasureTool';
+import SatelliteImageCatalog from '../widget/SatelliteImageCatalog';
+import ModalPortal from '../widget/ModalPortal';
 // import UploadAOIPolygon from '../widget/UploadAOIPolygon';
 
 export default function ToolsContainer() {
@@ -11,6 +13,8 @@ export default function ToolsContainer() {
     const [isMobile, setIsMobile] = useState(true);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const settingsRef = useRef<HTMLDivElement | null>(null); // NEW: Separate ref for modal
+    const catalogRef = useRef<HTMLDivElement>(null); // NEW: ref for catalog modal
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -30,22 +34,24 @@ export default function ToolsContainer() {
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (
-                containerRef.current && !containerRef.current.contains(event.target as Node) && // Outside tools
-                settingsRef.current && !settingsRef.current.contains(event.target as Node) // Outside settings modal
+                containerRef.current && !containerRef.current.contains(event.target as Node) && 
+                settingsRef.current && !settingsRef.current.contains(event.target as Node) &&
+                catalogRef.current && !catalogRef.current.contains(event.target as Node) // NEW: Outside catalog modal
             ) {
                 setActive(null);
             }
         }
-
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
 
     const Tools = [
         { icon: <Waypoints color="white" className="drawtool" size={22} />, name: 'drawtool', content: <DrawTool /> },
         { icon: <HardDriveUpload color="white" size={22} />, name: 'save', content: <UploadDownloadPolygon /> },
         { icon: <Ruler color="white" size={22} />, name: 'measure', content: <MeasureTool /> },
         { icon: <Settings color="white" size={22} />, name: 'settings', content: null },
+        { icon: <Image color="white" size={22} />, name: 'catalog', content: null },
         // { icon: <UploadAOIPolygon />, name: 'uploadaoi', content: null },
     ];
 
@@ -89,6 +95,28 @@ export default function ToolsContainer() {
             <div ref={settingsRef}>
                 <SettingsTools isOpen={active === 'settings'} onClose={() => setActive(null)} />
             </div>
+
+            {/* Separate Catalog Modal (Outside Floating Menu) */}
+            {/* <div ref={catalogRef}>
+                {active === 'catalog' && (
+                    <div className="fixed inset-0 z-1 flex items-center justify-center bg-black/50">
+                        <div className="relative max-w-7xl w-full max-h-[90vh] overflow-auto">
+                            <SatelliteImageCatalog onClose={() => setActive(null)} />
+                        </div>
+                    </div>
+                )}
+            </div> */}
+
+            {/* Catalog Modal via Portal */}
+            <ModalPortal>
+                {active === 'catalog' && (
+                    <div ref={catalogRef} className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
+                        <div className="relative max-w-7xl w-full max-h-[90vh] overflow-auto z-[10000]">
+                            <SatelliteImageCatalog onClose={() => setActive(null)} />
+                        </div>
+                    </div>
+                )}
+            </ModalPortal>
 
             {/* <UploadAOIPolygon /> */}
         </>
