@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 interface CatalogItem {
   id: number;
@@ -17,249 +17,316 @@ interface CatalogItem {
   info: string;
 }
 
-
 interface SatelliteImageCatalogProps {
   onClose?: () => void;
 }
 
-  const baseCatalogData: CatalogItem[] = [
-    {
-      id: 1,
-      title: 'Pleiades - 1A',
-      satellite_shortname: 'PNEO',
-      images: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/kebun.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/pabrik1.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/tambang.jpg'
-      ],
-      previewImages: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/kebun.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/pabrik1.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/tambang.jpg'
-      ],
-      description: 'Citra resolusi tinggi untuk pemetaan urban dan vegetasi dengan 5 band spektral.',
-      specs: [
-        { label: 'Resolusi Spasial', value: '0.5 m (Pankromatik), 2 m (Multispektral)' },
-        { label: 'Resolusi Temporal', value: '2 Hari' },
-        { label: 'Resolusi Spektral', value: 'Pankromatik (480–830 nm), Blue (430–550 nm), Green (490–610 nm), Red (600–720 nm), NIR (750–950 nm)' },
-        { label: 'Altitude', value: '695 km' },
-        { label: 'Orbit', value: 'Sun Synchronous' },
-        { label: 'Lebar Sapuan', value: '20 km' }
-      ],
-      price: 'Loading...',
-      info: 'Satelit Pleiades-1A menyediakan citra 0.5 m pankromatik dan 2 m multispektral, ideal untuk analisis urban dan vegetasi.'
-    },
-    {
-      id: 2,
-      title: 'Ikonos',
-      satellite_shortname: 'IK02',
-      images: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/tambang.jpg'
-      ],
-      previewImages: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/tambang.jpg'
-      ],
-      description: 'Citra spasial 0.8 m pankromatik dan 3.28 m multispektral dengan 4 band VNIR.',
-      specs: [
-        { label: 'Resolusi Spasial', value: '0.8 m (Pankromatik), 3.28 m (Multispektral)' },
-        { label: 'Resolusi Temporal', value: '3 Hari' },
-        { label: 'Resolusi Spektral', value: 'Pankromatik (450–900 nm), Blue (445–516 nm), Green (506–595 nm), Red (632–698 nm), NIR (757–853 nm)' },
-        { label: 'Altitude', value: '681 km' },
-        { label: 'Orbit', value: 'Sun synchronous, 10:30 Pagi' },
-        { label: 'Lebar Sapuan', value: '11.3–13.8 km' }
-      ],
-      price: 'Loading...',
-      info: 'Satelit Ikonos menghasilkan citra 0.8 meter, cocok untuk analisis perubahan lahan dan perkotaan.'
-    },
-    {
-      id: 3,
-      title: 'QuickBird',
-      satellite_shortname: 'QB',
-      images: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/permukiman(Perkebunan).jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/tambang.jpg'
-      ],
-      previewImages: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/permukiman(Perkebunan).jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/tambang.jpg'
-      ],
-      description: 'Citra pankromatik 0.61 m dan multispektral 2.4 m dengan 4 band VNIR.',
-      specs: [
-        { label: 'Resolusi Spasial', value: '0.61 m (Pankromatik), 2.4 m (Multispektral)' },
-        { label: 'Resolusi Temporal', value: '3–7 Hari' },
-        { label: 'Resolusi Spektral', value: 'Pankromatik (450–1053 nm), Blue (430–545 nm), Green (466–620 nm), Red (590–710 nm), NIR (715–918 nm)' },
-        { label: 'Altitude', value: '450 km' },
-        { label: 'Orbit', value: 'Sun Synchronous' },
-        { label: 'Lebar Sapuan', value: '14.9 km' }
-      ],
-      price: 'Loading...',
-      info: 'QuickBird memberikan citra 0.61 m pankromatik untuk analisis detail urban, vegetasi, dan infrastruktur.'
-    },
-    {
-      id: 4,
-      title: 'WorldView-2',
-      satellite_shortname: 'WV2',
-      images: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/kebun.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/tambang.jpg'
-      ],
-      previewImages: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/kebun.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/tambang.jpg'
-      ],
-      description: 'Satelit WorldView-2 menawarkan 8 band multispektral dan resolusi 0.46 m.',
-      specs: [
-        { label: 'Resolusi Spasial', value: '0.46 m (Pankromatik), 1.84 m (Multispektral)' },
-        { label: 'Resolusi Temporal', value: '2 Hari' },
-        { label: 'Resolusi Spektral', value: 'Pankromatik (450–800 nm), Coastal Blue (400–450 nm), Blue (450–510 nm), Green (510–580 nm), Yellow (585–625 nm), Red (639–690 nm), Red Edge (705–745 nm), NIR1 (770–895 nm), NIR2 (860–1040 nm)' },
-        { label: 'Altitude', value: '770 km' },
-        { label: 'Orbit', value: 'Sun synchronous, 10:30 Pagi' },
-        { label: 'Lebar Sapuan', value: '16.4 km' }
-      ],
-      price: 'Loading...',
-      info: 'WorldView-2 menyediakan 8 band spektral untuk analisis kompleks, cocok untuk pemetaan lingkungan dan wilayah pesisir.'
-    },
-    {
-      id: 5,
-      title: 'GeoEye-1',
-      satellite_shortname: 'GE1',
-      images: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/perkebunan.png',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/pabrik%2Bpemukiman.png',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/tambang.png'
-      ],
-      previewImages: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/perkebunan.png',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/pabrik%2Bpemukiman.png',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/tambang.png'
-      ],
-      description: 'Citra pankromatik 0.46 m dan multispektral 1.84 m dengan waktu ulang 2.6 hari.',
-      specs: [
-        { label: 'Resolusi Spasial', value: '0.46 m (Pankromatik), 1.84 m (Multispektral)' },
-        { label: 'Resolusi Temporal', value: '2.6 Hari' },
-        { label: 'Resolusi Spektral', value: 'Pankromatik (450–800 nm), Blue (450–510 nm), Green (510–580 nm), Red (655–690 nm), NIR (780–920 nm)' },
-        { label: 'Altitude', value: '770 km' },
-        { label: 'Orbit', value: 'Sun Synchronous' },
-        { label: 'Lebar Sapuan', value: '15.3 km' }
-      ],
-      price: 'Loading...',
-      info: 'GeoEye-1 menghasilkan citra 0.46 m dengan ketepatan tinggi, cocok untuk survei geospasial.'
-    },
-    {
-      id: 6,
-      title: 'Kompsat-3A',
-      satellite_shortname: 'K3A',
-      images: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/pertanian.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/tambang.jpg'
-      ],
-      previewImages: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/pertanian.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/tambang.jpg'
-      ],
-      description: 'Citra pankromatik 0.55 m dan multispektral 2.2 m dengan kemampuan inframerah jarak menengah.',
-      specs: [
-        { label: 'Resolusi Spasial', value: '0.55 m (Pankromatik), 2.2 m (Multispektral), 5.5 m (Mid-IR)' },
-        { label: 'Resolusi Temporal', value: '28 Hari' },
-        { label: 'Resolusi Spektral', value: 'Pankromatik (450–900 nm), Blue (450–520 nm), Green (520–600 nm), Red (630–690 nm), NIR (760–900 nm)' },
-        { label: 'Altitude', value: '528 km' },
-        { label: 'Orbit', value: 'Sun synchronous, 13:30 Pagi' },
-        { label: 'Lebar Sapuan', value: '12 km' }
-      ],
-      price: 'Loading...',
-      info: 'Kompsat-3A memiliki 4 band utama dan sensor inframerah jarak menengah, ideal untuk analisis geologi dan vegetasi.'
-    },
-    {
-      id: 7,
-      title: 'SPOT 7/6',
-      satellite_shortname: 'SP6',
-      images: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/pabrik(SPOT6).jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/Perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/tambang.jpg'
-      ],
-      previewImages: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/pabrik(SPOT6).jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/Perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/tambang.jpg'
-      ],
-      description: 'Citra pankromatik 1.5 m dan multispektral 6 m dari SPOT-6/7 untuk analisis regional.',
-      specs: [
-        { label: 'Resolusi Spasial', value: '1.5 m (Pankromatik), 6 m (Multispektral)' },
-        { label: 'Resolusi Temporal', value: '1–3 Hari (bersamaan dengan SPOT-7)' },
-        { label: 'Resolusi Spektral', value: 'Pankromatik (450–745 nm), Blue (455–525 nm), Green (530–590 nm), Red (625–695 nm), Near Infrared (760–890 nm)' },
-        { label: 'Altitude/Ketinggian', value: '694 km' },
-        { label: 'Tipe Orbit', value: 'Sun synchronous' },
-        { label: 'Lebar Sapuan', value: '10–60 km (tergantung resolusi spasial dan jumlah detector)' }
-      ],
-      price: 'Loading...',
-      info: 'SPOT 6/7 memberikan cakupan luas dan temporal cepat, ideal untuk pemetaan regional dan monitoring lahan.'
-    },
-    {
-      id: 8,
-      title: 'PlanetScope',
-      satellite_shortname: 'PS',
-      images: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/tambang.jpg'
-      ],
-      previewImages: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/tambang.jpg'
-      ],
-      description: 'Konsistensi harian dengan resolusi spasial 3 m dan 4 band multispektral.',
-      specs: [
-        { label: 'Resolusi Spasial', value: '3 meter' },
-        { label: 'Resolusi Temporal', value: '1 Hari' },
-        { label: 'Resolusi Spektral', value: 'Blue (450–510 nm), Green (500–590 nm), Red (590–670 nm), Near Infrared (780–860 nm)' },
-        { label: 'Altitude/Ketinggian', value: '475 km' },
-        { label: 'Tipe Orbit', value: 'Sun synchronous' },
-        { label: 'Lebar Sapuan', value: '24.6 × 16 km' }
-      ],
-      price: 'Loading...',
-      info: 'PlanetScope menawarkan citra 3 meter harian dengan 4 band utama, cocok untuk monitoring vegetasi dan perubahan lahan.'
-    },
-    {
-      id: 9,
-      title: 'RapidEye',
-      satellite_shortname: 'REO',
-      images: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/tambang.jpg'
-      ],
-      previewImages: [
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/pabrik.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/perkebunan.jpg',
-        'https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/tambang.jpg'
-      ],
-      description: 'Konstelasi satelit RapidEye dengan 5 band multispektral dan resolusi 5 meter.',
-      specs: [
-        { label: 'Resolusi Spasial', value: '5 meter' },
-        { label: 'Resolusi Temporal', value: '1 Hari (Off-nadir) / 5.5 Hari (Nadir)' },
-        { label: 'Resolusi Spektral', value: 'Blue (440–510 nm), Green (520–590 nm), Red (630–685 nm), Red Edge (690–730 nm), Near Infrared (760–850 nm)' },
-        { label: 'Altitude/Ketinggian', value: '630 km' },
-        { label: 'Tipe Orbit', value: 'Sun synchronous' },
-        { label: 'Lebar Sapuan', value: '77 km' }
-      ],
-      price: 'Loading...',
-      info: 'RapidEye menyediakan citra 5 m dengan 5 band multispektral, ideal untuk pertanian dan pemetaan skala menengah.'
-    },
-  ];
+const baseCatalogData: CatalogItem[] = [
+  {
+    id: 1,
+    title: "Pleiades",
+    satellite_shortname: "PNEO",
+    images: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/kebun.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/pabrik1.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/tambang.jpg",
+    ],
+    previewImages: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/kebun.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/pabrik1.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PLEIADES/tambang.jpg",
+    ],
+    description: "Minimal Order | 25Km",
+    specs: [
+      {
+        label: "Resolusi Spasial",
+        value: "0.5 m (Pankromatik), 2 m (Multispektral)",
+      },
+      { label: "Resolusi Temporal", value: "2 Hari" },
+      {
+        label: "Resolusi Spektral",
+        value:
+          "Pankromatik (480–830 nm), Blue (430–550 nm), Green (490–610 nm), Red (600–720 nm), NIR (750–950 nm)",
+      },
+      { label: "Altitude", value: "695 km" },
+      { label: "Orbit", value: "Sun Synchronous" },
+      { label: "Lebar Sapuan", value: "20 km" },
+    ],
+    price: "Loading...",
+    info: "Satelit Pleiades-1A menyediakan citra 0.5 m pankromatik dan 2 m multispektral, ideal untuk analisis urban dan vegetasi.",
+  },
+  {
+    id: 2,
+    title: "Ikonos",
+    satellite_shortname: "IK02",
+    images: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/tambang.jpg",
+    ],
+    previewImages: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Ikonos/tambang.jpg",
+    ],
+    description: "Minimal Order | 25Km",
+    specs: [
+      {
+        label: "Resolusi Spasial",
+        value: "0.8 m (Pankromatik), 3.28 m (Multispektral)",
+      },
+      { label: "Resolusi Temporal", value: "3 Hari" },
+      {
+        label: "Resolusi Spektral",
+        value:
+          "Pankromatik (450–900 nm), Blue (445–516 nm), Green (506–595 nm), Red (632–698 nm), NIR (757–853 nm)",
+      },
+      { label: "Altitude", value: "681 km" },
+      { label: "Orbit", value: "Sun synchronous, 10:30 Pagi" },
+      { label: "Lebar Sapuan", value: "11.3–13.8 km" },
+    ],
+    price: "Loading...",
+    info: "Satelit Ikonos menghasilkan citra 0.8 meter, cocok untuk analisis perubahan lahan dan perkotaan.",
+  },
+  {
+    id: 3,
+    title: "QuickBird",
+    satellite_shortname: "QB",
+    images: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/permukiman(Perkebunan).jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/tambang.jpg",
+    ],
+    previewImages: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/permukiman(Perkebunan).jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/QB/tambang.jpg",
+    ],
+    description: "Minimal Order | 25Km",
+    specs: [
+      {
+        label: "Resolusi Spasial",
+        value: "0.61 m (Pankromatik), 2.4 m (Multispektral)",
+      },
+      { label: "Resolusi Temporal", value: "3–7 Hari" },
+      {
+        label: "Resolusi Spektral",
+        value:
+          "Pankromatik (450–1053 nm), Blue (430–545 nm), Green (466–620 nm), Red (590–710 nm), NIR (715–918 nm)",
+      },
+      { label: "Altitude", value: "450 km" },
+      { label: "Orbit", value: "Sun Synchronous" },
+      { label: "Lebar Sapuan", value: "14.9 km" },
+    ],
+    price: "Loading...",
+    info: "QuickBird memberikan citra 0.61 m pankromatik untuk analisis detail urban, vegetasi, dan infrastruktur.",
+  },
+  {
+    id: 4,
+    title: "WorldView",
+    satellite_shortname: "WV2",
+    images: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/kebun.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/tambang.jpg",
+    ],
+    previewImages: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/kebun.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/WV/tambang.jpg",
+    ],
+    description: "Minimal Order | 25Km",
+    specs: [
+      {
+        label: "Resolusi Spasial",
+        value: "0.46 m (Pankromatik), 1.84 m (Multispektral)",
+      },
+      { label: "Resolusi Temporal", value: "2 Hari" },
+      {
+        label: "Resolusi Spektral",
+        value:
+          "Pankromatik (450–800 nm), Coastal Blue (400–450 nm), Blue (450–510 nm), Green (510–580 nm), Yellow (585–625 nm), Red (639–690 nm), Red Edge (705–745 nm), NIR1 (770–895 nm), NIR2 (860–1040 nm)",
+      },
+      { label: "Altitude", value: "770 km" },
+      { label: "Orbit", value: "Sun synchronous, 10:30 Pagi" },
+      { label: "Lebar Sapuan", value: "16.4 km" },
+    ],
+    price: "Loading...",
+    info: "WorldView-2 menyediakan 8 band spektral untuk analisis kompleks, cocok untuk pemetaan lingkungan dan wilayah pesisir.",
+  },
+  {
+    id: 5,
+    title: "GeoEye",
+    satellite_shortname: "GE1",
+    images: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/perkebunan.png",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/pabrik%2Bpemukiman.png",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/tambang.png",
+    ],
+    previewImages: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/perkebunan.png",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/pabrik%2Bpemukiman.png",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/GeoEye/tambang.png",
+    ],
+    description: "Minimal Order | 25Km",
+    specs: [
+      {
+        label: "Resolusi Spasial",
+        value: "0.46 m (Pankromatik), 1.84 m (Multispektral)",
+      },
+      { label: "Resolusi Temporal", value: "2.6 Hari" },
+      {
+        label: "Resolusi Spektral",
+        value:
+          "Pankromatik (450–800 nm), Blue (450–510 nm), Green (510–580 nm), Red (655–690 nm), NIR (780–920 nm)",
+      },
+      { label: "Altitude", value: "770 km" },
+      { label: "Orbit", value: "Sun Synchronous" },
+      { label: "Lebar Sapuan", value: "15.3 km" },
+    ],
+    price: "Loading...",
+    info: "GeoEye-1 menghasilkan citra 0.46 m dengan ketepatan tinggi, cocok untuk survei geospasial.",
+  },
+  {
+    id: 6,
+    title: "Kompsat-3A",
+    satellite_shortname: "K3A",
+    images: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/pertanian.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/tambang.jpg",
+    ],
+    previewImages: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/pertanian.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/Komsat/tambang.jpg",
+    ],
+    description: "Minimal Order | 25Km",
+    specs: [
+      {
+        label: "Resolusi Spasial",
+        value: "0.55 m (Pankromatik), 2.2 m (Multispektral), 5.5 m (Mid-IR)",
+      },
+      { label: "Resolusi Temporal", value: "28 Hari" },
+      {
+        label: "Resolusi Spektral",
+        value:
+          "Pankromatik (450–900 nm), Blue (450–520 nm), Green (520–600 nm), Red (630–690 nm), NIR (760–900 nm)",
+      },
+      { label: "Altitude", value: "528 km" },
+      { label: "Orbit", value: "Sun synchronous, 13:30 Pagi" },
+      { label: "Lebar Sapuan", value: "12 km" },
+    ],
+    price: "Loading...",
+    info: "Kompsat-3A memiliki 4 band utama dan sensor inframerah jarak menengah, ideal untuk analisis geologi dan vegetasi.",
+  },
+  {
+    id: 7,
+    title: "SPOT 7/6",
+    satellite_shortname: "SP6",
+    images: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/pabrik(SPOT6).jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/Perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/tambang.jpg",
+    ],
+    previewImages: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/pabrik(SPOT6).jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/Perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/SPOT+baru/tambang.jpg",
+    ],
+    description: "Minimal Order | 25Km",
+    specs: [
+      {
+        label: "Resolusi Spasial",
+        value: "1.5 m (Pankromatik), 6 m (Multispektral)",
+      },
+      {
+        label: "Resolusi Temporal",
+        value: "1–3 Hari (bersamaan dengan SPOT-7)",
+      },
+      {
+        label: "Resolusi Spektral",
+        value:
+          "Pankromatik (450–745 nm), Blue (455–525 nm), Green (530–590 nm), Red (625–695 nm), Near Infrared (760–890 nm)",
+      },
+      { label: "Altitude/Ketinggian", value: "694 km" },
+      { label: "Tipe Orbit", value: "Sun synchronous" },
+      {
+        label: "Lebar Sapuan",
+        value: "10–60 km (tergantung resolusi spasial dan jumlah detector)",
+      },
+    ],
+    price: "Loading...",
+    info: "SPOT 6/7 memberikan cakupan luas dan temporal cepat, ideal untuk pemetaan regional dan monitoring lahan.",
+  },
+  {
+    id: 8,
+    title: "PlanetScope",
+    satellite_shortname: "PS",
+    images: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/tambang.jpg",
+    ],
+    previewImages: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/PSS/tambang.jpg",
+    ],
+    description: "Minimal Order | 100Km",
+    specs: [
+      { label: "Resolusi Spasial", value: "3 meter" },
+      { label: "Resolusi Temporal", value: "1 Hari" },
+      {
+        label: "Resolusi Spektral",
+        value:
+          "Blue (450–510 nm), Green (500–590 nm), Red (590–670 nm), Near Infrared (780–860 nm)",
+      },
+      { label: "Altitude/Ketinggian", value: "475 km" },
+      { label: "Tipe Orbit", value: "Sun synchronous" },
+      { label: "Lebar Sapuan", value: "24.6 × 16 km" },
+    ],
+    price: "Loading...",
+    info: "PlanetScope menawarkan citra 3 meter harian dengan 4 band utama, cocok untuk monitoring vegetasi dan perubahan lahan.",
+  },
+  {
+    id: 9,
+    title: "RapidEye",
+    satellite_shortname: "REO",
+    images: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/tambang.jpg",
+    ],
+    previewImages: [
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/pabrik.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/perkebunan.jpg",
+      "https://s3.ap-southeast-1.amazonaws.com/cdn.ruangbumi.com/assets/catalog/RapidEye/tambang.jpg",
+    ],
+    description: "Minimal Order | 100Km",
+    specs: [
+      { label: "Resolusi Spasial", value: "5 meter" },
+      {
+        label: "Resolusi Temporal",
+        value: "1 Hari (Off-nadir) / 5.5 Hari (Nadir)",
+      },
+      {
+        label: "Resolusi Spektral",
+        value:
+          "Blue (440–510 nm), Green (520–590 nm), Red (630–685 nm), Red Edge (690–730 nm), Near Infrared (760–850 nm)",
+      },
+      { label: "Altitude/Ketinggian", value: "630 km" },
+      { label: "Tipe Orbit", value: "Sun synchronous" },
+      { label: "Lebar Sapuan", value: "77 km" },
+    ],
+    price: "Loading...",
+    info: "RapidEye menyediakan citra 5 m dengan 5 band multispektral, ideal untuk pertanian dan pemetaan skala menengah.",
+  },
+];
 
-export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatalogProps = {}) {
+export default function SatelliteImageryCatalog({
+  onClose,
+}: SatelliteImageCatalogProps = {}) {
   // const [sliders, setSliders] = useState<any[]>([]);
   const [currentSlides, setCurrentSlides] = useState<number[]>([]);
   const [previewCurrentSlide, setPreviewCurrentSlide] = useState(0);
@@ -268,9 +335,9 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
   const [catalogData, setCatalogData] = useState<CatalogItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [previewData, setPreviewData] = useState({
-    title: '',
+    title: "",
     images: [] as string[],
-    info: ''
+    info: "",
   });
 
   useEffect(() => {
@@ -289,8 +356,10 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
                 const priceIDR = Math.floor(data.data.price_per_km_with_markup);
                 return {
                   ...item,
-                  price: `Rp ${priceIDR.toLocaleString('id-ID')}`,
-                  info: `${item.description}. Harga per km: Rp ${priceIDR.toLocaleString('id-ID')}`
+                  price: `Rp ${priceIDR.toLocaleString("id-ID")}`,
+                  info: `${
+                    item.description
+                  }. Harga per km: Rp ${priceIDR.toLocaleString("id-ID")}`,
                 };
               }
             }
@@ -300,7 +369,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
 
         setCatalogData(updatedCatalog);
       } catch (error) {
-        console.error('Error fetching prices:', error);
+        console.error("Error fetching prices:", error);
         setCatalogData(baseCatalogData);
       } finally {
         setLoading(false);
@@ -316,7 +385,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
   }, [catalogData]);
 
   const moveSlide = (direction: number, sliderIndex: number) => {
-    setCurrentSlides(prev => {
+    setCurrentSlides((prev) => {
       const newSlides = [...prev];
       const slideCount = catalogData[sliderIndex].images.length;
 
@@ -332,7 +401,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
   };
 
   const goToSlide = (slideIndex: number, sliderIndex: number) => {
-    setCurrentSlides(prev => {
+    setCurrentSlides((prev) => {
       const newSlides = [...prev];
       newSlides[sliderIndex] = slideIndex;
       return newSlides;
@@ -351,7 +420,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
   };
 
   const movePreviewSlide = (direction: number) => {
-    setPreviewCurrentSlide(prev => {
+    setPreviewCurrentSlide((prev) => {
       let newSlide = prev + direction;
       if (newSlide < 0) {
         newSlide = previewTotalSlides - 1;
@@ -378,19 +447,19 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isPreviewModalActive) {
-        if (e.key === 'ArrowLeft') {
+        if (e.key === "ArrowLeft") {
           movePreviewSlide(-1);
-        } else if (e.key === 'ArrowRight') {
+        } else if (e.key === "ArrowRight") {
           movePreviewSlide(1);
-        } else if (e.key === 'Escape') {
+        } else if (e.key === "Escape") {
           closePreview();
         }
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isPreviewModalActive, movePreviewSlide]);
 
@@ -398,25 +467,38 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
     <>
       <div className="overlay">
         <div className="modal-panel">
-          <button className="close-btn" onClick={onClose || (() => alert('Close clicked'))} aria-label="Close">
+          <button
+            className="close-btn"
+            onClick={onClose || (() => alert("Close clicked"))}
+            aria-label="Close"
+          >
             ×
           </button>
 
           <h1 className="modal-title">Satellite Imagery Catalog</h1>
 
           <div className="modal-content">
-            <p style={{ marginBottom: '12px', fontSize: '13px', textAlign: 'center' }}>
-              Explore our comprehensive collection of satellite imagery from various sensors and resolutions. Click Download to preview all images in this dataset.
+            <p
+              style={{
+                marginBottom: "12px",
+                fontSize: "13px",
+                textAlign: "center",
+              }}
+            >
+              Explore our comprehensive collection of hight resolution satellite
+              imagery from various sensors and resolutions.
             </p>
           </div>
 
           {/* ✅ Tampilkan loading atau catalog */}
           {loading ? (
             <div className="overlay fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-            <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center">
                 <div className="w-12 h-12 border-4 border-greensecondarycolor border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-white mt-4 text-sm">Loading, please wait...</p>
-            </div>
+                <p className="text-white mt-4 text-sm">
+                  Loading, please wait...
+                </p>
+              </div>
             </div>
           ) : (
             <div className="catalog-grid">
@@ -427,26 +509,39 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
                       <div
                         className="slides"
                         style={{
-                          transform: `translateX(${-currentSlides[index] * 100}%)`
+                          transform: `translateX(${
+                            -currentSlides[index] * 100
+                          }%)`,
                         }}
                       >
                         {item.images.map((img, imgIndex) => (
                           <div key={imgIndex} className="slide">
-                            <img src={img} alt={`${item.title} - Image ${imgIndex + 1}`} />
+                            <img
+                              src={img}
+                              alt={`${item.title} - Image ${imgIndex + 1}`}
+                            />
                           </div>
                         ))}
                       </div>
-                      <button className="slider-btn prev-btn" onClick={() => moveSlide(-1, index)}>
+                      <button
+                        className="slider-btn prev-btn"
+                        onClick={() => moveSlide(-1, index)}
+                      >
                         ❮
                       </button>
-                      <button className="slider-btn next-btn" onClick={() => moveSlide(1, index)}>
+                      <button
+                        className="slider-btn next-btn"
+                        onClick={() => moveSlide(1, index)}
+                      >
                         ❯
                       </button>
                       <div className="slider-dots">
                         {item.images.map((_, dotIndex) => (
                           <span
                             key={dotIndex}
-                            className={`dot ${dotIndex === currentSlides[index] ? 'active' : ''}`}
+                            className={`dot ${
+                              dotIndex === currentSlides[index] ? "active" : ""
+                            }`}
                             onClick={() => goToSlide(dotIndex, index)}
                           />
                         ))}
@@ -456,9 +551,8 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
                   <div className="description-section">
                     <div>
                       <h2 className="catalog-title">{item.title}</h2>
-                      <div className="catalog-meta">
-                      </div>
-                      <p className="catalog-description">{item.description}</p>
+                      <hr></hr>
+                      <div className="catalog-meta"></div>
                       <div className="catalog-specs">
                         {item.specs.map((spec, specIndex) => (
                           <div key={specIndex} className="spec-item">
@@ -467,14 +561,21 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
                           </div>
                         ))}
                       </div>
+                      <hr></hr>
+
                       <div className="price-section">
-                        <div className="price-label">💰 HARGA</div>
+                        <div className="price-label">💰 HARGA /Km</div>
                         <div className="price-value">{item.price}</div>
+                        <p className="catalog-description">
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                     <button
                       className="download-btn"
-                      onClick={() => showPreview(item.title, item.previewImages, item.info)}
+                      onClick={() =>
+                        showPreview(item.title, item.previewImages, item.info)
+                      }
                     >
                       Preview
                     </button>
@@ -486,7 +587,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
         </div>
       </div>
 
-      <div className={`preview-modal ${isPreviewModalActive ? 'active' : ''}`}>
+      <div className={`preview-modal ${isPreviewModalActive ? "active" : ""}`}>
         <button className="preview-close" onClick={closePreview}>
           ×
         </button>
@@ -497,7 +598,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
             <div
               className="preview-slides"
               style={{
-                transform: `translateX(${-previewCurrentSlide * 100}%)`
+                transform: `translateX(${-previewCurrentSlide * 100}%)`,
               }}
             >
               {previewData.images.map((img, index) => (
@@ -506,10 +607,16 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
                 </div>
               ))}
             </div>
-            <button className="preview-slider-btn preview-prev-btn" onClick={() => movePreviewSlide(-1)}>
+            <button
+              className="preview-slider-btn preview-prev-btn"
+              onClick={() => movePreviewSlide(-1)}
+            >
               ❮
             </button>
-            <button className="preview-slider-btn preview-next-btn" onClick={() => movePreviewSlide(1)}>
+            <button
+              className="preview-slider-btn preview-next-btn"
+              onClick={() => movePreviewSlide(1)}
+            >
               ❯
             </button>
             <div className="preview-slide-label">
@@ -519,7 +626,9 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
               {previewData.images.map((_, index) => (
                 <span
                   key={index}
-                  className={`preview-dot ${index === previewCurrentSlide ? 'active' : ''}`}
+                  className={`preview-dot ${
+                    index === previewCurrentSlide ? "active" : ""
+                  }`}
                   onClick={() => goToPreviewSlide(index)}
                 />
               ))}
@@ -527,16 +636,26 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
           </div>
 
           <div className="preview-counter">
-            <span>{previewCurrentSlide + 1} / {previewTotalSlides}</span>
+            <span>
+              {previewCurrentSlide + 1} / {previewTotalSlides}
+            </span>
           </div>
 
           <div className="preview-info">
-            <p><strong>Dataset Information:</strong></p>
-            <p>{previewData.info}</p>
+            <p>
+              <strong>More Information:</strong>
+            </p>
+            <p>
+              {previewData.info} | More info send massage:
+              ruangbumipersada@gmail.com{" "}
+            </p>
           </div>
 
           <div className="preview-buttons">
-            <button className="preview-btn preview-btn-secondary" onClick={closePreview}>
+            <button
+              className="preview-btn preview-btn-secondary"
+              onClick={closePreview}
+            >
               Close
             </button>
           </div>
@@ -615,7 +734,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
           position: absolute;
           top: 12px;
           right: 12px;
-          background: linear-gradient(135deg, #70e000, #cbfe33);
+          background: none;
           border: none;
           color: #9ca3af;
           cursor: pointer;
@@ -696,12 +815,12 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
           display: flex;
           flex-direction: column;
           height: 100%;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .catalog-card:hover {
           transform: translateY(-3px);
-          box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .image-section {
@@ -741,9 +860,9 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
-          background: rgba(255,255,255,0.85);
+          background: rgba(255, 255, 255, 0.85);
           border: none;
-          color: #cbfe33;
+          color: #333;
           padding: 4px 5px;
           cursor: pointer;
           font-size: 12px;
@@ -752,7 +871,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
         }
 
         .slider-btn:hover {
-          background: rgba(255,255,255,1);
+          background: rgba(255, 255, 255, 1);
         }
 
         .prev-btn {
@@ -777,7 +896,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
           width: 5px;
           height: 5px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.5);
+          background: rgba(255, 255, 255, 0.5);
           cursor: pointer;
           transition: background 0.3s;
         }
@@ -795,8 +914,8 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
         }
 
         .catalog-title {
-          font-size: 13px;
-          color: #cbfe33;
+          font-size: 14px;
+          color: #f1f5f9;
           margin-bottom: 6px;
           font-weight: bold;
           line-height: 1.1;
@@ -826,7 +945,9 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
           color: #cbd5e1;
           line-height: 1.3;
           margin-bottom: 6px;
+          margin-top: 6px;
           font-size: 10px;
+          text-align: center;
         }
 
         .catalog-specs {
@@ -838,11 +959,10 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
         }
 
         .spec-item {
-          background: #2d3d2b;
+          background: #3b3d41;
           padding: 5px;
           border-radius: 3px;
-          font-size: 9px;
-          color: #e6ffe0;
+          font-size: 12px;
         }
 
         .spec-label {
@@ -853,17 +973,22 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
         }
 
         .price-section {
-          background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+          background: linear-gradient(
+            135deg,
+            rgba(16, 185, 129, 0.1) 0%,
+            rgba(5, 150, 105, 0.1) 100%
+          );
           padding: 8px;
           border-radius: 5px;
           margin-bottom: 6px;
+          margin-top: 10px;
           text-align: center;
           border-left: 3px solid #cbfe33;
         }
 
         .price-label {
-          font-size: 9px;
-          color: #94a3b8;
+          font-size: 10px;
+          color: #b6e42e;
           font-weight: bold;
         }
 
@@ -995,9 +1120,9 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
         }
 
         .preview-title {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: bold;
-          color: #cbfe33;
+          color: #ffff;
           margin-bottom: 15px;
           text-align: center;
         }
@@ -1044,7 +1169,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
           top: 15px;
           left: 15px;
           background: rgba(0, 0, 0, 0.7);
-          color: #10b981;
+          color: #ffffff;
           padding: 8px 12px;
           border-radius: 6px;
           font-size: 13px;
@@ -1055,9 +1180,9 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
-          background: rgba(16, 185, 129, 0.9);
+          background: #0000009c;
           border: none;
-          color: #cbfe33;
+          color: white;
           padding: 12px 15px;
           cursor: pointer;
           font-size: 20px;
@@ -1067,7 +1192,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
         }
 
         .preview-slider-btn:hover {
-          background: #cbfe33;
+          background: #8bc34a;
           transform: translateY(-50%) scale(1.1);
         }
 
@@ -1093,17 +1218,17 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.5);
+          background: rgba(255, 255, 255, 0.5);
           cursor: pointer;
           transition: all 0.3s;
         }
 
         .preview-dot:hover {
-          background: rgba(255,255,255,0.8);
+          background: rgba(255, 255, 255, 0.8);
         }
 
         .preview-dot.active {
-          background: #10b981;
+          background: #8bc34a;
           transform: scale(1.2);
         }
 
@@ -1115,19 +1240,19 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
         }
 
         .preview-info p {
-          color: #cbd5e1;
+          color: #ffffff;
           font-size: 13px;
           margin-bottom: 8px;
           line-height: 1.5;
         }
 
         .preview-info strong {
-          color: #10b981;
+          color: #ffffff;
         }
 
         .preview-counter {
           text-align: center;
-          color: #9ca3af;
+          color: #ffffff;
           font-size: 12px;
           margin-bottom: 15px;
         }
@@ -1163,7 +1288,7 @@ export default function SatelliteImageryCatalog({ onClose }: SatelliteImageCatal
         }
 
         .preview-btn-secondary:hover {
-          background: #64748b;
+          background: #d95f5f;
         }
       `}</style>
     </>
