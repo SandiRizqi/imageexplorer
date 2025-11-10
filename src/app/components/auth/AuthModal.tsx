@@ -1,3 +1,4 @@
+//src/app/components/auth/AuthModal.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,12 +7,19 @@ import { useAuth } from "../context/AuthProrider";
 import { FcGoogle } from 'react-icons/fc';
 import Image from "next/image";
 import { ChevronDownIcon } from "lucide-react";
+import EditProfileModal from "./EditProfileModal";
 
 
 export default function AuthModal() {
   const [isOpen, setIsOpen] = useState(false);
   const { session, status, signIn, signOut } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+
+  const handleProfileUpdated = () => {
+    // Optional: refresh session atau reload user data
+    console.log("Profile updated successfully");
+  };
 
 
   return (
@@ -46,7 +54,7 @@ export default function AuthModal() {
                 </span>
               )}
             </div>
-            
+
             <ChevronDownIcon className="w-4 h-4 text-gray-300" />
           </button>
 
@@ -54,27 +62,36 @@ export default function AuthModal() {
           {isUserMenuOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white  shadow-lg py-1 z-10">
               {session ? (
-                  <>
-                    <div className="w-full text-left px-4 py-2 text-sm text-gray-900">
-                      Username : {session?.user?.name || 'Guest'}
-                    </div>
-                    <button
-                      onClick={() => {
-                        window.location.replace('/dashboard')
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Dashboard
-                    </button>
-                    <button
-                      onClick={() => {
-                        signOut();
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Sign Out
-                    </button>
-                  </>
+                <>
+                  <div className="w-full text-left px-4 py-2 text-sm text-gray-900">
+                    Username : {session?.user?.name || 'Guest'}
+                  </div>
+                  <button
+                    onClick={() => {
+                      window.location.replace('/dashboard')
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Dashboard
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsEditProfileOpen(true);
+                      setIsUserMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={() => {
+                      signOut();
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <button
                   onClick={() => {
@@ -88,6 +105,14 @@ export default function AuthModal() {
               )}
             </div>
           )}
+
+          {/* Tambahkan EditProfileModal di akhir component, sebelum closing tag */}
+          <EditProfileModal
+            isOpen={isEditProfileOpen}
+            onClose={() => setIsEditProfileOpen(false)}
+            userId={session?.user?.id || ""}
+            onProfileUpdated={handleProfileUpdated}
+          />
         </div>
 
       )}
@@ -140,13 +165,13 @@ export default function AuthModal() {
 
       {/* Click outside detector */}
       {(isUserMenuOpen) && (
-                <div
-                    className="fixed inset-0 z-0"
-                    onClick={() => {
-                        setIsUserMenuOpen(false);
-                    }}
-                />
-            )}
+        <div
+          className="fixed inset-0 z-0"
+          onClick={() => {
+            setIsUserMenuOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }
