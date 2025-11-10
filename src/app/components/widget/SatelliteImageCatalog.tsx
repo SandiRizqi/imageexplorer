@@ -353,7 +353,7 @@ export default function SatelliteImageryCatalog({
               const data = await response.json();
 
               if (data.success) {
-                const priceIDR = Math.floor(data.data.price_per_km_with_markup);
+                const priceIDR = Math.floor(data.data.price_per_km);
                 return {
                   ...item,
                   price: `Rp ${priceIDR.toLocaleString("id-ID")}`,
