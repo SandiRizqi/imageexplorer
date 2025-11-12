@@ -3,7 +3,7 @@ import { MapMouseEvent, GeoJSONSource } from "maplibre-gl";
 import { useMap } from "../context/MapProvider";
 import { useConfig } from "../context/ConfigProvider";
 import * as turf from "@turf/turf";
-import { PencilRuler} from "lucide-react";
+import { Ruler} from "lucide-react";
 import { Marker } from "maplibre-gl";
 
 
@@ -190,7 +190,7 @@ export default function MeasureTool() {
                             isDrawing ? "bg-yellow-600" : "bg-maincolor"
                         } hover:bg-greenmaincolor transition-colors duration-200 shadow-xl`}
                     >
-                        <PencilRuler color="white" />
+                        <Ruler color="white" />
                         <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
                             Distance
                         </span>

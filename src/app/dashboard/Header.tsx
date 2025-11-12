@@ -5,6 +5,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '../components/context/AuthProrider';
 import Image from 'next/image';
 import logo from "../components/assets/SIE.png";
+import EditProfileModal from "../components/auth/EditProfileModal";
 
 export default function Header() {
     const router = useRouter();
@@ -12,6 +13,12 @@ export default function Header() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const { session, signIn, signOut } = useAuth();
+    const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+
+    const handleProfileUpdated = () => {
+            // Optional: refresh session atau reload user data
+        console.log("Profile updated successfully");
+    };
 
     const currentPage = pathname === '/explorer' ? 'Explorer' : 'Dashboard';
 
@@ -100,6 +107,16 @@ export default function Header() {
                             {isUserMenuOpen && (
                                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg py-1 z-10">
                                     {session ? (
+                                        <>
+                                        <button
+                                            onClick={() => {
+                                            setIsEditProfileOpen(true);
+                                            setIsUserMenuOpen(false);
+                                            }}
+                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        >
+                                            Edit Profile
+                                        </button>
                                         <button
                                             onClick={() => {
                                                 signOut();
@@ -109,6 +126,7 @@ export default function Header() {
                                         >
                                             Sign Out
                                         </button>
+                                        </>                                        
                                     ) : (
                                         <button
                                             onClick={() => {
@@ -122,6 +140,13 @@ export default function Header() {
                                     )}
                                 </div>
                             )}
+
+                            <EditProfileModal
+                                isOpen={isEditProfileOpen}
+                                onClose={() => setIsEditProfileOpen(false)}
+                                userId={session?.user?.id || ""}
+                                onProfileUpdated={handleProfileUpdated}
+                            />
                         </div>
                     </div>
                 </div>
