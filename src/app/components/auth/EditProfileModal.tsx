@@ -12,11 +12,11 @@ interface EditProfileModalProps {
   onProfileUpdated: () => void;
 }
 
-export default function EditProfileModal({ 
-  isOpen, 
-  onClose, 
+export default function EditProfileModal({
+  isOpen,
+  onClose,
   userId,
-  onProfileUpdated 
+  onProfileUpdated
 }: EditProfileModalProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -92,7 +92,7 @@ export default function EditProfileModal({
 
       setSuccess(true);
       onProfileUpdated();
-      
+
       // Close modal after 1.5 seconds
       setTimeout(() => {
         onClose();
@@ -116,124 +116,135 @@ export default function EditProfileModal({
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-      
+
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel className="mx-auto max-w-md w-full bg-black rounded-lg shadow-xl">
-          <div className="flex items-center justify-between p-6 border-b">
-            <DialogTitle className="text-lg font-semibold text-white">
-              Edit Profile
-            </DialogTitle>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-white"
-            >
-              <XMarkIcon className="h-6 w-6" />
-            </button>
+        {loading ? (
+          <div className="overlay fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+            <div className="flex flex-col items-center">
+              <div className="w-12 h-12 border-4 border-greensecondarycolor border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-white mt-4 text-sm">
+                Loading, please wait...
+              </p>
+            </div>
           </div>
-
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            {error && (
-              <div className="bg-red-50 text-red-600 px-4 py-3 rounded-md text-sm">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="bg-black text-greenmaincolor px-4 py-3 rounded-md text-sm">
-                Profile updated successfully!
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-1">
-                Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-black"
-                disabled
-              />
-              <p className="text-xs text-white-500 mt-1">Email cannot be changed</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-1">
-                Company
-              </label>
-              <input
-                type="text"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-                placeholder="Enter your company name"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-1">
-                Phone
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Enter your phone number"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-white mb-1">
-                Address
-              </label>
-              <textarea
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                placeholder="Enter your address"
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
-              />
-            </div>
-
-            <div className="flex gap-3 pt-4">
+        ) : (
+          <DialogPanel className="mx-auto max-w-md w-full bg-black rounded-lg shadow-xl">
+            <div className="flex items-center justify-between p-6 border-b">
+              <DialogTitle className="text-lg font-semibold text-white">
+                Edit Profile
+              </DialogTitle>
               <button
-                type="button"
                 onClick={onClose}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-white hover:bg-red-600 bg-red-500"
-                disabled={loading}
+                className="text-gray-400 hover:text-white"
               >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="flex-1 px-4 py-2 bg-greenmaincolor text-black rounded-md hover:bg-greensecondarycolor disabled:bg-blue-300"
-                disabled={loading}
-              >
-                {loading ? "Saving..." : "Save Changes"}
+                <XMarkIcon className="h-6 w-6" />
               </button>
             </div>
-          </form>
-        </DialogPanel>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              {error && (
+                <div className="bg-red-50 text-red-600 px-4 py-3 rounded-md text-sm">
+                  {error}
+                </div>
+              )}
+
+              {success && (
+                <div className="bg-black text-greenmaincolor px-4 py-3 rounded-md text-sm">
+                  Profile updated successfully!
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-black"
+                  disabled
+                />
+                <p className="text-xs text-white-500 mt-1">Email cannot be changed</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Company
+                </label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  placeholder="Enter your company name"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Enter your phone number"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Address
+                </label>
+                <textarea
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="Enter your address"
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-white hover:bg-red-600 bg-red-500"
+                  disabled={loading}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-greenmaincolor text-black rounded-md hover:bg-greensecondarycolor disabled:bg-blue-300"
+                  disabled={loading}
+                >
+                  {loading ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </DialogPanel>
+        )}
       </div>
     </Dialog>
   );
