@@ -486,7 +486,8 @@ export default function SatelliteImageryCatalog({
               }}
             >
               Explore our comprehensive collection of hight resolution satellite
-              imagery from various sensors and resolutions.
+              imagery from various sensors and resolutions. Here are the best
+              image recommendations for you to order.
             </p>
           </div>
 
