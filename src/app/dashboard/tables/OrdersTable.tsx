@@ -8,13 +8,10 @@ import {
 } from "lucide-react";
 import { getOrdersByUser } from "../../components/Tools";
 import { useAuth } from "../../components/context/AuthProrider";
+import OrderDetailModal from "../../components/OrderDetailModal";
 import { OrderType } from "../../components/types";
 
 const ITEMS_PER_PAGE = 15;
-
-interface OrdersTableProps {
-  onOrderSelect?: (orderId: string) => void;
-}
 
 const typeColors: Record<string, string> = {
   rawdata: "bg-pink-700",
@@ -33,17 +30,23 @@ const LoadingComponent = () => {
   );
 };
 
-export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
+export default function OrdersTable({
+  onOrderSelect,
+}: {
+  onOrderSelect?: (orderId: string) => void;
+}) {
   const { status } = useAuth();
   const [sortOrder, setSortOrder] = useState<"date" | "name">("date");
   const [userOrders, setUserOrders] = useState<OrderType[]>([]);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
+  const [showDetail, setShowDetail] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (status === "authenticated") {
-      setLoading(true); // Start loading
+      setLoading(true);
       getOrdersByUser(setUserOrders).finally(() => setLoading(false));
     }
   }, [status]);
@@ -95,88 +98,99 @@ export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
       </div>
 
       <div className="relative h-[calc(100%-10px)]">
-        {/* Fixed Header */}
         <table className="min-w-full divide-y divide-gray-700 border-b border-gray-500">
           <thead className="bg-maincolor">
             <tr>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Order ID
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Customer
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Date
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Status
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Tasks
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Total
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                Actions
               </th>
             </tr>
           </thead>
         </table>
 
-        {/* Scrollable Body */}
         <div className="overflow-y-auto h-[calc(100%-100px)]">
           <table className="min-w-full divide-y divide-gray-700">
             <tbody className="bg-maincolor divide-y divide-gray-700">
-              {loading ? ( // Show loading indicator when loading
+              {loading ? (
                 <LoadingComponent />
               ) : (
                 currentOrders.map((order) => (
                   <tr
                     key={order.orderId}
+                    onClick={() => {
+                      setSelectedItem(order.orderId);
+                      onOrderSelect?.(order.orderId);
+                    }}
                     className={`cursor-pointer transition-colors duration-150 ${
                       selectedItem === order.orderId
                         ? "bg-secondarycolor"
                         : "hover:bg-secondarycolor"
                     }`}
-                    onClick={() => {
-                      setSelectedItem(order.orderId);
-                      onOrderSelect?.(order.orderId);
-                    }}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                      {order.orderId.slice(0, 20) + "..."}
+                    <td className="px-6 py-4 text-sm text-gray-300">
+                      {order.orderId.slice(0, 20)}...
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       {order.userData.name}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       {new Date(order.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-                          order?.status
+                          order.status
                         )}`}
                       >
-                        {order?.status}
+                        {order.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       <div className="flex flex-col space-y-2">
-                        {order.processingTypes.map(
-                          (type: string, index: number) => (
-                            <span
-                              key={index}
-                              className={`px-2 py-1 text-xs font-semibold text-white rounded-lg ${
-                                typeColors[type] || "bg-gray-400"
-                              }`}
-                            >
-                              {type}
-                            </span>
-                          )
-                        )}
+                        {order.processingTypes.map((type, idx) => (
+                          <span
+                            key={idx}
+                            className={`px-2 py-1 text-xs font-semibold text-white rounded-lg ${
+                              typeColors[type] || "bg-gray-400"
+                            }`}
+                          >
+                            {type}
+                          </span>
+                        ))}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       IDR {order.estimatedPrice.toLocaleString("id-ID")}
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedOrder(order);
+                          setShowDetail(true);
+                        }}
+                        className="px-3 py-1 bg-yellow-300 hover:bg-yellow-500 text-black text-xs rounded-md"
+                      >
+                        Detail
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -185,7 +199,6 @@ export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
           </table>
         </div>
 
-        {/* Pagination */}
         <div className="absolute bottom-0 left-0 right-0 bg-maincolor border-t border-gray-700 px-4 py-3 flex items-center justify-between">
           <div className="flex items-center text-sm text-gray-400">
             Showing {startIndex + 1} to{" "}
@@ -227,6 +240,13 @@ export default function OrdersTable({ onOrderSelect }: OrdersTableProps) {
           </div>
         </div>
       </div>
+
+      {showDetail && selectedOrder && (
+        <OrderDetailModal
+          order={selectedOrder}
+          onClose={() => setShowDetail(false)}
+        />
+      )}
     </>
   );
 }

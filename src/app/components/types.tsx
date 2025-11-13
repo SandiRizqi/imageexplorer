@@ -1,6 +1,3 @@
-
-
-
 interface Coordinates {
     x: number;
     y: number;
@@ -142,6 +139,7 @@ export interface OrderType {
   orderId: string;
   processingTypes: string[];
   additionalNotes: string;
+  pdf_url: string;
 }
 
 
