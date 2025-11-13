@@ -81,7 +81,7 @@ export default function OrdersTable({
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-white">Orders List</h2>
+        <h2 className="text-base font-bold text-white">Orders List</h2>
         <div className="flex items-center space-x-4">
           <select
             value={sortOrder}
@@ -187,7 +187,7 @@ export default function OrdersTable({
                           setSelectedOrder(order);
                           setShowDetail(true);
                         }}
-                        className="px-3 py-1 bg-yellow-300 hover:bg-yellow-500 text-black text-xs rounded-md"
+                        className="px-3 py-1 bg-greensecondarycolor hover:bg-greenmaincolor text-black text-xs rounded-md"
                       >
                         Detail
                       </button>
