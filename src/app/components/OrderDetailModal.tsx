@@ -10,7 +10,7 @@ export default function OrderDetailModal({
 }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-      <div className="bg-gray-800 rounded-lg shadow-lg p-6 w-[600px] max-h-[80vh] overflow-y-auto text-gray-200">
+      <div className="bg-gray-800 rounded-lg shadow-lg p-6 w-[600px] max-h-[80vh] overflow-y-auto text-gray-200 m-5">
         <h3 className="text-base font-bold text-center mb-4">ORDER DETAIL</h3>
         <hr className="border-t-2 border-gray-400" />
         <hr className="border-t border-gray-400 mt-1" />
