@@ -16,14 +16,14 @@ export default function EditProfileModal({
   isOpen,
   onClose,
   userId,
-  onProfileUpdated
+  onProfileUpdated,
 }: EditProfileModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     company: "",
     phone: "",
-    address: ""
+    address: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -58,7 +58,7 @@ export default function EditProfileModal({
         email: data.email || "",
         company: data.company || "",
         phone: data.phone || "",
-        address: data.address || ""
+        address: data.address || "",
       });
     } catch (err) {
       setError("Failed to load profile");
@@ -106,32 +106,32 @@ export default function EditProfileModal({
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div className="fixed inset-0 bg-black/80" aria-hidden="true" />
 
       <div className="fixed inset-0 flex items-center justify-center p-4">
         {loading ? (
           <div className="overlay fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
             <div className="flex flex-col items-center">
               <div className="w-12 h-12 border-4 border-greensecondarycolor border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-white mt-4 text-sm">
-                Loading, please wait...
-              </p>
+              <p className="text-white mt-4 text-sm">Loading, please wait...</p>
             </div>
           </div>
         ) : (
-          <DialogPanel className="mx-auto max-w-md w-full bg-black rounded-lg shadow-xl">
+          <DialogPanel className="mx-auto max-w-md w-full bg-[rgb(33,37,41)] rounded-lg shadow-xl">
             <div className="flex items-center justify-between p-6 border-b">
-              <DialogTitle className="text-lg font-semibold text-white">
-                Edit Profile
+              <DialogTitle className="text-base font-semibold text-white">
+                EDIT PROFILE
               </DialogTitle>
               <button
                 onClick={onClose}
@@ -140,7 +140,8 @@ export default function EditProfileModal({
                 <XMarkIcon className="h-6 w-6" />
               </button>
             </div>
-
+            <hr className="border-t-2 border-gray-400" />
+            <hr className="border-t border-gray-400 mt-1" />
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               {error && (
                 <div className="bg-red-50 text-red-600 px-4 py-3 rounded-md text-sm">
@@ -180,7 +181,9 @@ export default function EditProfileModal({
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-black"
                   disabled
                 />
-                <p className="text-xs text-white-500 mt-1">Email cannot be changed</p>
+                <p className="text-xs text-white-500 mt-1">
+                  Email cannot be changed
+                </p>
               </div>
 
               <div>
@@ -236,7 +239,7 @@ export default function EditProfileModal({
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-greenmaincolor text-black rounded-md hover:bg-greensecondarycolor disabled:bg-blue-300"
+                  className="flex-1 px-4 py-2 bg-greensecondarycolor text-black rounded-md hover:bg-greenmaincolor disabled:bg-blue-300"
                   disabled={loading}
                 >
                   {loading ? "Saving..." : "Save Changes"}

@@ -19,8 +19,8 @@ interface SavedSearchesTableProps {
 const LoadingComponent = () => {
   return (
     <tr>
-      <td colSpan={6} className="text-center py-6 text-gray-400">
-        Loading orders...
+      <td colSpan={4} className="text-center py-6 text-gray-400">
+        Loading searches...
       </td>
     </tr>
   );
@@ -37,10 +37,10 @@ export default function SavedSearchesTable({
 
   useEffect(() => {
     if (status === "authenticated") {
-      setLoading(true); // Start loading
+      setLoading(true);
       getConfigsByUser(setUserConfigs).finally(() => setLoading(false));
     }
-  }, []);
+  }, [status]);
 
   const totalPages = Math.ceil(userConfigs.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -53,33 +53,38 @@ export default function SavedSearchesTable({
     <>
       <h2 className="text-base font-bold text-white mb-4">Saved Searches</h2>
 
-      <div className="relative h-[calc(100%-10px)]">
-        {/* Fixed Header */}
-        <table className="min-w-full divide-y divide-gray-700 border-b border-gray-500">
-          <thead className="bg-maincolor">
-            <tr>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
-                ID
-              </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
-                Query Name
-              </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
-                Date
-              </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider bg-maincolor z-10">
-                URL
-              </th>
-            </tr>
-          </thead>
-        </table>
-
-        {/* Scrollable Body */}
-        <div className="overflow-y-auto h-[calc(100%-100px)]">
+      <div className="relative h-[calc(100%-25px)] flex flex-col">
+        {/* Table Container with Scroll */}
+        <div className="flex-1 overflow-auto border border-gray-500 rounded-lg">
           <table className="min-w-full divide-y divide-gray-700">
+            {/* Header with Sticky Position */}
+            <thead className="bg-maincolor sticky top-0 z-10">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  Query Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  URL
+                </th>
+              </tr>
+            </thead>
+
+            {/* Body */}
             <tbody className="bg-maincolor divide-y divide-gray-700">
               {loading ? (
                 <LoadingComponent />
+              ) : currentSearches.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="text-center py-6 text-gray-400">
+                    No saved searches found
+                  </td>
+                </tr>
               ) : (
                 currentSearches.map((search, idx) => (
                   <tr
@@ -94,25 +99,27 @@ export default function SavedSearchesTable({
                       onSearchSelect?.(search.id);
                     }}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                      #{idx + 1}
+                    <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
+                      #{startIndex + idx + 1}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                      {search?.userData?.name}
+                    <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
+                      {search?.userData?.name || "Unnamed"}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
                       {new Date(search.timestamp * 1000).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <a
-                        href={`${process.env.NEXT_PUBLIC_HOST}/?savedconfig=${search.id}`}
-                        className="text-greensecondarycolor hover:text-greenmaincolor"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {`${process.env.NEXT_PUBLIC_HOST}/?savedconfig=${search.id}`}
-                      </a>
+                    <td className="px-6 py-5 text-sm">
+                      <div className="max-w-md overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+                        <a
+                          href={`${process.env.NEXT_PUBLIC_HOST}/?savedconfig=${search.id}`}
+                          className="text-greensecondarycolor hover:text-greenmaincolor hover:underline transition-colors whitespace-nowrap inline-block"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {`${process.env.NEXT_PUBLIC_HOST}/?savedconfig=${search.id}`}
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -121,45 +128,54 @@ export default function SavedSearchesTable({
           </table>
         </div>
 
-        {/* Pagination */}
-        <div className="absolute bottom-0 left-0 right-0 bg-maincolor border-t border-gray-700 px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center text-sm text-gray-400">
-            Showing {startIndex + 1} to{" "}
-            {Math.min(startIndex + ITEMS_PER_PAGE, userConfigs.length)} of{" "}
-            {userConfigs.length}
-          </div>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-              className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronsLeft className="w-5 h-5 text-gray-400" />
-            </button>
-            <button
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-              disabled={currentPage === 1}
-              className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronLeft className="w-5 h-5 text-gray-400" />
-            </button>
-            <span className="text-gray-400">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage === totalPages}
-              className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronRight className="w-5 h-5 text-gray-400" />
-            </button>
-            <button
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
-              className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronsRight className="w-5 h-5 text-gray-400" />
-            </button>
+        {/* Pagination - Fixed at Bottom */}
+        <div className="flex-shrink-0 bg-maincolor border-t border-gray-700 px-3 sm:px-4 py-3 rounded-b-lg">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            {/* Showing Info */}
+            <div className="text-xs sm:text-sm text-gray-400 order-2 sm:order-1">
+              Showing {userConfigs.length === 0 ? 0 : startIndex + 1} to{" "}
+              {Math.min(startIndex + ITEMS_PER_PAGE, userConfigs.length)} of{" "}
+              {userConfigs.length}
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
+              <button
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+                className="p-1.5 sm:p-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="First page"
+              >
+                <ChevronsLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              </button>
+              <button
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+                disabled={currentPage === 1}
+                className="p-1.5 sm:p-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="Previous page"
+              >
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              </button>
+              <span className="text-xs sm:text-sm text-gray-400 min-w-[80px] sm:min-w-[100px] text-center px-2">
+                Page {currentPage} of {totalPages || 1}
+              </span>
+              <button
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={currentPage === totalPages}
+                className="p-1.5 sm:p-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="Next page"
+              >
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              </button>
+              <button
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+                className="p-1.5 sm:p-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="Last page"
+              >
+                <ChevronsRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

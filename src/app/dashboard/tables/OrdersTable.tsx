@@ -23,7 +23,7 @@ const typeColors: Record<string, string> = {
 const LoadingComponent = () => {
   return (
     <tr>
-      <td colSpan={6} className="text-center py-6 text-gray-400">
+      <td colSpan={7} className="text-center py-6 text-gray-400">
         Loading orders...
       </td>
     </tr>
@@ -97,40 +97,47 @@ export default function OrdersTable({
         </div>
       </div>
 
-      <div className="relative h-[calc(100%-10px)]">
-        <table className="min-w-full divide-y divide-gray-700 border-b border-gray-500">
-          <thead className="bg-maincolor">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Order ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Customer
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Tasks
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Total
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-        </table>
-
-        <div className="overflow-y-auto h-[calc(100%-100px)]">
+      <div className="relative h-[calc(100%-25px)] flex flex-col">
+        {/* Table Container with Scroll */}
+        <div className="flex-1 overflow-auto border border-gray-500 rounded-lg">
           <table className="min-w-full divide-y divide-gray-700">
+            {/* Header with Sticky Position */}
+            <thead className="bg-maincolor sticky top-0 z-10">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  Order ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  Customer
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  Tasks
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  Total
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+
+            {/* Body */}
             <tbody className="bg-maincolor divide-y divide-gray-700">
               {loading ? (
                 <LoadingComponent />
+              ) : currentOrders.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="text-center py-6 text-gray-400">
+                    No orders found
+                  </td>
+                </tr>
               ) : (
                 currentOrders.map((order) => (
                   <tr
@@ -145,13 +152,13 @@ export default function OrdersTable({
                         : "hover:bg-secondarycolor"
                     }`}
                   >
-                    <td className="px-6 py-4 text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
                       {order.orderId.slice(0, 20)}...
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
                       {order.userData.name}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
                       {new Date(order.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -168,7 +175,7 @@ export default function OrdersTable({
                         {order.processingTypes.map((type, idx) => (
                           <span
                             key={idx}
-                            className={`px-2 py-1 text-xs font-semibold text-white rounded-lg ${
+                            className={`px-2 py-1 text-xs font-semibold text-white rounded-lg whitespace-nowrap ${
                               typeColors[type] || "bg-gray-400"
                             }`}
                           >
@@ -177,17 +184,17 @@ export default function OrdersTable({
                         ))}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
                       IDR {order.estimatedPrice.toLocaleString("id-ID")}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedOrder(order);
                           setShowDetail(true);
                         }}
-                        className="px-3 py-1 bg-greensecondarycolor hover:bg-greenmaincolor text-black text-xs rounded-md"
+                        className="px-3 py-1 bg-greensecondarycolor hover:bg-greenmaincolor text-black text-xs rounded-md transition-colors"
                       >
                         Detail
                       </button>
@@ -199,44 +206,54 @@ export default function OrdersTable({
           </table>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 bg-maincolor border-t border-gray-700 px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center text-sm text-gray-400">
-            Showing {startIndex + 1} to{" "}
-            {Math.min(startIndex + ITEMS_PER_PAGE, sortedOrders.length)} of{" "}
-            {sortedOrders.length}
-          </div>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-              className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronsLeft className="w-5 h-5 text-gray-400" />
-            </button>
-            <button
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-              disabled={currentPage === 1}
-              className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronLeft className="w-5 h-5 text-gray-400" />
-            </button>
-            <span className="text-gray-400">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage === totalPages}
-              className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronRight className="w-5 h-5 text-gray-400" />
-            </button>
-            <button
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
-              className="p-1 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronsRight className="w-5 h-5 text-gray-400" />
-            </button>
+        {/* Pagination - Fixed at Bottom */}
+        <div className="flex-shrink-0 bg-maincolor border-t border-gray-700 px-3 sm:px-4 py-3 rounded-b-lg">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            {/* Showing Info */}
+            <div className="text-xs sm:text-sm text-gray-400 order-2 sm:order-1">
+              Showing {sortedOrders.length === 0 ? 0 : startIndex + 1} to{" "}
+              {Math.min(startIndex + ITEMS_PER_PAGE, sortedOrders.length)} of{" "}
+              {sortedOrders.length}
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
+              <button
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+                className="p-1.5 sm:p-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="First page"
+              >
+                <ChevronsLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              </button>
+              <button
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+                disabled={currentPage === 1}
+                className="p-1.5 sm:p-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="Previous page"
+              >
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              </button>
+              <span className="text-xs sm:text-sm text-gray-400 min-w-[80px] sm:min-w-[100px] text-center px-2">
+                Page {currentPage} of {totalPages || 1}
+              </span>
+              <button
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={currentPage === totalPages}
+                className="p-1.5 sm:p-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="Next page"
+              >
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              </button>
+              <button
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+                className="p-1.5 sm:p-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="Last page"
+              >
+                <ChevronsRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
