@@ -1,3 +1,4 @@
+//src/app/components/widget/OrderReview.tsx
 import React, { useState, useEffect } from 'react';
 import { OrderData } from './OrderProcessing';
 import { useConfig } from '../context/ConfigProvider';
@@ -20,20 +21,21 @@ interface UserFormData {
     company?: string;
 }
 
-export default function OrderReviewModal({ orderData, selectedItems, onConfirm, onBack}: OrderReviewProps) {
+export default function OrderReviewModal({ orderData, selectedItems, onConfirm, onBack }: OrderReviewProps) {
     const [additionalNotes, setAdditionalNotes] = useState('');
-    const {config} = useConfig();
-    const {session} = useAuth();
+    const { config } = useConfig();
+    const { session } = useAuth();
     const { polygon } = usePolygon(); // Tambahkan hook untuk polygon
+    const { filters, imageResult, selectedItem } = useConfig();
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [loading, setLoading] = useState(false);
-    
+
     // State untuk estimated price
     const [estimatedPrice, setEstimatedPrice] = useState<number>(0);
     const [priceLoading, setPriceLoading] = useState(false);
     const [priceError, setPriceError] = useState<string | null>(null);
     const [totalAreaAOI, setTotalAreaAOI] = useState<number>(0); // State untuk total area AOI
-    
+
     const [userData, setUserData] = useState<UserFormData>({
         name: '',
         email: '',
@@ -44,9 +46,9 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
     // Fungsi untuk menghitung total area AOI dari polygon
     const calculateTotalAreaAOI = () => {
         if (polygon.length >= 3) {
-            const isClosed = polygon[0][0] === polygon[polygon.length - 1][0] && 
-                            polygon[0][1] === polygon[polygon.length - 1][1];
-            
+            const isClosed = polygon[0][0] === polygon[polygon.length - 1][0] &&
+                polygon[0][1] === polygon[polygon.length - 1][1];
+
             if (isClosed) {
                 const turfPolygon = turf.polygon([polygon]);
                 const area = turf.area(turfPolygon);
@@ -66,7 +68,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
     const calculateEstimatedPrice = async () => {
         setPriceLoading(true);
         setPriceError(null);
-        
+
         try {
             // Siapkan data untuk dikirim ke API calculate-price dengan total area AOI
             const calculationData = {
@@ -95,9 +97,9 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
             const result = await response.json();
             console.log('Price calculation result:', result);
-            
+
             setEstimatedPrice(result.estimatedPrice || 0);
-            
+
         } catch (error) {
             console.error('Price calculation error:', error);
             setPriceError('Gagal menghitung harga');
@@ -142,15 +144,20 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
             const data = {
                 userData: session?.user || userData,
                 processingTypes: orderData.processingTypes,
-                estimatedPrice: estimatedPrice, // Gunakan calculated price
+                estimatedPrice: estimatedPrice,
                 additionalNotes: additionalNotes,
                 selectedItems: selectedItems,
                 configID: config.configID,
-                totalArea: totalAreaAOI // Tambahkan total area AOI ke data order
+                totalArea: totalAreaAOI,
+                // Data tambahan untuk order config
+                filter: filters,
+                polygon: polygon,
+                results: imageResult,
+                selected: selectedItem
             };
-            
-            console.log('Submitting order with AOI:', data);
-            
+
+            console.log('Submitting order with config data:', data);
+
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/saveorder`, {
                 method: 'POST',
                 headers: {
@@ -158,12 +165,12 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 },
                 body: JSON.stringify(data)
             });
-    
+
             if (!response.ok) throw new Error('Failed to save order');
-            
+
             const responseData = await response.json();
-            console.log("Order saved:", responseData);
-            
+            console.log("Order saved with config:", responseData);
+
             setLoading(false);
             onConfirm();
         } catch (error) {
@@ -387,7 +394,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                         onChange={(e) => setAdditionalNotes(e.target.value)}
                     ></textarea>
                 </div>
-                
+
                 <h3 className="text-sm font-medium text-greensecondarycolor mb-2">*) The prices listed on our platform are initial estimates. We guarantee that the final price you receive will be lower than the estimate, ensuring you always get the best deal.</h3>
 
                 {/* Terms and buttons - Full width */}
@@ -404,7 +411,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                     </label>
                 </div>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row justify-between mt-6 gap-2">
                 <button
                     className="bg-gray-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 w-full sm:w-auto order-2 sm:order-1"
