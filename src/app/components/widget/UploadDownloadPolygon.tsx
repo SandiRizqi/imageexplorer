@@ -149,9 +149,9 @@ const PolygonDownloadModal: React.FC<PolygonDownloadModalProps> = ({ isOpen, onC
                             onChange={(e) => setFormat(e.target.value)}
                         >
                             <option value="" disabled>Select format</option>
-                            <option value="geojson" className='text-gray-200'>GeoJSON</option>
-                            <option value="kml" className='text-gray-200'>KML/KMZ</option>
-                            <option value="zip" className='text-gray-200'>Shapefile (ZIP)</option>
+                            <option value="geojson" className='bg-maincolor text-gray-200'>GeoJSON</option>
+                            <option value="kml" className='bg-maincolor text-gray-200'>KML/KMZ</option>
+                            <option value="zip" className='bg-maincolor text-gray-200'>Shapefile (ZIP)</option>
                         </select>
                     </div>
 
