@@ -1,3 +1,4 @@
+//src/app/components/types.tsx
 interface Coordinates {
     x: number;
     y: number;
@@ -140,6 +141,7 @@ export interface OrderType {
   processingTypes: string[];
   additionalNotes: string;
   pdf_url: string;
+  totalArea?: number;
 }
 
 
