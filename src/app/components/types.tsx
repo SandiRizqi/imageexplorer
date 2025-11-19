@@ -142,6 +142,7 @@ export interface OrderType {
   additionalNotes: string;
   pdf_url: string;
   totalArea?: number;
+  lokasiLiputan?: string;
 }
 
 

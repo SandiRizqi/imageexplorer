@@ -23,6 +23,7 @@ interface UserFormData {
 
 export default function OrderReviewModal({ orderData, selectedItems, onConfirm, onBack }: OrderReviewProps) {
     const [additionalNotes, setAdditionalNotes] = useState('');
+    const [lokasiLiputan, setLokasiLiputan] = useState('');
     const { config } = useConfig();
     const { session } = useAuth();
     const { polygon } = usePolygon(); // Tambahkan hook untuk polygon
@@ -146,6 +147,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 processingTypes: orderData.processingTypes,
                 estimatedPrice: estimatedPrice,
                 additionalNotes: additionalNotes,
+                lokasiLiputan: lokasiLiputan,
                 selectedItems: selectedItems,
                 configID: config.configID,
                 totalArea: totalAreaAOI,
@@ -378,6 +380,21 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                             )}
                         </div>
                     </div>
+                </div>
+
+                {/* Lokasi Liputan section - Full width */}
+                <div className="mt-4">
+                    <label htmlFor="lokasi-liputan" className="block text-sm font-medium text-gray-300 mb-1">
+                        Lokasi Liputan:
+                    </label>
+                    <input
+                        id="lokasi-liputan"
+                        type="text"
+                        className="w-full px-3 py-2 bg-maincolor border border-gray-700 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-greenmaincolor"
+                        placeholder="Masukkan lokasi liputan (contoh: Jakarta Selatan, Surabaya, dll.)"
+                        value={lokasiLiputan}
+                        onChange={(e) => setLokasiLiputan(e.target.value)}
+                    />
                 </div>
 
                 {/* Comments section - Full width */}
