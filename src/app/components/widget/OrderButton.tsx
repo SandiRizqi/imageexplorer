@@ -209,7 +209,7 @@ export default function Cart({ isMobile }: CartProps) {
       {/* Cart Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="relative flex-1 bg-[rgb(252,242,1)] hover:bg-[rgb(163,157,12)] transition text-black py-2 px-2 rounded-md text-xs"
+        className="relative flex-1 bg-[rgb(252,242,1)] hover:bg-[rgb(163,157,12)] transition text-black py-2 px-2 rounded-md text-sm font-semibold"
       >
         ORDER
         {/* Badge */}
