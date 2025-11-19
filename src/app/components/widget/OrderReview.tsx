@@ -385,7 +385,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 {/* Lokasi Liputan section - Full width */}
                 <div className="mt-4">
                     <label htmlFor="lokasi-liputan" className="block text-sm font-medium text-gray-300 mb-1">
-                        Lokasi Liputan:
+                        Lokasi Liputan<span className="text-red-500">*</span>
                     </label>
                     <input
                         id="lokasi-liputan"
@@ -394,8 +394,10 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                         placeholder="Masukkan lokasi liputan (contoh: Jakarta Selatan, Surabaya, dll.)"
                         value={lokasiLiputan}
                         onChange={(e) => setLokasiLiputan(e.target.value)}
+                        required
                     />
                 </div>
+
 
                 {/* Comments section - Full width */}
                 <div className="mt-4">
@@ -439,8 +441,13 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 <button
                     className="bg-greenmaincolor text-black px-4 py-2 rounded-md shadow-md hover:bg-greensecondarycolor disabled:bg-gray-600 disabled:text-gray-400 w-full sm:w-auto order-1 sm:order-2"
                     onClick={handleSubmit}
-                    disabled={session === null ? isValid : !agreedToTerms}
+                    disabled={
+                        session === null
+                            ? isValid || priceLoading
+                            : !agreedToTerms || priceLoading || !lokasiLiputan.trim()
+                    }
                 >
+
                     {!loading ? "Submit Order" : (
                         <div className="flex items-center">
                             <svg className="animate-spin h-4 w-4 text-gray-900 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
