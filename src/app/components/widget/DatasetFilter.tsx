@@ -26,6 +26,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
     resetFilter,
     selectedItem,
     setImageResults,
+    clearResults // <- Tambahkan ini
   } = useConfig();
   const { polygon } = usePolygon();
   const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
@@ -97,6 +98,20 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
     });
     setImageResults([]);
     setConfig({ ...config, isFilterOpen: false });
+  };
+
+  // Tambahkan fungsi handleFullReset
+  const handleFullReset = () => {
+    // Hapus preview image untuk setiap selected item
+    selectedItem.forEach((item) => {
+      removeImagePreview(item);
+    });
+    
+    // Reset filter state
+    resetFilter();
+    
+    // Clear image results dan selected items
+    clearResults();
   };
 
   const handleSubmit = async () => {
@@ -255,8 +270,8 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
       <div className="sticky bottom-0 left-0 right-0 bg-maincolor pt-3 pb-3 mt-auto border-t border-gray-700">
         <div className="flex justify-end gap-2 xs:gap-3 text-sm ">
           <button
-            className="text-white bg-red-600 py-1.5 xs:py-2 px-4 xs:px-6 md:px-8 rounded hover:bg-red-500 transition font-semibold "
-            onClick={resetFilter}
+            className="text-white bg-red-600 py-1.5 xs:py-2 px-4 xs:px-6 md:px-8 rounded hover:bg-red-500 transition font-semibold"
+            onClick={handleFullReset} // <- Ganti ini
           >
             RESET
           </button>

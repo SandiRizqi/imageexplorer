@@ -2,10 +2,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { ImageItem, Filters } from "../types";
 
-
-
-
-
 interface Config {
     configID: string | null,
     isFilterOpen: boolean;
@@ -23,11 +19,8 @@ type ConfigContextType = {
     setImageResults: React.Dispatch<React.SetStateAction<ImageItem[]>>;
     selectedItem: string[];
     setSelectedItem: React.Dispatch<React.SetStateAction<string[]>>;
+    clearResults: () => void; // <- Tambahkan ini
 };
-
-
-
-
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
@@ -102,6 +95,11 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setSelectedItem([]);
     }
 
+    // Tambahkan fungsi clearResults
+    const clearResults = () => {
+        setSelectedItem([]);
+        setImageResults([]);
+    }
 
     return (
         <ConfigContext.Provider value={{ 
@@ -109,7 +107,9 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             filters, setFilters, 
             resetFilter, 
             imageResult, setImageResults, 
-            selectedItem, setSelectedItem }}>
+            selectedItem, setSelectedItem,
+            clearResults // <- Tambahkan ini
+        }}>
             {children}
         </ConfigContext.Provider>
     );
