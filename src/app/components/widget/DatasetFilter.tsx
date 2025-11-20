@@ -106,10 +106,10 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
     selectedItem.forEach((item) => {
       removeImagePreview(item);
     });
-    
+
     // Reset filter state
     resetFilter();
-    
+
     // Clear image results dan selected items
     clearResults();
   };
@@ -148,6 +148,8 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
         data,
         config
       );
+
+      clearResults();
       setImageResults(response.data["results"]);
       return; // Return data if needed for further processing
     } catch (error) {
