@@ -143,6 +143,7 @@ export interface OrderType {
   pdf_url: string;
   totalArea?: number;
   lokasiLiputan?: string;
+  pdf_url_penawaran?: string;
 }
 
 
