@@ -194,7 +194,7 @@ const DrawTool: React.FC = () => {
             });
             // Zoom to fit the polygon
             map.fitBounds(bounds, {
-                padding:400 // Optional: add padding around the polygon
+                padding:100 // Optional: add padding around the polygon
             });
         };
 
