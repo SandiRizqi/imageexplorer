@@ -179,6 +179,12 @@ interface PolygonUploadModalProps {
 const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose, onUpload }) => {
   const [error, setError] = useState<string | null>(null);
 
+    const normalizeTo2D = (coords: number[]): [number, number] => {
+      if (coords.length === 3) {
+        return [coords[0], coords[1]];
+      }
+      return coords as [number, number];
+    };
 
     const extractCoordinates = (geojson: FeatureCollection<Geometry, GeoJsonProperties>): [number, number][] => {
       if (!geojson.features || geojson.features.length === 0) return [];
@@ -190,11 +196,13 @@ const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose
       
       return geojson.features
         .filter((feature) : feature is Feature<Polygon | MultiPolygon, GeoJsonProperties> => feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")
-        .flatMap((feature) =>
-          feature.geometry.type === "Polygon"
-            ? feature.geometry.coordinates.flat() as [number,number][]
-            : feature.geometry.coordinates.flat(2) as [number,number][]
-        );
+        .flatMap((feature) => {
+          if (feature.geometry.type === "Polygon") {
+            return feature.geometry.coordinates[0].map(coord => normalizeTo2D(coord));
+          } else {
+            return feature.geometry.coordinates[0][0].map(coord => normalizeTo2D(coord));
+          }
+        });
     };
 
   const readFileAsText = (file: File): Promise<string> => {

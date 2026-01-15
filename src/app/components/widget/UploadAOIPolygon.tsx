@@ -43,6 +43,14 @@ export default function UploadAOIPolygon() {
   const { map } = useMap();
   const { config } = useConfig();
 
+
+  const normalizeTo2D = (coords: number[]): [number, number] => {
+    if (coords.length === 3) {
+      return [coords[0], coords[1]];
+    }
+    return coords as [number, number];
+  };
+
   const extractCoordinates = (
     geojson: FeatureCollection<Geometry, GeoJsonProperties>
   ): [number, number][] => {
@@ -58,11 +66,13 @@ export default function UploadAOIPolygon() {
         ): feature is Feature<Polygon | MultiPolygon, GeoJsonProperties> =>
           ["Polygon", "MultiPolygon"].includes(feature.geometry.type)
       )
-      .flatMap((feature) =>
-        feature.geometry.type === "Polygon"
-          ? (feature.geometry.coordinates.flat() as [number, number][])
-          : (feature.geometry.coordinates.flat(2) as [number, number][])
-      );
+      .flatMap((feature) => {
+        if (feature.geometry.type === "Polygon") {
+          return feature.geometry.coordinates[0].map(coord => normalizeTo2D(coord));
+        } else {
+          return feature.geometry.coordinates[0][0].map(coord => normalizeTo2D(coord));
+        }
+      });
   };
 
   const drawPolygon = (coords: [number, number][]) => {
