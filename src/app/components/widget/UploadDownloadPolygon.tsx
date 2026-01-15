@@ -244,9 +244,29 @@ const PolygonUploadModal: React.FC<PolygonUploadModalProps> = ({ isOpen, onClose
         const text = await file.text();
         const geojson = JSON.parse(text);
         coordinates = extractCoordinates(geojson);
-      } else if (fileType === "kml" || fileType === "kmz") {
+      } else if (fileType === "kml") {
         const text = await readFileAsText(file);
         const kml = new DOMParser().parseFromString(text, "text/xml") as unknown as Document;
+        const rawGeojson = toGeoJSON.kml(kml);
+        const geojson: FeatureCollection<Geometry, GeoJsonProperties> = {
+            type: "FeatureCollection",
+            features: rawGeojson.features.filter((feature) : feature is Feature<Geometry, GeoJsonProperties> => feature.geometry !== null),
+        };
+        coordinates = extractCoordinates(geojson);
+      } else if (fileType === "kmz") {
+        const zip = new JSZip();
+        const unzipped = await zip.loadAsync(file);
+        
+        const kmlFile = Object.keys(unzipped.files).find((name) =>
+          name.toLowerCase().endsWith(".kml")
+        );
+        
+        if (!kmlFile) {
+          throw new Error("No KML file found in KMZ archive.");
+        }
+        
+        const kmlText = await unzipped.files[kmlFile].async("text");
+        const kml = new DOMParser().parseFromString(kmlText, "text/xml") as unknown as Document;
         const rawGeojson = toGeoJSON.kml(kml);
         const geojson: FeatureCollection<Geometry, GeoJsonProperties> = {
             type: "FeatureCollection",

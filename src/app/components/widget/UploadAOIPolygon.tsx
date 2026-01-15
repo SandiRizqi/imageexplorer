@@ -43,7 +43,6 @@ export default function UploadAOIPolygon() {
   const { map } = useMap();
   const { config } = useConfig();
 
-
   const normalizeTo2D = (coords: number[]): [number, number] => {
     if (coords.length === 3) {
       return [coords[0], coords[1]];
@@ -154,10 +153,36 @@ export default function UploadAOIPolygon() {
       if (fileType === "geojson") {
         const text = await file.text();
         coords = extractCoordinates(JSON.parse(text));
-      } else if (fileType === "kml" || fileType === "kmz") {
+      } else if (fileType === "kml") {
         const text = await readFileAsText(file);
         const kml = new DOMParser().parseFromString(
           text,
+          "text/xml"
+        ) as unknown as Document;
+        const rawGeojson = toGeoJSON.kml(kml);
+        const geojson: FeatureCollection<Geometry, GeoJsonProperties> = {
+          type: "FeatureCollection",
+          features: rawGeojson.features.filter(
+            (f): f is Feature<Geometry, GeoJsonProperties> =>
+              f.geometry !== null
+          ),
+        };
+        coords = extractCoordinates(geojson);
+      } else if (fileType === "kmz") {
+        const zip = new JSZip();
+        const unzipped = await zip.loadAsync(file);
+        
+        const kmlFile = Object.keys(unzipped.files).find((name) =>
+          name.toLowerCase().endsWith(".kml")
+        );
+        
+        if (!kmlFile) {
+          throw new Error("No KML file found in KMZ archive.");
+        }
+        
+        const kmlText = await unzipped.files[kmlFile].async("text");
+        const kml = new DOMParser().parseFromString(
+          kmlText,
           "text/xml"
         ) as unknown as Document;
         const rawGeojson = toGeoJSON.kml(kml);
