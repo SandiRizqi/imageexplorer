@@ -4,36 +4,40 @@ import { useState, useEffect, FC } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X } from "lucide-react";
 import Tour from "./Tour";
+import { useLanguage } from "./context/LanguageProvider";
+import { translations } from "../translations";
 
 const WelcomePopup: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tourOpen, setTourOpen] = useState<boolean>(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   const steps = [
     {
       target: '.upload-aoi',
-      content: 'Upload or draw your polygon',
-      disableBeacon: true, 
+      content: t.tourStep1,
+      disableBeacon: true,
     },
     {
       target: '.dataset-filter',
-      content: 'Filter your satellite imagery datasets.',
-      disableBeacon: true, 
+      content: t.tourStep2,
+      disableBeacon: true,
     },
     {
       target: '.filter-daterange',
-      content: 'Filter your the daterange.',
-      disableBeacon: true, 
+      content: t.tourStep3,
+      disableBeacon: true,
     },
     {
       target: '.filter-cloudcover',
-      content: 'Filter the maximum cloudcover percentage.',
-      disableBeacon: true, 
+      content: t.tourStep4,
+      disableBeacon: true,
     },
     {
       target: '.apply-search',
-      content: 'Search your data.',
-      disableBeacon: true, 
+      content: t.tourStep5,
+      disableBeacon: true,
     },
   ];
 
@@ -82,66 +86,61 @@ const WelcomePopup: FC = () => {
 
             {/* Modal Title */}
             <DialogTitle className="text-xl sm:text-2xl font-extrabold text-greenmaincolor text-center mb-4 sm:mb-6 leading-tight">
-              Welcome to Ruang Bumi Explorer
+              {t.welcomeTitle}
             </DialogTitle>
 
             {/* Modal Content */}
             <div className="text-left text-gray-300 space-y-4">
               <p className="text-base leading-relaxed">
-                Discover the world`s most powerful collection of satellite
-                imagery, aerial photos, and DEM datasets right at your fingertips.
+                {t.welcomeDesc}
               </p>
 
               <div>
                 <p className="font-semibold text-gray-200 mb-3">
-                  Latest Updates:
+                  {t.latestUpdates}
                 </p>
                 <ul className="list-none space-y-2 text-sm text-gray-300 pl-0">
                   <li className="flex items-start">
                     <span className="mr-2 mt-1">•</span>
                     <span>
-                      New 30-cm ultra-high resolution satellite imagery added.
+                      {t.update1}
                     </span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2 mt-1">•</span>
                     <span>
-                      Access massive 130-km footprints from SuperView Neo imagery
-                      (50 cm, 8-band).
+                      {t.update2}
                     </span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2 mt-1">•</span>
                     <span>
-                      First radar dataset TerraSAR-X available, reaching 25-cm
-                      resolution.
+                      {t.update3}
                     </span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2 mt-1">•</span>
                     <span>
-                      Expanded satellite fleet: BJ3A (50 cm), SuperView-2 (40 cm),
-                      BJ3N (30 cm), SuperView Neo (30 cm).
+                      {t.update4}
                     </span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2 mt-1">•</span>
                     <span>
-                      SPOT World Heritage imagery now part of our catalog!
+                      {t.update5}
                     </span>
                   </li>
                 </ul>
               </div>
 
               <p className="text-sm text-gray-400 leading-relaxed">
-                Sign up for a free Ruang Bumi Explorer account today to save
-                searches, track orders, and access exclusive features.
+                {t.signUpPromo}
               </p>
 
               {/* Process Flow Section */}
               <div className="mt-6 sm:mt-8">
                 <p className="font-semibold text-gray-200 text-center mb-8 sm:mb-14 mt-8 sm:mt-16">
-                  HOW TO ORDER
+                  {t.howToOrder}
                 </p>
                 <div
                   className="
@@ -163,7 +162,7 @@ const WelcomePopup: FC = () => {
                       />
                     </div>
                     <p className="text-xs sm:text-sm text-center font-bold">
-                      DEFINE / UPLOAD AOI
+                      {t.step1Title}
                     </p>
                   </div>
 
@@ -182,7 +181,7 @@ const WelcomePopup: FC = () => {
                       />
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-center">
-                      SEARCH IMAGERY
+                      {t.step2Title}
                     </p>
                   </div>
 
@@ -201,7 +200,7 @@ const WelcomePopup: FC = () => {
                       />
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-center">
-                      SAVE OR CREATE QUOTE
+                      {t.step3Title}
                     </p>
                   </div>
 
@@ -220,7 +219,7 @@ const WelcomePopup: FC = () => {
                       />
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-center">
-                      CHOOSE IMAGERY PROCESSING
+                      {t.step4Title}
                     </p>
                   </div>
 
@@ -239,7 +238,7 @@ const WelcomePopup: FC = () => {
                       />
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-center">
-                      ADD ORDER INFORMATION
+                      {t.step5Title}
                     </p>
                   </div>
 
@@ -258,7 +257,7 @@ const WelcomePopup: FC = () => {
                       />
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-center">
-                      CONFIRMATION
+                      {t.step6Title}
                     </p>
                   </div>
                 </div>
@@ -271,21 +270,21 @@ const WelcomePopup: FC = () => {
                 onClick={handleDontShow}
                 className="px-4 py-2 sm:px-6 sm:py-2 bg-gray-700 hover:bg-red-600 text-white font-bold rounded-lg transition-colors duration-200 shadow-md"
               >
-                Dont show this again!
+                {t.dontShowAgain}
               </button>
 
               <button
                 onClick={handleTour}
                 className="px-4 py-2 sm:px-6 sm:py-2 bg-greenmaincolor hover:bg-greensecondarycolor text-gray-900 font-bold rounded-lg transition-colors duration-200 shadow-md"
               >
-                Tour
+                {t.tourButton}
               </button>
 
               <button
                 onClick={handleClose}
                 className="px-4 py-2 sm:px-6 sm:py-2 bg-greenmaincolor hover:bg-greensecondarycolor text-gray-900 font-bold rounded-lg transition-colors duration-200 shadow-md"
               >
-                Let`s Explore
+                {t.letsExplore}
               </button>
             </div>
           </DialogPanel>

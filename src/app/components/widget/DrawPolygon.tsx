@@ -4,6 +4,8 @@ import { MapMouseEvent, GeoJSONSource, LngLatBounds } from "maplibre-gl";
 import { Square, Trash2, Pentagon } from "lucide-react";
 import { usePolygon } from "../context/PolygonProvider";
 import { useConfig } from "../context/ConfigProvider";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 type DrawMode = "polygon" | "rectangle" | null;
@@ -11,7 +13,9 @@ type DrawMode = "polygon" | "rectangle" | null;
 const DrawTool: React.FC = () => {
     const { map } = useMap();
     const { polygon, setPolygon } = usePolygon();
-    const {config} = useConfig();
+    const { config } = useConfig();
+    const { language } = useLanguage();
+    const t = translations[language];
     const [isDrawing, setIsDrawing] = useState<boolean>(false);
     const [drawMode, setDrawMode] = useState<DrawMode>(null);
     const [startPoint, setStartPoint] = useState<[number, number] | null>(null);
@@ -57,7 +61,7 @@ const DrawTool: React.FC = () => {
             }
         };
 
-        
+
 
         map.on("click", handleClick);
         map.on("mousemove", handleMouseMove);
@@ -76,7 +80,7 @@ const DrawTool: React.FC = () => {
             map.on("style.load", () => {
                 if (polygon.length > 3) {
                     drawPolygon(polygon);
-                    
+
                 }
             })
         };
@@ -194,11 +198,11 @@ const DrawTool: React.FC = () => {
             });
             // Zoom to fit the polygon
             map.fitBounds(bounds, {
-                padding:100 // Optional: add padding around the polygon
+                padding: 100 // Optional: add padding around the polygon
             });
         };
 
-        if(polygon.length >= 3 && !isDrawing) {
+        if (polygon.length >= 3 && !isDrawing) {
             if (polygon[0][0] === polygon[polygon.length - 1][0] && polygon[0][1] === polygon[polygon.length - 1][1]) {
                 drawPolygon(polygon);
                 zoomToPolygon(polygon);
@@ -218,7 +222,7 @@ const DrawTool: React.FC = () => {
                 >
                     <Pentagon color="white" />
                     <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
-                        Draw Polygon
+                        {t.drawPolygonTool}
                     </span>
                 </button>
             </div>
@@ -231,7 +235,7 @@ const DrawTool: React.FC = () => {
                 >
                     <Square color="white" />
                     <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
-                        Draw Rectangle
+                        {t.drawRectangleTool}
                     </span>
 
                 </button>
@@ -259,7 +263,7 @@ const DrawTool: React.FC = () => {
                 >
                     <Trash2 color="white" />
                     <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block  text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
-                        Delete
+                        {t.deleteTool}
                     </span>
                 </button>
 

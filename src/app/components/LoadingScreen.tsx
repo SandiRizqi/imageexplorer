@@ -1,11 +1,17 @@
 import React from 'react'
 
+import { useLanguage } from './context/LanguageProvider';
+import { translations } from '../translations';
+
 export default function LoadingScreen() {
+    const { language } = useLanguage();
+    const t = translations[language];
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
             <div className="flex flex-col items-center">
                 <div className="w-12 h-12 border-4 border-greensecondarycolor border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-white mt-4 text-sm">Loading, please wait...</p>
+                <p className="text-white mt-4 text-sm">{t.loadingWait}</p>
             </div>
         </div>
     )

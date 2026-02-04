@@ -1,5 +1,7 @@
 import React from "react";
 import { MdFeedback } from "react-icons/md";
+import { useLanguage } from "./context/LanguageProvider";
+import { translations } from "../translations";
 
 interface FeedbackButtonProps {
     url?: string;
@@ -15,6 +17,9 @@ const FeedbackButton: React.FC<FeedbackButtonProps> = ({
     size = 24,
     className = "",
 }) => {
+    const { language } = useLanguage();
+    const t = translations[language];
+
     const openFeedbackSite = () => {
         window.open(url, "_blank", "noopener,noreferrer");
     };
@@ -23,7 +28,7 @@ const FeedbackButton: React.FC<FeedbackButtonProps> = ({
         <button
             onClick={openFeedbackSite}
             className={`w-12 h-12 bg-orange-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-orange-300 transition-colors ${className}`}
-            title="Give Feedback"
+            title={t.giveFeedback}
             aria-label="Feedback button"
         >
             <MdFeedback size={size} />

@@ -7,6 +7,8 @@ import MeasureTool from '../widget/MeasureTool';
 import SatelliteImageCatalog from '../widget/SatelliteImageCatalog';
 import ModalPortal from '../widget/ModalPortal';
 // import UploadAOIPolygon from '../widget/UploadAOIPolygon';
+import { useLanguage } from '../context/LanguageProvider';
+import { translations } from '../../translations';
 
 export default function ToolsContainer() {
     const [active, setActive] = useState<string | null>(null);
@@ -14,6 +16,8 @@ export default function ToolsContainer() {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const settingsRef = useRef<HTMLDivElement | null>(null); // NEW: Separate ref for modal
     const catalogRef = useRef<HTMLDivElement>(null); // NEW: ref for catalog modal
+    const { language } = useLanguage();
+    const t = translations[language];
 
 
     useEffect(() => {
@@ -75,7 +79,7 @@ export default function ToolsContainer() {
 
                         {obj.name === 'catalog' && (
                             <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
-                                Catalog
+                                {t.catalogTooltip}
                             </span>
                         )}
 

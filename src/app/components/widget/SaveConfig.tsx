@@ -4,6 +4,8 @@ import { useConfig } from "../context/ConfigProvider";
 import { saveConfig } from "../Tools";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { getSession } from "next-auth/react";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 export default function SaveConfigButton() {
   const { polygon } = usePolygon();
@@ -13,6 +15,8 @@ export default function SaveConfigButton() {
   const [configID, setConfigID] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false); // Track loading state
+  const { language } = useLanguage();
+  const t = translations[language];
 
   const handleSaveConfig = async () => {
     setError(null);
@@ -87,7 +91,7 @@ export default function SaveConfigButton() {
             ></path>
           </svg>
         ) : (
-          "SAVE"
+          t.saveConfigButton
         )}
       </button>
 
@@ -100,11 +104,11 @@ export default function SaveConfigButton() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
           <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
             <DialogTitle className="text-lg font-semibold text-greenmaincolor text-center">
-              {error ? "Error" : "Configuration Saved"}
+              {error ? t.error : t.configurationSaved}
             </DialogTitle>
 
             <p className="mt-4 text-sm text-center">
-              {error ? error : `Your configuration has been saved!`}
+              {error ? error : t.configSavedMsg}
             </p>
 
             {configID && (
@@ -114,7 +118,7 @@ export default function SaveConfigButton() {
                   className="bg-greenmaincolor text-gray-800 px-3 py-1 text-xs rounded-md shadow-md hover:bg-greensecondarycolor"
                   onClick={handleCopy}
                 >
-                  {copied ? "Copied!" : "Copy"}
+                  {copied ? t.copied : t.copy}
                 </button>
               </div>
             )}
@@ -123,7 +127,7 @@ export default function SaveConfigButton() {
               className="w-full bg-greenmaincolor text-gray-800 py-2 mt-4 rounded-md shadow-md hover:bg-greensecondarycolor"
               onClick={() => setModalOpen(false)}
             >
-              OK
+              {t.ok}
             </button>
           </DialogPanel>
         </div>

@@ -3,14 +3,18 @@ import { ChevronDownIcon } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthProrider';
+import { useLanguage } from '../context/LanguageProvider';
+import { translations } from '../../translations';
 
 export default function DashboardSwitcher() {
     const router = useRouter();
-    const {session} = useAuth();
+    const { session } = useAuth();
     const pathname = usePathname();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const { language } = useLanguage();
+    const t = translations[language];
 
-    const currentPage = pathname === '/' ? 'Explorer' : 'Dashboard';
+    const currentPage = pathname === '/' ? t.explorer : t.dashboard;
 
     const handleNavigate = (path: string) => {
         // setIsDropdownOpen(false);
@@ -42,20 +46,21 @@ export default function DashboardSwitcher() {
                             <button
                                 onClick={() => handleNavigate('/dashboard')}
                                 className={`${pathname === '/dashboard'
-                                        ? 'bg-greenmaincolor text-gray-900'
-                                        : 'text-gray-700'
+                                    ? 'bg-greenmaincolor text-gray-900'
+                                    : 'text-gray-700'
                                     } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
                             >
-                                Dashboard
+
+                                {t.dashboard}
                             </button>
                             <button
                                 onClick={() => handleNavigate('/')}
                                 className={`${pathname === '/'
-                                        ? 'bg-greenmaincolor text-gray-900'
-                                        : 'text-gray-700'
+                                    ? 'bg-greenmaincolor text-gray-900'
+                                    : 'text-gray-700'
                                     } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
                             >
-                                Explorer
+                                {t.explorer}
                             </button>
                         </div>
                     </div>

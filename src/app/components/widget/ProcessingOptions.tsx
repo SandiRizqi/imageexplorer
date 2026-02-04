@@ -1,6 +1,8 @@
 //src/app/components/widget/ProcessingOptions.tsx
 import React, { useState } from "react";
 import LoadingScreen from "../LoadingScreen";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 type ProcessingType =
   | "rawdata"
@@ -28,12 +30,14 @@ export default function ProcessingOptions({
     "rawdata",
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   const options: ProcessingOption[] = [
     {
       id: "rawdata",
-      name: "Raw Data",
-      description: "Raw Data of satellite imagery (.TIF format) ",
+      name: t.rawData,
+      description: t.rawDataDesc,
       icon: (
         <svg
           className="w-6 h-6"
@@ -47,9 +51,8 @@ export default function ProcessingOptions({
     },
     {
       id: "imageprocessing",
-      name: "Image Processing",
-      description:
-        "Geometric correction (rectification), enhanced imagery with color correction, export to (.ECW format)",
+      name: t.imageProcessing,
+      description: t.imageProcessingDesc,
       icon: (
         <svg
           className="w-6 h-6"
@@ -67,8 +70,8 @@ export default function ProcessingOptions({
     },
     {
       id: "imageanalysis",
-      name: "Image Analysis",
-      description: "Visual analysis (land cover/land use analysis)",
+      name: t.imageAnalysis,
+      description: t.imageAnalysisDesc,
       icon: (
         <svg
           className="w-6 h-6"
@@ -86,9 +89,8 @@ export default function ProcessingOptions({
     },
     {
       id: "layouting",
-      name: "Layout Design",
-      description:
-        "Professional layout & presentation of imagery (printed or digital map)",
+      name: t.layoutDesign,
+      description: t.layoutDesignDesc,
       icon: (
         <svg
           className="w-6 h-6"
@@ -121,8 +123,7 @@ export default function ProcessingOptions({
       {isLoading && <LoadingScreen />}
 
       <p className="text-sm text-center mb-4 text-gray-300">
-        Select processing options for your {selectedItems} selected image
-        {selectedItems !== 1 ? "s" : ""}
+        {t.selectProcessingOptionsDesc.replace("{0}", selectedItems.toString())}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -130,25 +131,22 @@ export default function ProcessingOptions({
           <div
             key={option.id}
             className={`p-4 rounded-lg border-2 transition-all
-                            ${
-                              selectedOptions.includes(option.id)
-                                ? "border-greenmaincolor bg-greenmaincolor/10"
-                                : "border-gray-700"
-                            }
-                            ${
-                              option.id === "rawdata"
-                                ? "cursor-not-allowed opacity-75"
-                                : "cursor-pointer hover:border-greenmaincolor"
-                            }`}
+                            ${selectedOptions.includes(option.id)
+                ? "border-greenmaincolor bg-greenmaincolor/10"
+                : "border-gray-700"
+              }
+                            ${option.id === "rawdata"
+                ? "cursor-not-allowed opacity-75"
+                : "cursor-pointer hover:border-greenmaincolor"
+              }`}
             onClick={() => option.id !== "rawdata" && toggleOption(option.id)}
           >
             <div className="flex items-start">
               <div
-                className={`p-2 rounded-lg ${
-                  selectedOptions.includes(option.id)
-                    ? "bg-greensecondarycolor"
-                    : "bg-gray-700"
-                }`}
+                className={`p-2 rounded-lg ${selectedOptions.includes(option.id)
+                  ? "bg-greensecondarycolor"
+                  : "bg-gray-700"
+                  }`}
               >
                 {option.icon}
               </div>
@@ -170,14 +168,14 @@ export default function ProcessingOptions({
             className="px-6 py-2 bg-gray-700 rounded-md hover:bg-red-600 transition"
             onClick={() => setSelectedOptions(["rawdata"])}
           >
-            Clear
+            {t.clear}
           </button>
           <button
             className="px-6 py-2 bg-greenmaincolor text-gray-900 rounded-md hover:bg-greensecondarycolor transition disabled:opacity-50"
             onClick={handleContinue}
             disabled={selectedOptions.length === 0}
           >
-            Continue
+            {t.continue}
           </button>
         </div>
       </div>

@@ -12,6 +12,8 @@ import { getSession } from "next-auth/react";
 import { getEstimatedPrice } from "../Tools";
 import { ImageItem } from "../types";
 import * as turf from "@turf/turf";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 const StepIndicator = ({
   currentStep,
@@ -27,27 +29,24 @@ const StepIndicator = ({
           <div className="flex flex-col items-center">
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center 
-                  ${
-                    currentStep >= index
-                      ? "bg-greenmaincolor text-gray-900"
-                      : "bg-gray-700 text-gray-300"
-                  }`}
+                  ${currentStep >= index
+                  ? "bg-greenmaincolor text-gray-900"
+                  : "bg-gray-700 text-gray-300"
+                }`}
             >
               {currentStep > index ? "✓" : index + 1}
             </div>
             <span
-              className={`text-xs mt-2 ${
-                currentStep >= index ? "text-white" : "text-gray-400"
-              }`}
+              className={`text-xs mt-2 ${currentStep >= index ? "text-white" : "text-gray-400"
+                }`}
             >
               {step}
             </span>
           </div>
           {index < steps.length - 1 && (
             <div
-              className={`h-1 w-16 mx-2 ${
-                currentStep > index ? "bg-greenmaincolor" : "bg-gray-700"
-              }`}
+              className={`h-1 w-16 mx-2 ${currentStep > index ? "bg-greenmaincolor" : "bg-gray-700"
+                }`}
             />
           )}
         </React.Fragment>
@@ -128,6 +127,8 @@ export default function Cart({ isMobile }: CartProps) {
         coverage,
       };
     });
+  const { language } = useLanguage();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isProcessingModalOpen, setIsProcessingModalOpen] = useState(false);
@@ -211,7 +212,7 @@ export default function Cart({ isMobile }: CartProps) {
         onClick={() => setIsOpen(true)}
         className="relative flex-1 bg-[rgb(252,242,1)] hover:bg-[rgb(163,157,12)] transition text-black py-2 px-2 rounded-md text-sm font-semibold"
       >
-        ORDER
+        {t.order}
         {/* Badge */}
         {selectedItem.length > 0 && (
           <span className="ml-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
@@ -254,7 +255,7 @@ export default function Cart({ isMobile }: CartProps) {
               {/* Drawer Content */}
               <div className="p-4 flex-1 overflow-hidden">
                 <h2 className="flex items-center gap-2 text-lg font-bold text-white">
-                  <ShoppingCart size={18} /> My Cart
+                  <ShoppingCart size={18} /> {t.myCart}
                 </h2>
 
                 {/* Cart Items List with Scroll */}
@@ -271,29 +272,29 @@ export default function Cart({ isMobile }: CartProps) {
                             {item.collection_vehicle_short}_{item.objectid}
                           </p>
                           <p className="text-gray-300">
-                            <span className="font-bold">Date:</span>{" "}
+                            <span className="font-bold">{t.date}:</span>{" "}
                             {item.collection_date}
                           </p>
                           <p className="text-gray-300">
-                            <strong>Time:</strong> {item.acq_time || "N/A"}
+                            <span className="font-bold">{t.time}:</span> {item.acq_time || "N/A"}
                           </p>
                           <p className="text-gray-300">
-                            <span className="font-bold">Resolution:</span>{" "}
+                            <span className="font-bold">{t.resolution.replace(":", "")}:</span>{" "}
                             {item.resolution}
                           </p>
                           <p className="text-gray-300">
-                            <span className="font-bold">Cloud coverage:</span>{" "}
+                            <span className="font-bold">{t.cloudCover.replace(":", "")}:</span>{" "}
                             {item.cloud_cover_percent}%
                           </p>
                           <p className="text-gray-300">
-                            <span className="font-bold">Polygon coverage:</span>{" "}
+                            <span className="font-bold">{t.polygonCoverage}:</span>{" "}
                             {item.coverage.toFixed(2)}%
                           </p>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-gray-300 mt-4">Your cart is empty.</p>
+                    <p className="text-gray-300 mt-4">{t.yourCartIsEmpty}</p>
                   )}
                 </div>
               </div>
@@ -306,7 +307,7 @@ export default function Cart({ isMobile }: CartProps) {
                     onClick={() => handleSaveConfig()}
                   >
                     {!loading ? (
-                      "Create Quote"
+                      t.createQuote
                     ) : (
                       <div className="flex items-center">
                         <svg
@@ -329,7 +330,7 @@ export default function Cart({ isMobile }: CartProps) {
                             d="M4 12a8 8 0 0116 0H4z"
                           ></path>
                         </svg>
-                        <span>Creating...</span>
+                        <span>{t.creating}</span>
                       </div>
                     )}
                   </button>
@@ -338,7 +339,7 @@ export default function Cart({ isMobile }: CartProps) {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence >
 
       {/* Processing Options Modal */}
       <Dialog
@@ -353,20 +354,20 @@ export default function Cart({ isMobile }: CartProps) {
                 currentStep === "options" ? 1 : currentStep === "review" ? 2 : 3
               }
               steps={[
-                "Image Collection",
-                "Processing Options",
-                "Order Review",
-                "Confirmation",
+                t.stepImageCollection,
+                t.stepProcessingOptions,
+                t.stepOrderReview,
+                t.stepConfirmation,
               ]}
             />
 
             <div className="border border-gray-700 p-2 rounded-lg">
               <DialogTitle className="text-lg font-semibold text-whaite text-center mb-4">
                 {currentStep === "options"
-                  ? "Select Processing Options"
+                  ? t.selectProcessingOptionsTitle
                   : currentStep === "review"
-                  ? "Review Your Order"
-                  : "Order Confirmation"}
+                    ? t.reviewYourOrderTitle
+                    : t.orderConfirmationTitle}
               </DialogTitle>
 
               {/* Konten step */}
@@ -405,17 +406,16 @@ export default function Cart({ isMobile }: CartProps) {
                       </svg>
                     </div>
                     <h3 className="text-xl font-semibold mb-2">
-                      Order Submitted!
+                      {t.orderSubmitted}
                     </h3>
                     <p className="text-gray-300 mb-6">
-                      Your order has been successfully processed. Check your
-                      email and we will contact you shortly.
+                      {t.orderSuccessMessage}
                     </p>
                     <button
                       className="w-full bg-greenmaincolor text-gray-800 py-2 rounded-md shadow-md hover:bg-greensecondarycolor"
                       onClick={resetOrderProcess}
                     >
-                      Close
+                      {t.close}
                     </button>
                   </div>
                 )}
@@ -423,7 +423,7 @@ export default function Cart({ isMobile }: CartProps) {
             </div>
           </DialogPanel>
         </div>
-      </Dialog>
+      </Dialog >
       {Error && (
         <Alert category={"error"} message={Error} setClose={setError} />
       )}

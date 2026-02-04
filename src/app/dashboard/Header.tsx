@@ -6,6 +6,8 @@ import { useAuth } from '../components/context/AuthProrider';
 import Image from 'next/image';
 import logo from "../components/assets/SIE.png";
 import EditProfileModal from "../components/auth/EditProfileModal";
+import { useLanguage } from '../components/context/LanguageProvider';
+import { translations } from '../translations';
 
 export default function Header() {
     const router = useRouter();
@@ -14,13 +16,15 @@ export default function Header() {
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const { session, signIn, signOut } = useAuth();
     const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+    const { language } = useLanguage();
+    const t = translations[language];
 
     const handleProfileUpdated = () => {
-            // Optional: refresh session atau reload user data
+        // Optional: refresh session atau reload user data
         console.log("Profile updated successfully");
     };
 
-    const currentPage = pathname === '/explorer' ? 'Explorer' : 'Dashboard';
+    const currentPage = pathname === '/explorer' ? t.explorer : t.dashboard;
 
     const handleNavigate = (path: string) => {
         // setIsDropdownOpen(false);
@@ -44,7 +48,7 @@ export default function Header() {
                             <Image src={logo} alt="Logo" width={45} height={45} className='ml-8  p-[10px]' />
 
                         </div>
-                        
+
 
                         {/* Dropdown menu */}
                         {isDropdownOpen && (
@@ -52,23 +56,21 @@ export default function Header() {
                                 <div className="py-1">
                                     <button
                                         onClick={() => handleNavigate('/dashboard')}
-                                        className={`${
-                                            pathname === '/dashboard'
+                                        className={`${pathname === '/dashboard'
                                                 ? 'bg-greenmaincolor text-gray-900'
                                                 : 'text-gray-700'
-                                        } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
+                                            } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
                                     >
-                                        Dashboard
+                                        {t.dashboard}
                                     </button>
                                     <button
                                         onClick={() => handleNavigate('/')}
-                                        className={`${
-                                            pathname === '/'
+                                        className={`${pathname === '/'
                                                 ? 'bg-greenmaincolor text-gray-900'
                                                 : 'text-gray-700'
-                                        } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
+                                            } flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100`}
                                     >
-                                        Explorer
+                                        {t.explorer}
                                     </button>
                                 </div>
                             </div>
@@ -98,7 +100,7 @@ export default function Header() {
                                     )}
                                 </div>
                                 <div className="text-sm font-medium text-gray-300">
-                                    {session?.user?.name || 'Guest'}
+                                    {session?.user?.name || t.guest}
                                 </div>
                                 <ChevronDownIcon className="w-4 h-4 text-gray-300" />
                             </button>
@@ -108,25 +110,25 @@ export default function Header() {
                                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg py-1 z-10">
                                     {session ? (
                                         <>
-                                        <button
-                                            onClick={() => {
-                                            setIsEditProfileOpen(true);
-                                            setIsUserMenuOpen(false);
-                                            }}
-                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        >
-                                            Edit Profile
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                signOut();
-                                                setIsUserMenuOpen(false);
-                                            }}
-                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        >
-                                            Sign Out
-                                        </button>
-                                        </>                                        
+                                            <button
+                                                onClick={() => {
+                                                    setIsEditProfileOpen(true);
+                                                    setIsUserMenuOpen(false);
+                                                }}
+                                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            >
+                                                {t.editProfile}
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    signOut();
+                                                    setIsUserMenuOpen(false);
+                                                }}
+                                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            >
+                                                {t.logout}
+                                            </button>
+                                        </>
                                     ) : (
                                         <button
                                             onClick={() => {
@@ -135,7 +137,7 @@ export default function Header() {
                                             }}
                                             className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                         >
-                                            Sign In with Google
+                                            {t.signInWithGoogle}
                                         </button>
                                     )}
                                 </div>

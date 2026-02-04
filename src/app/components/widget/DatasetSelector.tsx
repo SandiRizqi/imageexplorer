@@ -2,6 +2,8 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useState } from "react";
 import { Folder, ChevronDown, ChevronUp, CheckSquare, Square } from "lucide-react";
 import { useConfig } from "../context/ConfigProvider";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 interface Dataset {
     name: string;
@@ -134,7 +136,7 @@ const datasetCategories: DatasetCategory[] = [
             { name: "Landsat 8 (LS8) - 15-m 7-band", value: "LS8" },
         ],
     },
-        {
+    {
         name: "KGS Space Technologies",
         datasets: [
             { name: "KazEOSat-1 (KZ1) - 1-m 4-band", value: "KZ1" },
@@ -152,6 +154,8 @@ interface DatasetSelectorModalProps {
 
 export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModalProps) {
     const { filters, setFilters } = useConfig();
+    const { language } = useLanguage();
+    const t = translations[language];
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
     const handleClick = (datasetValue: string) => {
@@ -188,7 +192,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
 
                 {/* Fixed Title */}
                 <div className="sticky top-0 bg-maincolor pb-4 z-10">
-                    <DialogTitle className="text-lg font-bold text-white text-center">Satellite Imagery Datasets</DialogTitle>
+                    <DialogTitle className="text-lg font-bold text-white text-center">{t.satelliteImageryDatasets}</DialogTitle>
                 </div>
 
                 {/* Scrollable Content */}
@@ -232,7 +236,7 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
                                             );
                                         })
                                     ) : (
-                                        <p className="text-gray-400 text-sm">No datasets available</p>
+                                        <p className="text-gray-400 text-sm">{t.noDatasets}</p>
                                     )}
                                 </div>
                             )}
@@ -244,13 +248,13 @@ export default function DatasetSelector({ isOpen, onClose }: DatasetSelectorModa
                 <div className="sticky bottom-0 bg-maincolor pt-4 z-10">
                     <div className="flex justify-end">
                         <button onClick={onClose} className="bg-gray-700 rounded-md hover:bg-red-600 transition px-3 py-1">
-                            Close
+                            {t.close}
                         </button>
                     </div>
                 </div>
 
             </DialogPanel>
-        </Dialog>
+        </Dialog >
 
     );
 }

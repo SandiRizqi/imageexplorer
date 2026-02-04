@@ -7,12 +7,16 @@ import Header from "./Header";
 import Footer from "./Footer";
 import OrdersTable from "./tables/OrdersTable";
 import SavedSearchesTable from "./tables/SavedSearchesTable";
+import { useLanguage } from '../components/context/LanguageProvider';
+import { translations } from '../translations';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<"orders" | "searches">("orders");
   // const [sortOrder, setSortOrder] = useState<'date' | 'name'>('date');
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const { session } = useAuth();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   // const getStatusColor = (status: Order['status']) => {
   //     switch (status) {
@@ -53,24 +57,22 @@ export default function Dashboard() {
             {/* Tabs */}
             <div className="flex border-b border-gray-500">
               <button
-                className={`px-6 py-3 text-sm font-medium ${
-                  activeTab === "orders"
+                className={`px-6 py-3 text-sm font-medium ${activeTab === "orders"
                     ? "border-b-2 border-greensecondarycolor text-white"
                     : "text-gray-400 hover:text-greenmaincolor"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("orders")}
               >
-                Orders
+                {t.orders}
               </button>
               <button
-                className={`px-6 py-3 text-sm font-medium ${
-                  activeTab === "searches"
+                className={`px-6 py-3 text-sm font-medium ${activeTab === "searches"
                     ? "border-b-2 border-greensecondarycolor text-white"
                     : "text-gray-400 hover:text-greenmaincolor"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("searches")}
               >
-                Saved Searches
+                {t.savedSearches}
               </button>
             </div>
 

@@ -1,6 +1,8 @@
 import React from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { ImageItem } from "../types";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 interface ImageDetailModalProps {
   isOpen: boolean;
@@ -13,6 +15,9 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
   onClose,
   imageData,
 }) => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   if (!imageData) return null;
 
   return (
@@ -42,7 +47,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
             <tbody className="divide-y divide-gray-600">
               <tr className="bg-gray-700/30 hover:bg-gray-700/50 transition-colors">
                 <td className="px-3 sm:px-4 py-2.5 font-semibold text-gray-300 w-2/5">
-                  Date<span className="ml-auto float-right">:</span>
+                  {t.date}<span className="ml-auto float-right">:</span>
                 </td>
                 <td className="px-3 sm:px-4 py-2.5">
                   {imageData.collection_date}
@@ -50,7 +55,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
               </tr>
               <tr className="hover:bg-gray-700/50 transition-colors">
                 <td className="px-3 sm:px-4 py-2.5 font-semibold text-gray-300">
-                  Time<span className="ml-auto float-right">:</span>
+                  {t.time}<span className="ml-auto float-right">:</span>
                 </td>
                 <td className="px-3 sm:px-4 py-2.5">
                   {imageData.acq_time || "N/A"}
@@ -58,7 +63,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
               </tr>
               <tr className="bg-gray-700/30 hover:bg-gray-700/50 transition-colors">
                 <td className="px-3 sm:px-4 py-2.5 font-semibold text-gray-300">
-                  Resolution<span className="ml-auto float-right">:</span>
+                  {t.resolution.replace(":", "")}<span className="ml-auto float-right">:</span>
                 </td>
                 <td className="px-3 sm:px-4 py-2.5">
                   {imageData.resolution || "N/A"}
@@ -66,7 +71,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
               </tr>
               <tr className="hover:bg-gray-700/50 transition-colors">
                 <td className="px-3 sm:px-4 py-2.5 font-semibold text-gray-300">
-                  Cloud Cover<span className="ml-auto float-right">:</span>
+                  {t.cloudCover.replace(":", "")}<span className="ml-auto float-right">:</span>
                 </td>
                 <td className="px-3 sm:px-4 py-2.5">
                   {imageData.cloud_cover_percent}%
@@ -74,7 +79,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
               </tr>
               <tr className="bg-gray-700/30 hover:bg-gray-700/50 transition-colors">
                 <td className="px-3 sm:px-4 py-2.5 font-semibold text-gray-300">
-                  Sensor<span className="ml-auto float-right">:</span>
+                  {t.sensorName}<span className="ml-auto float-right">:</span>
                 </td>
                 <td className="px-3 sm:px-4 py-2.5 break-words">
                   {imageData.satellite ||
@@ -84,7 +89,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
               </tr>
               <tr className="hover:bg-gray-700/50 transition-colors">
                 <td className="px-3 sm:px-4 py-2.5 font-semibold text-gray-300">
-                  ImageBand Type<span className="ml-auto float-right">:</span>
+                  {t.imageBandType}<span className="ml-auto float-right">:</span>
                 </td>
                 <td className="px-3 sm:px-4 py-2.5">
                   {imageData.imageBand || "N/A"}
@@ -92,7 +97,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
               </tr>
               <tr className="bg-gray-700/30 hover:bg-gray-700/50 transition-colors">
                 <td className="px-3 sm:px-4 py-2.5 font-semibold text-gray-300">
-                  Band Count<span className="ml-auto float-right">:</span>
+                  {t.bandCount}<span className="ml-auto float-right">:</span>
                 </td>
                 <td className="px-3 sm:px-4 py-2.5">
                   {imageData.imageBandCount || "N/A"}
@@ -100,7 +105,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
               </tr>
               <tr className="hover:bg-gray-700/50 transition-colors">
                 <td className="px-3 sm:px-4 py-2.5 font-semibold text-gray-300">
-                  Sun Azimuth<span className="ml-auto float-right">:</span>
+                  {t.sunAzimuth}<span className="ml-auto float-right">:</span>
                 </td>
                 <td className="px-3 sm:px-4 py-2.5">
                   {imageData.sun_az || "N/A"}
@@ -116,7 +121,7 @@ const ShowImageInfo: React.FC<ImageDetailModalProps> = ({
             onClick={onClose}
             className="bg-gray-700 rounded-md hover:bg-red-600 transition px-3 py-1"
           >
-            Close
+            {t.close}
           </button>
         </div>
       </DialogPanel>

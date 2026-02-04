@@ -18,11 +18,15 @@ import { usePolygon } from "../context/PolygonProvider";
 import { useMap } from "../context/MapProvider";
 import { useConfig } from "../context/ConfigProvider";
 import { GeoJSONSource } from "maplibre-gl";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 const Dropzone: React.FC<{ onDrop: (files: File[]) => void }> = ({
   onDrop,
 }) => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  const { language } = useLanguage();
+  const t = translations[language];
   return (
     <div
       {...getRootProps()}
@@ -30,7 +34,7 @@ const Dropzone: React.FC<{ onDrop: (files: File[]) => void }> = ({
     >
       <input {...getInputProps()} />
       <span className="text-gray-400">
-        Drag and drop or click to upload AOI
+        {t.dragDropAOI}
       </span>
     </div>
   );
@@ -42,6 +46,8 @@ export default function UploadAOIPolygon() {
   const { setPolygon } = usePolygon();
   const { map } = useMap();
   const { config } = useConfig();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   const normalizeTo2D = (coords: number[]): [number, number] => {
     if (coords.length === 3) {
@@ -171,15 +177,15 @@ export default function UploadAOIPolygon() {
       } else if (fileType === "kmz") {
         const zip = new JSZip();
         const unzipped = await zip.loadAsync(file);
-        
+
         const kmlFile = Object.keys(unzipped.files).find((name) =>
           name.toLowerCase().endsWith(".kml")
         );
-        
+
         if (!kmlFile) {
           throw new Error("No KML file found in KMZ archive.");
         }
-        
+
         const kmlText = await unzipped.files[kmlFile].async("text");
         const kml = new DOMParser().parseFromString(
           kmlText,
@@ -225,7 +231,7 @@ export default function UploadAOIPolygon() {
         onClick={() => setIsOpen(true)}
       >
         <Upload size="15" />
-        <span>UPLOAD AOI</span>
+        <span>{t.uploadAOI}</span>
       </button>
 
       <Dialog
@@ -235,14 +241,13 @@ export default function UploadAOIPolygon() {
       >
         <DialogPanel className="bg-maincolor p-6 rounded-md text-center text-white w-[90%] max-w-md">
           <DialogTitle className="text-lg font-bold text-greensecondarycolor">
-            Upload AOI
+            {t.uploadAOI.charAt(0) + t.uploadAOI.slice(1).toLowerCase()}
           </DialogTitle>
           <p className="text-sm my-2 text-xs">
-            You can define an area by uploading a KML/KMZ, GeoJSON or zipped
-            shapefile.
+            {t.uploadAOIDesc}
           </p>
           <p className="text-sm my-2 text-xs">
-            All files must contain a single polygon.
+            {t.uploadAOIWarning}
           </p>
           <Dropzone onDrop={onDrop} />
           {error && <p className="text-red-400 mt-2 text-xs">{error}</p>}
@@ -251,7 +256,8 @@ export default function UploadAOIPolygon() {
               onClick={() => setIsOpen(false)}
               className="bg-gray-600 text-white px-3 py-1 rounded-sm hover:bg-red-600 transition"
             >
-              Close
+
+              {t.close}
             </button>
           </div>
         </DialogPanel>

@@ -8,6 +8,8 @@ import ProcessingOptions from './ProcessingOptions';
 import OrderReview from './OrderReview';
 import { ImageItem } from '../types';
 import * as turf from "@turf/turf";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 
 type OrderStep = 'options' | 'review' | 'confirmation';
@@ -34,6 +36,8 @@ export default function OrderProcessingButton() {
         processingTypes: [],
         estimatedPrice: 0
     });
+    const { language } = useLanguage();
+    const t = translations[language];
 
     const cartItems: ImageItem[] = imageResult.filter(item =>
         selectedItem.includes(item.collection_vehicle_short)
@@ -154,7 +158,7 @@ export default function OrderProcessingButton() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0H4z"></path>
                     </svg>
-                ) : "SUBMIT ORDER"}
+                ) : t.submitOrder}
             </button>
 
             {/* Modal */}
@@ -162,10 +166,10 @@ export default function OrderProcessingButton() {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
                     <DialogPanel className="bg-maincolor text-white rounded-lg  w-[100%] max-w-2xl shadow-xl max-h-[90vh] flex flex-col">
                         <DialogTitle className="text-lg font-semibold text-greenmaincolor text-center">
-                            {error ? "Error" :
-                                currentStep === 'options' ? "Processing Options" :
-                                    currentStep === 'review' ? "Order Review" :
-                                        "Order Confirmation"}
+                            {error ? t.error :
+                                currentStep === 'options' ? t.stepProcessingOptions :
+                                    currentStep === 'review' ? t.stepOrderReview :
+                                        t.orderConfirmationTitle}
                         </DialogTitle>
 
                         <div className="mt-6 mb-8">
@@ -212,7 +216,7 @@ export default function OrderProcessingButton() {
                             {!error && currentStep === 'confirmation' && (
                                 <div className="mt-4">
                                     <p className="text-sm text-center mb-4">
-                                        Your order has been submitted successfully!
+                                        {t.orderSuccessMessage}
                                     </p>
 
                                     {configID && (
@@ -222,7 +226,7 @@ export default function OrderProcessingButton() {
                                                 className="bg-greenmaincolor text-gray-800 px-3 py-1 text-xs rounded-md shadow-md hover:bg-greensecondarycolor"
                                                 onClick={handleCopy}
                                             >
-                                                {copied ? "Copied!" : "Copy"}
+                                                {copied ? t.copied : t.copy}
                                             </button>
                                         </div>
                                     )}
@@ -232,7 +236,7 @@ export default function OrderProcessingButton() {
                                             className="w-full bg-greenmaincolor text-gray-800 py-2 rounded-md shadow-md hover:bg-greensecondarycolor"
                                             onClick={resetOrderProcess}
                                         >
-                                            Done
+                                            {t.done}
                                         </button>
                                     </div>
                                 </div>

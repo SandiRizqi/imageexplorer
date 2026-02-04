@@ -13,6 +13,8 @@ import SaveConfigButton from "../widget/SaveConfig";
 import { ImageItem } from "../types";
 import Alert from "../Alert";
 import OrderButton from "../widget/OrderButton";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 type ImageOverlay = {
   id: string;
@@ -47,6 +49,8 @@ export default function SearchContainer() {
   const [infoDetail, setInfoDetail] = useState<ImageItem | null>(null);
   const [Error, setError] = useState<string | null>(null);
   const [isMobile] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   const drawPolygonPreview = (coords: [number, number][]) => {
     if (!map) return;
@@ -95,11 +99,11 @@ export default function SearchContainer() {
       [number, number],
       [number, number]
     ] = [
-      [item.topleft.x, item.bottomright.y], // Bottom-left
-      [item.bottomright.x, item.bottomright.y], // Bottom-right
-      [item.bottomright.x, item.topleft.y], // Top-right
-      [item.topleft.x, item.topleft.y], // Top-left
-    ];
+        [item.topleft.x, item.bottomright.y], // Bottom-left
+        [item.bottomright.x, item.bottomright.y], // Bottom-right
+        [item.bottomright.x, item.topleft.y], // Top-right
+        [item.topleft.x, item.topleft.y], // Top-left
+      ];
     if (response === "") {
       return null;
     }
@@ -169,7 +173,7 @@ export default function SearchContainer() {
   const selectItem = async (item: ImageItem) => {
     if (polygon.length < 3) {
       setError(
-        "You need to provide at least 3 coordinates for a polygon or upload a geojson, kml, or shapefile."
+        t.errorPolygon
       );
       return;
     }
@@ -290,20 +294,19 @@ export default function SearchContainer() {
         onClick={toggleFilter}
       >
         <div className="flex items-center">
-          <span className="text-gray-300 text-[12px] ml-2">Filters |</span>
+          <span className="text-gray-300 text-[12px] ml-2">{t.filtersLabel}</span>
           <span className="text-gray-400 text-[10px] ml-1">
-            {filters.satellites.length}/58 datasets, Res{" "}
-            {`< ${filters.resolution_max} m`}, Cloud{" "}
-            {`< ${filters.cloudcover_max}%`}, Off-Nadir{" "}
+            {filters.satellites.length}/58 {t.datasetsRes}{" "}
+            {`< ${filters.resolution_max} m`}, {t.cloud}{" "}
+            {`< ${filters.cloudcover_max}%`}, {t.offNadirLabel}{" "}
             {`< ${filters.offnadir_max}°`}
           </span>
         </div>
 
         {/* Animated Arrow Icon */}
         <div
-          className={`transition-transform h-8 w-8 items-center flex justify-center rounded-full bg-maincolor hover:bg-secondarycolor border duration-300  ${
-            config.isFilterOpen ? "rotate-180" : "rotate-0"
-          }`}
+          className={`transition-transform h-8 w-8 items-center flex justify-center rounded-full bg-maincolor hover:bg-secondarycolor border duration-300  ${config.isFilterOpen ? "rotate-180" : "rotate-0"
+            }`}
         >
           <ChevronUp size={22} color="#9ca3af" />
         </div>
@@ -311,11 +314,10 @@ export default function SearchContainer() {
 
       {/* Expanding Filter Section */}
       <div
-        className={`overflow-hidden transition-all duration-300 ${
-          config.isFilterOpen
+        className={`overflow-hidden transition-all duration-300 ${config.isFilterOpen
             ? "h-[calc(75vh-150px)] xxs:h-[calc(70vh-150px)] xs:h-[calc(70vh-150px)] sm:h-[calc(65vh-150px)] md:h-[calc(65vh-150px)] lg:h-[calc(65-vh-150px)] xl:h-[calc(65vh-150px)] 2xl:h-[calc(65vh-150px)] 3xl:h-[calc(63vh-150px)] 4xl:h-[calc(55vh-150px)]"
             : "h-0"
-        }`}
+          }`}
       >
         <div className="px-4 bg-maincolor h-full flex flex-col overflow-y-auto">
           {/* Add filter controls here */}
@@ -325,11 +327,10 @@ export default function SearchContainer() {
 
       {/* Main Content (Table) */}
       <div
-        className={`flex-grow overflow-hidden bg-white transition-all duration-300 ${
-          config.isFilterOpen
+        className={`flex-grow overflow-hidden bg-white transition-all duration-300 ${config.isFilterOpen
             ? "h-[calc(25vh-50px)] xxs:h-[calc(30vh-50px)] xs:h-[calc(30vh-50px)] sm:h-[calc(35vh-50px)] md:h-[calc(35vh-50px)] lg:h-[calc(35vh-50px)] xl:h-[calc(35vh-50px)] 2xl:h-[calc(35vh-50px)] 3xl:h-[calc(37vh-50px)] 4xl:h-[calc(45vh-50px)]"
             : "h-[calc(100vh-150px)]"
-        }`}
+          }`}
       >
         <div className="h-full">
           <div className="max-h-full overflow-y-auto">
@@ -343,28 +344,28 @@ export default function SearchContainer() {
                     className="p-2 min-w-[20px] cursor-pointer"
                     onClick={() => handleSort("collection_vehicle_short")}
                   >
-                    Sat
+                    {t.satHeader}
                   </th>
                   <th
                     className="p-2 w-[80px] cursor-pointer"
                     onClick={() => handleSort("collection_date")}
                   >
-                    Date
+                    {t.date}
                   </th>
                   <th
                     className="p-2 min-w-[40px] cursor-pointer"
                     onClick={() => handleSort("resolution")}
                   >
-                    Res
+                    {t.res}
                   </th>
                   <th
                     className="p-2 min-w-[40px] cursor-pointer"
                     onClick={() => handleSort("cloud_cover_percent")}
                   >
-                    Cloud
+                    {t.cloud}
                   </th>
                   <th className="p-2 max-w-[40px] whitespace-nowrap">
-                    Off-Nadir
+                    {t.offNadirLabel}
                   </th>
                   <th className="p-2 min-w-[20px]"></th>
                 </tr>
@@ -459,8 +460,8 @@ export default function SearchContainer() {
                         {Array.isArray(row.offnadir)
                           ? parseFloat(row.offnadir[0]).toFixed(1)
                           : typeof row.offnadir === "number"
-                          ? row.offnadir.toFixed(1)
-                          : row.offnadir || ""}
+                            ? row.offnadir.toFixed(1)
+                            : row.offnadir || ""}
                       </td>
                       <td className="p-2 whitespace-nowrap">
                         <FaInfoCircle
@@ -476,7 +477,7 @@ export default function SearchContainer() {
                 ) : (
                   <tr>
                     <td colSpan={7} className="text-center p-4 text-gray-500">
-                      No data available
+                      {t.noDataAvailable}
                     </td>
                   </tr>
                 )}
@@ -489,14 +490,14 @@ export default function SearchContainer() {
       {/* Footer Buttons */}
       <div className="absolute bottom-0 w-full bg-maincolor p-2 px-4 flex flex-col items-center justify-end border-t border-gray-300 pb-2 h-[100px]">
         <p className="text-xs text-gray-200">
-          {selectedItem.length} / {imageResult.length} selected
+          {selectedItem.length} / {imageResult.length} {t.selectedCount}
         </p>
         <div className="flex gap-2 w-full mt-2 mb-2">
           <button
             className="relative flex-1 bg-gray-700 hover:bg-red-600 transition text-gray-100 py-2 px-2 rounded-md text-sm font-semibold "
             onClick={handleReset}
           >
-            CLEAR
+            {t.clearButton}
           </button>
           <SaveConfigButton />
 

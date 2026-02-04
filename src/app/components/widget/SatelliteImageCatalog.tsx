@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 interface CatalogItem {
   id: number;
@@ -334,6 +336,20 @@ export default function SatelliteImageryCatalog({
   const [isPreviewModalActive, setIsPreviewModalActive] = useState(false);
   const [catalogData, setCatalogData] = useState<CatalogItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  // Helper to translate labels
+  const getLabel = (label: string) => {
+    if (label.includes("Resolusi Spasial")) return t.spatialResolution;
+    if (label.includes("Resolusi Temporal")) return t.temporalResolution;
+    if (label.includes("Resolusi Spektral")) return t.spectralResolution;
+    if (label.includes("Altitude")) return t.altitude;
+    if (label.includes("Orbit")) return t.orbit;
+    if (label.includes("Lebar Sapuan")) return t.swathWidth;
+    return label;
+  };
+
   const [previewData, setPreviewData] = useState({
     title: "",
     images: [] as string[],
@@ -357,9 +373,8 @@ export default function SatelliteImageryCatalog({
                 return {
                   ...item,
                   price: `Rp ${priceIDR.toLocaleString("id-ID")}`,
-                  info: `${
-                    item.description
-                  }. Harga per km: Rp ${priceIDR.toLocaleString("id-ID")}`,
+                  info: `${item.description
+                    }. Price per km: Rp ${priceIDR.toLocaleString("id-ID")}`,
                 };
               }
             }
@@ -470,12 +485,12 @@ export default function SatelliteImageryCatalog({
           <button
             className="close-btn"
             onClick={onClose || (() => alert("Close clicked"))}
-            aria-label="Close"
+            aria-label={t.close}
           >
             ×
           </button>
 
-          <h1 className="modal-title">Satellite Imagery Catalog</h1>
+          <h1 className="modal-title">{t.satelliteImageryCatalog}</h1>
 
           <div className="modal-content">
             <p
@@ -485,9 +500,8 @@ export default function SatelliteImageryCatalog({
                 textAlign: "center",
               }}
             >
-              Explore our comprehensive collection of hight resolution satellite
-              imagery from various sensors and resolutions. Here are the best
-              image recommendations for you to order.
+
+              {t.catalogDescription}
             </p>
           </div>
 
@@ -497,7 +511,7 @@ export default function SatelliteImageryCatalog({
               <div className="flex flex-col items-center">
                 <div className="w-12 h-12 border-4 border-greensecondarycolor border-t-transparent rounded-full animate-spin"></div>
                 <p className="text-white mt-4 text-sm">
-                  Loading, please wait...
+                  {t.loadingWait}
                 </p>
               </div>
             </div>
@@ -510,9 +524,8 @@ export default function SatelliteImageryCatalog({
                       <div
                         className="slides"
                         style={{
-                          transform: `translateX(${
-                            -currentSlides[index] * 100
-                          }%)`,
+                          transform: `translateX(${-currentSlides[index] * 100
+                            }%)`,
                         }}
                       >
                         {item.images.map((img, imgIndex) => (
@@ -540,9 +553,8 @@ export default function SatelliteImageryCatalog({
                         {item.images.map((_, dotIndex) => (
                           <span
                             key={dotIndex}
-                            className={`dot ${
-                              dotIndex === currentSlides[index] ? "active" : ""
-                            }`}
+                            className={`dot ${dotIndex === currentSlides[index] ? "active" : ""
+                              }`}
                             onClick={() => goToSlide(dotIndex, index)}
                           />
                         ))}
@@ -557,7 +569,7 @@ export default function SatelliteImageryCatalog({
                       <div className="catalog-specs">
                         {item.specs.map((spec, specIndex) => (
                           <div key={specIndex} className="spec-item">
-                            <span className="spec-label">{spec.label}</span>
+                            <span className="spec-label">{getLabel(spec.label)}</span>
                             {spec.value}
                           </div>
                         ))}
@@ -565,10 +577,10 @@ export default function SatelliteImageryCatalog({
                       <hr></hr>
 
                       <div className="price-section">
-                        <div className="price-label">💰 HARGA /Km</div>
+                        <div className="price-label">💰 {t.pricePerKm}</div>
                         <div className="price-value">{item.price}</div>
                         <p className="catalog-description">
-                          {item.description}
+                          {item.description.replace("Minimal Order", t.minimalOrder)}
                         </p>
                       </div>
                     </div>
@@ -578,7 +590,8 @@ export default function SatelliteImageryCatalog({
                         showPreview(item.title, item.previewImages, item.info)
                       }
                     >
-                      Preview
+
+                      {t.preview}
                     </button>
                   </div>
                 </div>
@@ -627,9 +640,8 @@ export default function SatelliteImageryCatalog({
               {previewData.images.map((_, index) => (
                 <span
                   key={index}
-                  className={`preview-dot ${
-                    index === previewCurrentSlide ? "active" : ""
-                  }`}
+                  className={`preview-dot ${index === previewCurrentSlide ? "active" : ""
+                    }`}
                   onClick={() => goToPreviewSlide(index)}
                 />
               ))}
@@ -644,10 +656,10 @@ export default function SatelliteImageryCatalog({
 
           <div className="preview-info">
             <p>
-              <strong>More Information:</strong>
+              <strong>{t.moreInformation}</strong>
             </p>
             <p>
-              {previewData.info} | More info send massage:
+              {previewData.info} | {t.moreInfoContact}
               ruangbumipersada@gmail.com{" "}
             </p>
           </div>
@@ -657,7 +669,7 @@ export default function SatelliteImageryCatalog({
               className="preview-btn preview-btn-secondary"
               onClick={closePreview}
             >
-              Close
+              {t.close}
             </button>
           </div>
         </div>

@@ -2,9 +2,13 @@
 import Link from 'next/link';
 import { Home } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useLanguage } from './components/context/LanguageProvider';
+import { translations } from './translations';
 
 export default function NotFound() {
     const [currentTime, setCurrentTime] = useState('2025-03-16 07:14:51');
+    const { language } = useLanguage();
+    const t = translations[language];
 
     useEffect(() => {
         const updateTime = () => {
@@ -35,18 +39,18 @@ export default function NotFound() {
                 <div className="text-center space-y-6">
                     <div className="space-y-2">
                         <h1 className="text-6xl font-bold text-greensecondarycolor">404</h1>
-                        <h2 className="text-2xl text-gray-300">Page Not Found</h2>
+                        <h2 className="text-2xl text-gray-300">{t.pageNotFound}</h2>
                     </div>
                     <p className="text-gray-400 max-w-md mx-auto">
-                        Sorry, we couldn&apos;t find the page you&apos;re looking for.
+                        {t.pageNotFoundDesc}
                     </p>
-                    <Link 
+                    <Link
                         href="/"
                         className="inline-flex items-center px-6 py-3 bg-greenmaincolor text-gray-900 rounded-lg
                                  hover:bg-greensecondarycolor transition-colors duration-200 font-semibold space-x-2"
                     >
                         <Home className="w-5 h-5" />
-                        <span>Back to Home</span>
+                        <span>{t.backToHome}</span>
                     </Link>
                 </div>
             </main>
@@ -54,7 +58,7 @@ export default function NotFound() {
             {/* Footer */}
             <footer className="bg-maincolor border-t border-gray-700 p-4">
                 <div className="max-w-7xl mx-auto text-center text-gray-400 text-sm">
-                    © 2025 Image Explorer. All rights reserved.
+                    © {new Date().getFullYear()} Image Explorer. {t.allRightsReserved}
                 </div>
             </footer>
         </div>

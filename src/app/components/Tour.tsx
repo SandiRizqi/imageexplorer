@@ -1,5 +1,7 @@
 import React from 'react';
 import Joyride, { Step, CallBackProps } from 'react-joyride';
+import { useLanguage } from "./context/LanguageProvider";
+import { translations } from "../translations";
 
 interface TourProps {
   children: React.ReactNode;
@@ -9,9 +11,12 @@ interface TourProps {
 }
 
 const Tour: React.FC<TourProps> = ({ children, steps, isOpen, onClose }) => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { action, type } = data;
-    
+
     // Close tour when close button is clicked or tour is finished
     if (action === 'close' || type === 'tour:end') {
       onClose();
@@ -40,11 +45,11 @@ const Tour: React.FC<TourProps> = ({ children, steps, isOpen, onClose }) => {
           },
         }}
         locale={{
-          back: 'Back',
-          close: 'Close',
-          last: 'Finish',
-          next: 'Next',
-          skip: 'Skip Tour',
+          back: t.tourBack,
+          close: t.tourClose,
+          last: t.tourLast,
+          next: t.tourNext,
+          skip: t.tourSkip,
         }}
       />
       {children}

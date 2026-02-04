@@ -10,6 +10,8 @@ import { getOrdersByUser } from "../../components/Tools";
 import { useAuth } from "../../components/context/AuthProrider";
 import OrderDetailModal from "../../components/OrderDetailModal";
 import { OrderType } from "../../components/types";
+import { useLanguage } from '../../components/context/LanguageProvider';
+import { translations } from '../../translations';
 
 const ITEMS_PER_PAGE = 15;
 
@@ -21,10 +23,13 @@ const typeColors: Record<string, string> = {
 };
 
 const LoadingComponent = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <tr>
       <td colSpan={7} className="text-center py-6 text-gray-400">
-        Loading orders...
+        {t.loadingOrders}
       </td>
     </tr>
   );
@@ -43,6 +48,8 @@ export default function OrdersTable({
   const [showDetail, setShowDetail] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState<boolean>(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -81,18 +88,18 @@ export default function OrdersTable({
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-base font-bold text-white">Orders List</h2>
+        <h2 className="text-base font-bold text-white">{t.ordersList}</h2>
         <div className="flex items-center space-x-4">
           <select
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value as "date" | "name")}
             className="px-3 py-1 rounded-md text-sm bg-gray-700 text-gray-300 border border-gray-600"
           >
-            <option value="date">Sort by Date</option>
-            <option value="name">Sort by Name</option>
+            <option value="date">{t.sortByDate}</option>
+            <option value="name">{t.sortByName}</option>
           </select>
           <span className="text-sm text-gray-400">
-            Total Orders: {userOrders.length}
+            {t.totalOrders}: {userOrders.length}
           </span>
         </div>
       </div>
@@ -105,25 +112,25 @@ export default function OrdersTable({
             <thead className="bg-maincolor sticky top-0 z-10">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  Order ID
+                  {t.orderId}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  Customer
+                  {t.customer}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  Date
+                  {t.date}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  Status
+                  {t.status}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  Tasks
+                  {t.tasks}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  Total
+                  {t.total}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  Actions
+                  {t.actions}
                 </th>
               </tr>
             </thead>
@@ -135,7 +142,7 @@ export default function OrdersTable({
               ) : currentOrders.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="text-center py-6 text-gray-400">
-                    No orders found
+                    {t.noOrdersFound}
                   </td>
                 </tr>
               ) : (
@@ -146,11 +153,10 @@ export default function OrdersTable({
                       setSelectedItem(order.orderId);
                       onOrderSelect?.(order.orderId);
                     }}
-                    className={`cursor-pointer transition-colors duration-150 ${
-                      selectedItem === order.orderId
-                        ? "bg-secondarycolor"
-                        : "hover:bg-secondarycolor"
-                    }`}
+                    className={`cursor-pointer transition-colors duration-150 ${selectedItem === order.orderId
+                      ? "bg-secondarycolor"
+                      : "hover:bg-secondarycolor"
+                      }`}
                   >
                     <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
                       {order.orderId.slice(0, 20)}...
@@ -175,9 +181,8 @@ export default function OrdersTable({
                         {order.processingTypes.map((type, idx) => (
                           <span
                             key={idx}
-                            className={`px-2 py-1 text-xs font-semibold text-white rounded-lg whitespace-nowrap ${
-                              typeColors[type] || "bg-gray-400"
-                            }`}
+                            className={`px-2 py-1 text-xs font-semibold text-white rounded-lg whitespace-nowrap ${typeColors[type] || "bg-gray-400"
+                              }`}
                           >
                             {type}
                           </span>
@@ -196,7 +201,7 @@ export default function OrdersTable({
                         }}
                         className="px-3 py-1 bg-greensecondarycolor hover:bg-greenmaincolor text-black text-xs rounded-md transition-colors"
                       >
-                        Detail
+                        {t.detail}
                       </button>
                     </td>
                   </tr>
@@ -211,8 +216,8 @@ export default function OrdersTable({
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             {/* Showing Info */}
             <div className="text-xs sm:text-sm text-gray-400 order-2 sm:order-1">
-              Showing {sortedOrders.length === 0 ? 0 : startIndex + 1} to{" "}
-              {Math.min(startIndex + ITEMS_PER_PAGE, sortedOrders.length)} of{" "}
+              {t.showing} {sortedOrders.length === 0 ? 0 : startIndex + 1} {t.to}{" "}
+              {Math.min(startIndex + ITEMS_PER_PAGE, sortedOrders.length)} {t.of}{" "}
               {sortedOrders.length}
             </div>
 
@@ -235,7 +240,7 @@ export default function OrdersTable({
                 <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
               </button>
               <span className="text-xs sm:text-sm text-gray-400 min-w-[80px] sm:min-w-[100px] text-center px-2">
-                Page {currentPage} of {totalPages || 1}
+                {t.page} {currentPage} {t.of} {totalPages || 1}
               </span>
               <button
                 onClick={() => setCurrentPage((prev) => prev + 1)}

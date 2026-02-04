@@ -6,6 +6,8 @@ import { ImageItem } from '../types';
 import { useAuth } from '../context/AuthProrider';
 import { usePolygon } from '../context/PolygonProvider';
 import * as turf from "@turf/turf";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 interface OrderReviewProps {
     orderData: OrderData;
@@ -26,6 +28,8 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
     const [lokasiLiputan, setLokasiLiputan] = useState('');
     const { config } = useConfig();
     const { session } = useAuth();
+    const { language } = useLanguage();
+    const t = translations[language];
     const { polygon } = usePolygon(); // Tambahkan hook untuk polygon
     const { filters, imageResult, selectedItem } = useConfig();
     const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -127,14 +131,14 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
     const getProcessingTypeLabel = (type: string): string => {
         switch (type) {
-            case 'rawdata': return 'Raw Data';
-            case 'raw': return 'Raw Data';
-            case 'imageprocessing': return 'Image Processing';
-            case 'olah_citra': return 'Olah Citra';
-            case 'imageanalysis': return 'Image Analysis';
-            case 'tafsir_pl': return 'Tafsir PL';
-            case 'layouting': return 'Layout Design';
-            case 'layout': return 'Layout';
+            case 'rawdata': return t.rawData;
+            case 'raw': return t.rawData;
+            case 'imageprocessing': return t.imageProcessing;
+            case 'olah_citra': return t.olahCitra || "Olah Citra";
+            case 'imageanalysis': return t.imageAnalysis;
+            case 'tafsir_pl': return t.tafsirPL || "Tafsir PL";
+            case 'layouting': return t.layoutDesign;
+            case 'layout': return t.layoutDesign;
             default: return type;
         }
     };
@@ -206,12 +210,12 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                         <table className="min-w-full text-sm text-left">
                             <thead className="text-xs border-b border-gray-700 sticky top-0 bg-secondarycolor z-10">
                                 <tr>
-                                    <th scope="col" className="py-2 px-3 text-gray-400">Sensor name</th>
-                                    <th scope="col" className="py-2 px-3 text-gray-400">Date</th>
-                                    <th scope="col" className="py-2 px-3 text-gray-400">Res.</th>
-                                    <th scope="col" className="py-2 px-3 text-gray-400">Cloud</th>
-                                    <th scope="col" className="py-2 px-3 text-gray-400">Off-nadir</th>
-                                    <th scope="col" className="py-2 px-3 text-gray-400">Coverage</th>
+                                    <th scope="col" className="py-2 px-3 text-gray-400">{t.sensorName}</th>
+                                    <th scope="col" className="py-2 px-3 text-gray-400">{t.date}</th>
+                                    <th scope="col" className="py-2 px-3 text-gray-400">{t.res}</th>
+                                    <th scope="col" className="py-2 px-3 text-gray-400">{t.cloud}</th>
+                                    <th scope="col" className="py-2 px-3 text-gray-400">{t.offNadir}</th>
+                                    <th scope="col" className="py-2 px-3 text-gray-400">{t.coverage}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -246,7 +250,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                             <div className="space-y-3">
                                 <div>
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
-                                        Your name<span className="text-red-500">*</span>
+                                        {t.yourName}<span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -261,7 +265,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
-                                        Email address<span className="text-red-500">*</span>
+                                        {t.emailAddress}<span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="email"
@@ -276,7 +280,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
                                 <div>
                                     <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">
-                                        Phone number<span className="text-red-500">*</span>
+                                        {t.phoneNumber}<span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="tel"
@@ -291,7 +295,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
                                 <div>
                                     <label htmlFor="company" className="block text-sm font-medium text-gray-300 mb-1">
-                                        Company
+                                        {t.company}
                                     </label>
                                     <input
                                         type="text"
@@ -308,7 +312,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
                     {/* Right column - Order Summary */}
                     <div className="bg-maincolor rounded-md p-4">
-                        <h3 className="text-sm font-medium text-greenmaincolor mb-2">Order Summary</h3>
+                        <h3 className="text-sm font-medium text-greenmaincolor mb-2">{t.orderSummary}</h3>
 
                         <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
@@ -317,14 +321,14 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                             </div>
 
                             <div className="flex justify-between">
-                                <span className="text-gray-400">Total Area (AOI):</span>
+                                <span className="text-gray-400">{t.totalAreaAOI}</span>
                                 <span className="text-white">
                                     {totalAreaAOI.toFixed(2)} km²
                                 </span>
                             </div>
 
                             <div className="flex justify-between">
-                                <span className="text-gray-400">Processing Options:</span>
+                                <span className="text-gray-400">{t.processingOptions}</span>
                                 <div className="text-right">
                                     {orderData.processingTypes.length > 0 ? (
                                         orderData.processingTypes.map(type => (
@@ -333,13 +337,13 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                             </div>
                                         ))
                                     ) : (
-                                        <span className="text-gray-500">None selected</span>
+                                        <span className="text-gray-500">{t.noneSelected}</span>
                                     )}
                                 </div>
                             </div>
 
                             <div className="border-t border-gray-700 my-2 pt-2 flex justify-between font-medium">
-                                <span className="text-gray-300">Estimated Price:</span>
+                                <span className="text-gray-300">{t.estimatedPrice}</span>
                                 <div className="text-right">
                                     {priceLoading ? (
                                         <div className="flex items-center">
@@ -347,7 +351,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0H4z"></path>
                                             </svg>
-                                            <span className="text-gray-400 text-sm">Calculating...</span>
+                                            <span className="text-gray-400 text-sm">{t.calculating}</span>
                                         </div>
                                     ) : priceError ? (
                                         <div className="text-right">
@@ -356,7 +360,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                                 onClick={calculateEstimatedPrice}
                                                 className="block text-xs text-greenmaincolor hover:text-greensecondarycolor mt-1"
                                             >
-                                                Coba lagi
+                                                {t.tryAgain}
                                             </button>
                                         </div>
                                     ) : (
@@ -374,7 +378,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                                         onClick={calculateEstimatedPrice}
                                         className="text-xs text-greenmaincolor hover:text-greensecondarycolor"
                                     >
-                                        Hitung ulang harga
+                                        {t.recalculatePrice}
                                     </button>
                                 </div>
                             )}
@@ -385,13 +389,13 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 {/* Lokasi Liputan section - Full width */}
                 <div className="mt-4">
                     <label htmlFor="lokasi-liputan" className="block text-sm font-medium text-gray-300 mb-1">
-                        Lokasi Liputan<span className="text-red-500">*</span>
+                        {t.locationCoverage}<span className="text-red-500">*</span>
                     </label>
                     <input
                         id="lokasi-liputan"
                         type="text"
                         className="w-full px-3 py-2 bg-maincolor border border-gray-700 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-greenmaincolor"
-                        placeholder="Masukkan lokasi liputan (contoh: Jakarta Selatan, Surabaya, dll.)"
+                        placeholder={t.locationCoveragePlaceholder}
                         value={lokasiLiputan}
                         onChange={(e) => setLokasiLiputan(e.target.value)}
                         required
@@ -402,19 +406,19 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                 {/* Comments section - Full width */}
                 <div className="mt-4">
                     <label htmlFor="notes" className="block text-sm font-medium text-gray-300 mb-1">
-                        Comments:
+                        {t.comments}
                     </label>
                     <textarea
                         id="notes"
                         rows={3}
                         className="w-full px-3 py-2 bg-maincolor border border-gray-700 rounded-md text-white text-sm focus:outline-none focus:ring-1 focus:ring-greenmaincolor"
-                        placeholder="Add any specific requirements or notes for your order..."
+                        placeholder={t.commentsPlaceholder}
                         value={additionalNotes}
                         onChange={(e) => setAdditionalNotes(e.target.value)}
                     ></textarea>
                 </div>
 
-                <h3 className="text-sm font-medium text-greensecondarycolor mb-2">*) The prices listed on our platform are initial estimates. We guarantee that the final price you receive will be lower than the estimate, ensuring you always get the best deal.</h3>
+                <h3 className="text-sm font-medium text-greensecondarycolor mb-2">{t.priceDisclaimer}</h3>
 
                 {/* Terms and buttons - Full width */}
                 <div className="mt-4 flex items-start">
@@ -426,7 +430,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                         onChange={(e) => setAgreedToTerms(e.target.checked)}
                     />
                     <label htmlFor="terms" className="ml-2 text-xs text-gray-400">
-                        I agree to the processing and use of the selected imagery according to the terms of service and privacy policy.
+                        {t.agreeTerms}
                     </label>
                 </div>
             </div>
@@ -436,7 +440,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                     className="bg-gray-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 w-full sm:w-auto order-2 sm:order-1"
                     onClick={onBack}
                 >
-                    Back
+                    {t.back}
                 </button>
                 <button
                     className="bg-greenmaincolor text-black px-4 py-2 rounded-md shadow-md hover:bg-greensecondarycolor disabled:bg-gray-600 disabled:text-gray-400 w-full sm:w-auto order-1 sm:order-2"
@@ -448,13 +452,13 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
                     }
                 >
 
-                    {!loading ? "Submit Order" : (
+                    {!loading ? t.submitOrder : (
                         <div className="flex items-center">
                             <svg className="animate-spin h-4 w-4 text-gray-900 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0H4z"></path>
                             </svg>
-                            <span>Creating...</span>
+                            <span>{t.creating}</span>
                         </div>
                     )}
                 </button>

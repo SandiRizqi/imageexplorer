@@ -12,6 +12,8 @@ import { getSession } from "next-auth/react";
 import { getEstimatedPrice } from "../Tools";
 import { ImageItem } from "../types";
 import * as turf from "@turf/turf";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 
 
@@ -20,28 +22,28 @@ import * as turf from "@turf/turf";
 
 const StepIndicator = ({ currentStep, steps }: { currentStep: number; steps: string[] }) => {
     return (
-      <div className="flex items-center justify-center mb-6">
-        {steps.map((step, index) => (
-          <React.Fragment key={step}>
-            <div className="flex flex-col items-center">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center 
+        <div className="flex items-center justify-center mb-6">
+            {steps.map((step, index) => (
+                <React.Fragment key={step}>
+                    <div className="flex flex-col items-center">
+                        <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center 
                   ${currentStep >= index ? 'bg-greenmaincolor text-gray-900' : 'bg-gray-700 text-gray-300'}`}
-              >
-                {currentStep > index ? '✓' : index + 1}
-              </div>
-              <span className={`text-xs mt-2 ${currentStep >= index ? 'text-white' : 'text-gray-400'}`}>
-                {step}
-              </span>
-            </div>
-            {index < steps.length - 1 && (
-              <div className={`h-1 w-16 mx-2 ${currentStep > index ? 'bg-greenmaincolor' : 'bg-gray-700'}`} />
-            )}
-          </React.Fragment>
-        ))}
-      </div>
+                        >
+                            {currentStep > index ? '✓' : index + 1}
+                        </div>
+                        <span className={`text-xs mt-2 ${currentStep >= index ? 'text-white' : 'text-gray-400'}`}>
+                            {step}
+                        </span>
+                    </div>
+                    {index < steps.length - 1 && (
+                        <div className={`h-1 w-16 mx-2 ${currentStep > index ? 'bg-greenmaincolor' : 'bg-gray-700'}`} />
+                    )}
+                </React.Fragment>
+            ))}
+        </div>
     );
-  };
+};
 
 interface CartProps {
     isMobile: boolean;
@@ -53,62 +55,64 @@ type ProcessingType = 'rawdata' | 'imageprocessing' | 'imageanalysis' | 'layouti
 interface OrderDataType {
     processingTypes: ProcessingType[];
     items: ImageItem[];
-  }
+}
 
 interface OrderData {
-  processingTypes: ProcessingType[];
-  estimatedPrice: number;
-  orderDetails?: string;
-  configID?: string;
+    processingTypes: ProcessingType[];
+    estimatedPrice: number;
+    orderDetails?: string;
+    configID?: string;
 }
 
 export default function Cart({ isMobile }: CartProps) {
     const { config, setConfig, filters, imageResult, selectedItem } = useConfig();
-    const {polygon} = usePolygon();
+    const { language } = useLanguage();
+    const t = translations[language];
+    const { polygon } = usePolygon();
     const cartItem = imageResult
-                    .filter((item) => selectedItem.includes(item.objectid))
-                    .map((item) => {
-                        // Define the image polygon coordinates
-                        const coords: [number, number][] = [
-                        [item.topleft.x, item.topleft.y],
-                        [item.bottomright.x, item.topleft.y],
-                        [item.bottomright.x, item.bottomright.y],
-                        [item.topleft.x, item.bottomright.y],
-                        [item.topleft.x, item.topleft.y], // Ensure polygon is closed
-                        ];
+        .filter((item) => selectedItem.includes(item.objectid))
+        .map((item) => {
+            // Define the image polygon coordinates
+            const coords: [number, number][] = [
+                [item.topleft.x, item.topleft.y],
+                [item.bottomright.x, item.topleft.y],
+                [item.bottomright.x, item.bottomright.y],
+                [item.topleft.x, item.bottomright.y],
+                [item.topleft.x, item.topleft.y], // Ensure polygon is closed
+            ];
 
-                        // Create Turf.js polygons
-                        const imagePolygon = turf.polygon([coords]); // Use polygon directly, not featureCollection
+            // Create Turf.js polygons
+            const imagePolygon = turf.polygon([coords]); // Use polygon directly, not featureCollection
 
-                        // Pastikan polygon memiliki minimal 4 koordinat
-                        if (!polygon || polygon.length < 4) {
-                        console.error("Polygon tidak valid:", polygon);
-                        return { ...item, coverage: 0 };
-                        }
+            // Pastikan polygon memiliki minimal 4 koordinat
+            if (!polygon || polygon.length < 4) {
+                console.error("Polygon tidak valid:", polygon);
+                return { ...item, coverage: 0 };
+            }
 
-                        const regionPolygon = turf.polygon([polygon]);
+            const regionPolygon = turf.polygon([polygon]);
 
-                        // Initialize intersection area
-                        let intersectionArea = 0;
+            // Initialize intersection area
+            let intersectionArea = 0;
 
-                        // Ensure polygons intersect before computing
-                        if (turf.booleanIntersects(imagePolygon, regionPolygon)) {
-                        const intersection = turf.intersect(turf.featureCollection([imagePolygon, regionPolygon]));
-                        if (intersection) {
-                            intersectionArea = turf.area(intersection);
-                        }
-                        }
+            // Ensure polygons intersect before computing
+            if (turf.booleanIntersects(imagePolygon, regionPolygon)) {
+                const intersection = turf.intersect(turf.featureCollection([imagePolygon, regionPolygon]));
+                if (intersection) {
+                    intersectionArea = turf.area(intersection);
+                }
+            }
 
-                        // Compute coverage percentage
-                        const polyArea = turf.area(regionPolygon);
-                        const coverage = intersectionArea > 0 ? (intersectionArea / polyArea) * 100 : 0;
+            // Compute coverage percentage
+            const polyArea = turf.area(regionPolygon);
+            const coverage = intersectionArea > 0 ? (intersectionArea / polyArea) * 100 : 0;
 
-                        return {
-                        ...item,
-                        coverage,
-                        };
-                    });
-    const [loading, setLoading] = useState(false); 
+            return {
+                ...item,
+                coverage,
+            };
+        });
+    const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isProcessingModalOpen, setIsProcessingModalOpen] = useState(false);
     const [currentStep, setCurrentStep] = useState<OrderStep>('options');
@@ -118,26 +122,26 @@ export default function Cart({ isMobile }: CartProps) {
     });
 
 
-    
-    const [Error, setError] = useState<string|null>(null);
+
+    const [Error, setError] = useState<string | null>(null);
 
 
 
-    
+
     const handleProcessingSelect = async (selectedOptions: ProcessingType[]) => {
 
-        const data : OrderDataType = {
+        const data: OrderDataType = {
             processingTypes: selectedOptions,
-            items : cartItem
+            items: cartItem
         };
 
         const price = await getEstimatedPrice(data);
         // console.log(price)
         setOrderData(prev => ({
             ...prev,
-            estimatedPrice: price?.estimatedPrice || 0, 
+            estimatedPrice: price?.estimatedPrice || 0,
             processingTypes: price?.processingTypes || []
-          }));
+        }));
 
         setCurrentStep('review');
     };
@@ -162,31 +166,31 @@ export default function Cart({ isMobile }: CartProps) {
 
 
     const handleSaveConfig = async () => {
-            setLoading(true); // Start loading
-            const session = await getSession();
-    
-            const configData = {
-                userData: session?.user,
-                filter: filters,
-                polygon: polygon,
-                results: imageResult,
-                selected: selectedItem,
-                status: "quoted"
-            };
-    
-            try {
-                const savedConfigID = await saveConfig(configData, setError, config.configID);
-                if (savedConfigID) {
-                    setConfig(prev => ({...prev, configID: savedConfigID}));
-                    setIsProcessingModalOpen(true);
-                    setIsOpen(false);
-                }
-            } catch {
-                setError("Failed to save configuration.");
-            }
-    
-            setLoading(false); // Stop loading
+        setLoading(true); // Start loading
+        const session = await getSession();
+
+        const configData = {
+            userData: session?.user,
+            filter: filters,
+            polygon: polygon,
+            results: imageResult,
+            selected: selectedItem,
+            status: "quoted"
         };
+
+        try {
+            const savedConfigID = await saveConfig(configData, setError, config.configID);
+            if (savedConfigID) {
+                setConfig(prev => ({ ...prev, configID: savedConfigID }));
+                setIsProcessingModalOpen(true);
+                setIsOpen(false);
+            }
+        } catch {
+            setError(t.failedToSaveOrder);
+        }
+
+        setLoading(false); // Stop loading
+    };
 
     return (
         <>
@@ -238,9 +242,9 @@ export default function Cart({ isMobile }: CartProps) {
 
                             {/* Drawer Content */}
                             <div className="p-4 flex-1 overflow-hidden">
-                            <h2 className="flex items-center gap-2 text-lg font-bold text-white">
-                                <ShoppingCart size={18} /> My Cart
-                            </h2>
+                                <h2 className="flex items-center gap-2 text-lg font-bold text-white">
+                                    <ShoppingCart size={18} /> {t.myCart}
+                                </h2>
 
 
                                 {/* Cart Items List with Scroll */}
@@ -251,16 +255,16 @@ export default function Cart({ isMobile }: CartProps) {
                                                 <li key={index} className="p-3 mt-1 border-b border-gray-700 bg-maincolor rounded-lg flex flex-col text-xs">
                                                     {/* Details */}
                                                     <p className="font-semibold text-white truncate w-50">{item.collection_vehicle_short}_{item.objectid}</p>
-                                                    <p className="text-gray-300"><span className="font-bold">Date:</span> {item.collection_date}</p>
-                                                    <p className="text-gray-300"><strong>Time:</strong> {item.acq_time || "N/A"}</p>
-                                                    <p className="text-gray-300"><span className="font-bold">Resolution:</span> {item.resolution}</p>
-                                                    <p className="text-gray-300"><span className="font-bold">Cloud coverage:</span> {item.cloud_cover_percent}%</p>
-                                                    <p className="text-gray-300"><span className="font-bold">Polygon coverage:</span> {item.coverage.toFixed(2)}%</p>
+                                                    <p className="text-gray-300"><span className="font-bold">{t.date}:</span> {item.collection_date}</p>
+                                                    <p className="text-gray-300"><strong>{t.time}:</strong> {item.acq_time || "N/A"}</p>
+                                                    <p className="text-gray-300"><span className="font-bold">{t.resolution.replace(":", "")}:</span> {item.resolution}</p>
+                                                    <p className="text-gray-300"><span className="font-bold">{t.cloudCover.replace(":", "")}:</span> {item.cloud_cover_percent}%</p>
+                                                    <p className="text-gray-300"><span className="font-bold">{t.coverage}:</span> {item.coverage.toFixed(2)}%</p>
                                                 </li>
                                             ))}
                                         </ul>
                                     ) : (
-                                        <p className="text-gray-300 mt-4">Your cart is empty.</p>
+                                        <p className="text-gray-300 mt-4">{t.yourCartIsEmpty}</p>
                                     )}
                                 </div>
                             </div>
@@ -268,19 +272,19 @@ export default function Cart({ isMobile }: CartProps) {
                             {/* Create Quote Button */}
                             {cartItem.length > 0 && (
                                 <div className="p-4 bg-maincolor">
-                                    <button 
+                                    <button
                                         className="w-full bg-greenmaincolor text-gray-800 py-2 rounded-md hover:bg-greensecondarycolor transition justify-center flex"
                                         onClick={() => handleSaveConfig()}
                                     >
-                                        {!loading ? "Create Quote" : (
-                                        <div className="flex items-center">
-                                            <svg className="animate-spin h-4 w-4 text-gray-900 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0H4z"></path>
-                                            </svg>
-                                            <span>Creating...</span>
-                                        </div>
-                                    )}
+                                        {!loading ? t.createQuote : (
+                                            <div className="flex items-center">
+                                                <svg className="animate-spin h-4 w-4 text-gray-900 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0H4z"></path>
+                                                </svg>
+                                                <span>{t.creating}</span>
+                                            </div>
+                                        )}
                                     </button>
                                 </div>
                             )}
@@ -288,64 +292,64 @@ export default function Cart({ isMobile }: CartProps) {
                     </>
                 )}
             </AnimatePresence>
-            
+
             {/* Processing Options Modal */}
             <Dialog open={isProcessingModalOpen} onClose={() => setIsProcessingModalOpen(false)} className="relative z-[60]">
-            <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
-                <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-2xl shadow-xl">
-                <StepIndicator 
-                    currentStep={currentStep === 'options' ? 1 : currentStep === 'review' ? 2 : 3}
-                    steps={['Image Collection', 'Processing Options', 'Order Review', 'Confirmation']}
-                />
-                
-                <div className="border border-gray-700 p-2 rounded-lg">
-                    <DialogTitle className="text-lg font-semibold text-whaite text-center mb-4">
-                    {currentStep === 'options' ? "Select Processing Options" : 
-                    currentStep === 'review' ? "Review Your Order" : 
-                    "Order Confirmation"}
-                    </DialogTitle>
-
-                    {/* Konten step */}
-                    <div className="max-h-[50vh] p-4 overflow-y-auto">
-                    {currentStep === 'options' && (
-                        <ProcessingOptions 
-                        onSelect={handleProcessingSelect} 
-                        selectedItems={cartItem.length} 
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
+                    <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-2xl shadow-xl">
+                        <StepIndicator
+                            currentStep={currentStep === 'options' ? 1 : currentStep === 'review' ? 2 : 3}
+                            steps={[t.stepImageCollection, t.stepProcessingOptions, t.stepOrderReview, t.stepConfirmation]}
                         />
-                    )}
-                    
-                    {currentStep === 'review' && (
-                        <OrderReview 
-                        orderData={orderData}
-                        selectedItems={cartItem}
-                        onConfirm={handleConfirmOrder}
-                        onBack={() => setCurrentStep('options')}
-                    />                    
-                    )}
-                    
-                    {currentStep === 'confirmation' && (
-                        <div className="mt-4 text-center">
-                        <div className="mb-6">
-                            <svg className="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
+
+                        <div className="border border-gray-700 p-2 rounded-lg">
+                            <DialogTitle className="text-lg font-semibold text-whaite text-center mb-4">
+                                {currentStep === 'options' ? t.selectProcessingOptionsTitle :
+                                    currentStep === 'review' ? t.reviewYourOrderTitle :
+                                        t.orderConfirmationTitle}
+                            </DialogTitle>
+
+                            {/* Konten step */}
+                            <div className="max-h-[50vh] p-4 overflow-y-auto">
+                                {currentStep === 'options' && (
+                                    <ProcessingOptions
+                                        onSelect={handleProcessingSelect}
+                                        selectedItems={cartItem.length}
+                                    />
+                                )}
+
+                                {currentStep === 'review' && (
+                                    <OrderReview
+                                        orderData={orderData}
+                                        selectedItems={cartItem}
+                                        onConfirm={handleConfirmOrder}
+                                        onBack={() => setCurrentStep('options')}
+                                    />
+                                )}
+
+                                {currentStep === 'confirmation' && (
+                                    <div className="mt-4 text-center">
+                                        <div className="mb-6">
+                                            <svg className="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        <h3 className="text-xl font-semibold mb-2">{t.orderSubmitted}</h3>
+                                        <p className="text-gray-300 mb-6">
+                                            {t.orderSuccessMessage}
+                                        </p>
+                                        <button
+                                            className="w-full bg-greenmaincolor text-gray-800 py-2 rounded-md shadow-md hover:bg-greensecondarycolor"
+                                            onClick={resetOrderProcess}
+                                        >
+                                            {t.close}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        <h3 className="text-xl font-semibold mb-2">Order Submitted!</h3>
-                        <p className="text-gray-300 mb-6">
-                            Your order has been successfully processed. We will contact you shortly.
-                        </p>
-                        <button
-                            className="w-full bg-greenmaincolor text-gray-800 py-2 rounded-md shadow-md hover:bg-greensecondarycolor"
-                            onClick={resetOrderProcess}
-                        >
-                            Close
-                        </button>
-                        </div>
-                    )}
-                    </div>
+                    </DialogPanel>
                 </div>
-                </DialogPanel>
-            </div>
             </Dialog>
             {Error && <Alert category={"error"} message={Error} setClose={setError} />}
         </>

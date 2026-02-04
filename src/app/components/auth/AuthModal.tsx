@@ -8,11 +8,15 @@ import { FcGoogle } from 'react-icons/fc';
 import Image from "next/image";
 import { ChevronDownIcon } from "lucide-react";
 import EditProfileModal from "./EditProfileModal";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 
 export default function AuthModal() {
   const [isOpen, setIsOpen] = useState(false);
   const { session, status, signIn, signOut } = useAuth();
+  const { language } = useLanguage();
+  const t = translations[language];
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
@@ -31,7 +35,7 @@ export default function AuthModal() {
                         hover:bg-greensecondarycolor transition-colors duration-200 flex items-center space-x-2"
           onClick={() => setIsOpen(true)}
         >
-          <span>LOGIN</span>
+          <span>{t.login}</span>
         </button>
       ) : (
         <div className="relative">
@@ -81,7 +85,7 @@ export default function AuthModal() {
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    Edit Profile
+                    {t.editProfile}
                   </button>
                   <button
                     onClick={() => {
@@ -89,7 +93,7 @@ export default function AuthModal() {
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    Sign Out
+                    {t.logout}
                   </button>
                 </>
               ) : (
@@ -100,7 +104,7 @@ export default function AuthModal() {
                   }}
                   className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
-                  Sign In with Google
+                  {t.signInWithGoogle}
                 </button>
               )}
             </div>
@@ -127,13 +131,13 @@ export default function AuthModal() {
           <DialogPanel className="bg-maincolor text-white rounded-lg p-6 w-[90%] max-w-md shadow-xl">
             {/* Modal Header */}
             <DialogTitle className="text-xl font-semibold text-greenmaincolor text-center mb-6">
-              Welcome Back
+              {t.welcomeBack}
             </DialogTitle>
 
             {/* Content */}
             <div className="text-center text-gray-300 mb-8">
-              <p className="mb-2">Sign in to access your dashboard</p>
-              <p className="text-sm text-gray-400">Use your Google account to continue</p>
+              <p className="mb-2">{t.signInToAccess}</p>
+              <p className="text-sm text-gray-400">{t.useGoogleAccount}</p>
             </div>
 
             {/* Google Sign In Button */}
@@ -149,15 +153,15 @@ export default function AuthModal() {
               ) : (
                 <>
                   <FcGoogle className="w-5 h-5" />
-                  <span className="font-medium">Continue with Google</span>
+                  <span className="font-medium">{t.continueWithGoogle}</span>
                 </>
               )}
             </button>
 
             {/* Footer Text */}
             <p className="mt-6 text-xs text-center text-gray-400">
-              By continuing, you agree to our{' '}
-              <a href="/privacy-policy" className="text-greenmaincolor hover:text-greensecondarycolor">Privacy Policy</a>
+              {t.agreePolicy}{' '}
+              <a href="/privacy-policy" className="text-greenmaincolor hover:text-greensecondarycolor">{t.privacyPolicy}</a>
             </p>
           </DialogPanel>
         </div>

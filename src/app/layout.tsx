@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Head from "next/head";
 import localFont from "next/font/local";
 import { AuthProviders } from "./components/context/AuthProrider";
+import { LanguageProvider } from "./components/context/LanguageProvider";
 // import { Analytics } from "@vercel/analytics/react";
 // import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css";
@@ -40,9 +41,11 @@ export default function RootLayout({
       >
         {/* <SpeedInsights /> */}
         {/* <Analytics /> */}
-        <AuthProviders >
-          {children}
-        </AuthProviders>
+        <LanguageProvider>
+          <AuthProviders >
+            {children}
+          </AuthProviders>
+        </LanguageProvider>
       </body>
     </html>
   );

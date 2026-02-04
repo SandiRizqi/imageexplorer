@@ -4,6 +4,8 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -28,6 +30,8 @@ export default function EditProfileModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   useEffect(() => {
     if (isOpen && userId) {
@@ -49,7 +53,7 @@ export default function EditProfileModal({
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch user profile");
+        throw new Error(t.failedLoadProfile);
       }
 
       const data = await response.json();
@@ -61,7 +65,7 @@ export default function EditProfileModal({
         address: data.address || "",
       });
     } catch (err) {
-      setError("Failed to load profile");
+      setError(t.failedLoadProfile);
       console.error(err);
     } finally {
       setLoading(false);
@@ -99,7 +103,7 @@ export default function EditProfileModal({
         setSuccess(false);
       }, 1500);
     } catch (err) {
-      setError("Failed to update profile. Please try again.");
+      setError(t.failedUpdateProfile);
       console.error(err);
     } finally {
       setLoading(false);
@@ -124,14 +128,14 @@ export default function EditProfileModal({
           <div className="overlay fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
             <div className="flex flex-col items-center">
               <div className="w-12 h-12 border-4 border-greensecondarycolor border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-white mt-4 text-sm">Loading, please wait...</p>
+              <p className="text-white mt-4 text-sm">{t.loadingWait}</p>
             </div>
           </div>
         ) : (
           <DialogPanel className="mx-auto max-w-md w-full bg-[rgb(33,37,41)] rounded-lg shadow-xl">
             <div className="flex items-center justify-between p-6 border-b">
               <DialogTitle className="text-base font-semibold text-white">
-                EDIT PROFILE
+                {t.editProfileTitle}
               </DialogTitle>
               <button
                 onClick={onClose}
@@ -151,13 +155,13 @@ export default function EditProfileModal({
 
               {success && (
                 <div className="bg-black text-greenmaincolor px-4 py-3 rounded-md text-sm">
-                  Profile updated successfully!
+                  {t.profileUpdatedSuccess}
                 </div>
               )}
 
               <div>
                 <label className="block text-sm font-medium text-white mb-1">
-                  Name
+                  {t.yourName}
                 </label>
                 <input
                   type="text"
@@ -171,7 +175,7 @@ export default function EditProfileModal({
 
               <div>
                 <label className="block text-sm font-medium text-white mb-1">
-                  Email
+                  {t.emailAddress}
                 </label>
                 <input
                   type="email"
@@ -182,47 +186,47 @@ export default function EditProfileModal({
                   disabled
                 />
                 <p className="text-xs text-white-500 mt-1">
-                  Email cannot be changed
+                  {t.emailCannotChange}
                 </p>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-white mb-1">
-                  Company
+                  {t.company}
                 </label>
                 <input
                   type="text"
                   name="company"
                   value={formData.company}
                   onChange={handleChange}
-                  placeholder="Enter your company name"
+                  placeholder={t.enterCompanyName}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-white mb-1">
-                  Phone
+                  {t.phoneNumber}
                 </label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="Enter your phone number"
+                  placeholder={t.enterPhoneNumber}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-white mb-1">
-                  Address
+                  {t.address}
                 </label>
                 <textarea
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  placeholder="Enter your address"
+                  placeholder={t.enterAddress}
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-greenmaincolor text-black"
                 />
@@ -235,14 +239,14 @@ export default function EditProfileModal({
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-white hover:bg-red-600 bg-red-500"
                   disabled={loading}
                 >
-                  Cancel
+                  {t.cancel}
                 </button>
                 <button
                   type="submit"
                   className="flex-1 px-4 py-2 bg-greensecondarycolor text-black rounded-md hover:bg-greenmaincolor disabled:bg-blue-300"
                   disabled={loading}
                 >
-                  {loading ? "Saving..." : "Save Changes"}
+                  {loading ? t.saving : t.saveChanges}
                 </button>
               </div>
             </form>

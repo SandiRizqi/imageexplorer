@@ -9,6 +9,8 @@ import axios from "axios";
 import Alert from "../Alert";
 import { checkTotalArea } from "../Tools";
 import UploadAOIPolygon from "../widget/UploadAOIPolygon";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 
 // type selectedMode = string | null;
 type DatasetFilterProps = {
@@ -28,6 +30,8 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
     setImageResults,
     clearResults // <- Tambahkan ini
   } = useConfig();
+  const { language } = useLanguage();
+  const t = translations[language];
   const { polygon } = usePolygon();
   const [isOpenDataSelector, setIsOpenDataSelector] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -61,7 +65,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
       // Check if the date range exceeds 10 years
       const tenYearsInMs = 20 * 365 * 24 * 60 * 60 * 1000; // 10 years in milliseconds
       if (endDate.getTime() - startDate.getTime() > tenYearsInMs) {
-        setError("Date range cannot exceed 20 years!");
+        setError(t.errorDateRange);
         return prev; // Prevent updating the state
       }
 
@@ -117,7 +121,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
   const handleSubmit = async () => {
     if (polygon.length < 3) {
       setError(
-        "You need to provide at least 3 coordinates for a polygon or upload a geojson, kml, or shapefile."
+        t.errorPolygon
       );
       return;
     }
@@ -125,7 +129,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
     const totalArea = checkTotalArea(polygon);
 
     if (totalArea > 5000) {
-      setError("Area should not exceed 5000 km²!");
+      setError(t.errorArea);
       return;
     }
 
@@ -156,7 +160,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
       if (axios.isAxiosError(error)) {
         setError(error.response?.data.error);
       } else {
-        setError("Something error in server.");
+        setError(t.errorServer);
       }
       setConfig((prev) => ({ ...prev, isFilterOpen: true }));
     } finally {
@@ -187,10 +191,10 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
             className="bg-greenmaincolor text-gray-800 shadow-md text-sm font-semibold w-full py-2 rounded-md hover:bg-greensecondarycolor dataset-filter"
             onClick={() => setIsOpenDataSelector(true)}
           >
-            SELECT IMAGERIES
+            {t.selectImageries}
           </button>
           <span className="text-white text-xs flex p-1 mt-2 flex-row w-full justify-center">
-            {filters.satellites.length} of 58 datasets selected
+            {filters.satellites.length} of 58 {t.datasetsSelected}
           </span>
           {/* <div className="flex justify-end text-sm mt-4">
                     <div></div>
@@ -203,7 +207,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
 
         <div className="flex justify-between filter-daterange">
           <div className="flex flex-col w-1/2 pr-2">
-            <label className="text-sm text-gray-400">Start Date</label>
+            <label className="text-sm text-gray-400">{t.startDate}</label>
             <input
               type="date"
               className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style"
@@ -212,7 +216,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
             />
           </div>
           <div className="flex flex-col w-1/2 pl-2">
-            <label className="text-sm text-gray-400">End Date</label>
+            <label className="text-sm text-gray-400">{t.endDate}</label>
             <input
               type="date"
               className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm input-style"
@@ -226,7 +230,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
         <div className="flex-grow flex flex-col justify-between space-y-1">
           <div className="filter-cloudcover">
             <label className="text-sm text-gray-400 flex justify-between">
-              Cloud Cover:{" "}
+              {t.cloudCover}{" "}
               <span className="text-gray-300">{filters.cloudcover_max}%</span>
             </label>
             <input
@@ -240,7 +244,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
           </div>
           <div>
             <label className="text-sm text-gray-400 flex justify-between">
-              Off Nadir:{" "}
+              {t.offNadir}{" "}
               <span className="text-gray-300">{filters.offnadir_max}°</span>
             </label>
             <input
@@ -254,7 +258,7 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
           </div>
           <div>
             <label className="text-sm text-gray-400 flex justify-between">
-              Resolution:{" "}
+              {t.resolution}{" "}
               <span className="text-gray-300">{filters.resolution_max} m</span>
             </label>
             <input
@@ -275,13 +279,13 @@ export default function DatasetFilter({ onLoading }: DatasetFilterProps) {
             className="text-white bg-red-600 py-1.5 xs:py-2 px-4 xs:px-6 md:px-8 rounded hover:bg-red-500 transition font-semibold"
             onClick={handleFullReset} // <- Ganti ini
           >
-            RESET
+            {t.reset}
           </button>
           <button
             className="bg-greensecondarycolor px-4 xs:px-6 md:px-8 py-1.5 xs:py-2 rounded text-white hover:bg-greensecondarycolor2 transition font-semibold apply-search"
             onClick={handleSubmit}
           >
-            APPLY
+            {t.apply}
           </button>
         </div>
       </div>

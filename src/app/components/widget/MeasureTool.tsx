@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { MapMouseEvent, GeoJSONSource } from "maplibre-gl";
 import { useMap } from "../context/MapProvider";
 import { useConfig } from "../context/ConfigProvider";
+import { useLanguage } from "../context/LanguageProvider";
+import { translations } from "../../translations";
 import * as turf from "@turf/turf";
 import { Ruler } from "lucide-react";
 import { Marker } from "maplibre-gl";
@@ -13,6 +15,8 @@ import { Marker } from "maplibre-gl";
 export default function MeasureTool() {
   const { map } = useMap();
   const { config } = useConfig();
+  const { language } = useLanguage();
+  const t = translations[language];
   const [coordinates, setCoordinates] = useState<[number, number][]>([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [marker, setMarker] = useState<Marker | null>(null);
@@ -187,13 +191,12 @@ export default function MeasureTool() {
         <div className="relative group">
           <button
             onClick={() => startMeasurement()}
-            className={`flex items-center justify-center w-10 h-10 rounded-full ${
-              isDrawing ? "bg-greensecondarycolor" : "bg-maincolor"
-            } hover:bg-greensecondarycolor transition-colors duration-200 shadow-xl`}
+            className={`flex items-center justify-center w-10 h-10 rounded-full ${isDrawing ? "bg-greensecondarycolor" : "bg-maincolor"
+              } hover:bg-greensecondarycolor transition-colors duration-200 shadow-xl`}
           >
             <Ruler color="white" />
             <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block text-[#262a59] text-xs rounded px-2 py-1 whitespace-nowrap">
-              Distance
+              {t.distance}
             </span>
           </button>
         </div>

@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { getConfigsByUser } from "../../components/Tools";
 import { ConfigType } from "../../components/types";
+import { useLanguage } from '../../components/context/LanguageProvider';
+import { translations } from '../../translations';
 
 const ITEMS_PER_PAGE = 15;
 
@@ -17,10 +19,13 @@ interface SavedSearchesTableProps {
 }
 
 const LoadingComponent = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <tr>
       <td colSpan={4} className="text-center py-6 text-gray-400">
-        Loading searches...
+        {t.loadingSearches}
       </td>
     </tr>
   );
@@ -34,6 +39,8 @@ export default function SavedSearchesTable({
   const [currentPage, setCurrentPage] = useState(1);
   const [userConfigs, setUserConfigs] = useState<ConfigType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -51,7 +58,7 @@ export default function SavedSearchesTable({
 
   return (
     <>
-      <h2 className="text-base font-bold text-white mb-4">Saved Searches</h2>
+      <h2 className="text-base font-bold text-white mb-4">{t.savedSearches}</h2>
 
       <div className="relative h-[calc(100%-25px)] flex flex-col">
         {/* Table Container with Scroll */}
@@ -61,16 +68,16 @@ export default function SavedSearchesTable({
             <thead className="bg-maincolor sticky top-0 z-10">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  ID
+                  {t.id}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  Query Name
+                  {t.queryName}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  Date
+                  {t.date}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">
-                  URL
+                  {t.url}
                 </th>
               </tr>
             </thead>
@@ -82,18 +89,17 @@ export default function SavedSearchesTable({
               ) : currentSearches.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="text-center py-6 text-gray-400">
-                    No saved searches found
+                    {t.noSavedSearchesFound}
                   </td>
                 </tr>
               ) : (
                 currentSearches.map((search, idx) => (
                   <tr
                     key={search.id}
-                    className={`cursor-pointer transition-colors duration-150 ${
-                      selectedItem === search.id
-                        ? "bg-secondarycolor"
-                        : "hover:bg-secondarycolor"
-                    }`}
+                    className={`cursor-pointer transition-colors duration-150 ${selectedItem === search.id
+                      ? "bg-secondarycolor"
+                      : "hover:bg-secondarycolor"
+                      }`}
                     onClick={() => {
                       setSelectedItem(search.id);
                       onSearchSelect?.(search.id);
@@ -103,7 +109,7 @@ export default function SavedSearchesTable({
                       #{startIndex + idx + 1}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
-                      {search?.userData?.name || "Unnamed"}
+                      {search?.userData?.name || t.unnamed}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-300 whitespace-nowrap">
                       {new Date(search.timestamp * 1000).toLocaleDateString()}
@@ -133,8 +139,8 @@ export default function SavedSearchesTable({
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             {/* Showing Info */}
             <div className="text-xs sm:text-sm text-gray-400 order-2 sm:order-1">
-              Showing {userConfigs.length === 0 ? 0 : startIndex + 1} to{" "}
-              {Math.min(startIndex + ITEMS_PER_PAGE, userConfigs.length)} of{" "}
+              {t.showing} {userConfigs.length === 0 ? 0 : startIndex + 1} {t.to}{" "}
+              {Math.min(startIndex + ITEMS_PER_PAGE, userConfigs.length)} {t.of}{" "}
               {userConfigs.length}
             </div>
 
@@ -157,7 +163,7 @@ export default function SavedSearchesTable({
                 <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
               </button>
               <span className="text-xs sm:text-sm text-gray-400 min-w-[80px] sm:min-w-[100px] text-center px-2">
-                Page {currentPage} of {totalPages || 1}
+                {t.page} {currentPage} {t.of} {totalPages || 1}
               </span>
               <button
                 onClick={() => setCurrentPage((prev) => prev + 1)}
