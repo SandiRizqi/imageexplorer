@@ -204,7 +204,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
             {/* Selected Scenes Section */}
             <div className="space-y-6">
                 <div className="bg-maincolor rounded-md p-4 mb-4">
-                    <h3 className="text-sm font-medium text-greenmaincolor mb-2">Your selected scenes</h3>
+                    <h3 className="text-sm font-medium text-greenmaincolor mb-2">{t.yourSelectedScenes}</h3>
 
                     <div className="overflow-x-auto max-h-[200px] overflow-y-auto">
                         <table className="min-w-full text-sm text-left">
@@ -316,7 +316,7 @@ export default function OrderReviewModal({ orderData, selectedItems, onConfirm, 
 
                         <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
-                                <span className="text-gray-400">Selected Scenes:</span>
+                                <span className="text-gray-400">{t.selectedScenes}</span>
                                 <span className="text-white">{selectedItems.length}</span>
                             </div>
 
