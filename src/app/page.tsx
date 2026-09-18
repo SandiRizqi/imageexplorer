@@ -16,6 +16,7 @@ import BasemapSwitcher from '../app/components/widget/BasemapSwitcher';
 import Cart from '../app/components/widget/Cart';
 import SearchLocation from '../app/components/widget/SeachLocation';
 import LanguageSwitcher from '../app/components/widget/LanguageSwitcher';
+import InfoLink from '../app/components/widget/InfoLink';
 import DashboardSwitcher from './components/widget/DashboardSwitcher';
 import WelcomePopup from './components/WelcomePopup';
 
@@ -90,6 +91,7 @@ export default function MapPage() {
 
                                 {/* Login/Signup Button */}
                                 <div className="flex items-center gap-4">
+                                    <InfoLink />
                                     <LanguageSwitcher />
                                     <Cart isMobile={isMobile} />
                                     <AuthModal />

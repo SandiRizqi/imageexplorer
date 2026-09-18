@@ -7,12 +7,47 @@ import LanguageSwitcher from "../components/widget/LanguageSwitcher";
 
 const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281298735585";
 
-const satelliteFleet = [
-  { name: "BJ3A", resolution: "50 cm" },
-  { name: "SuperView-2", resolution: "40 cm" },
-  { name: "BJ3N", resolution: "30 cm" },
-  { name: "SuperView Neo", resolution: "30 cm" },
-  { name: "TerraSAR-X (Radar)", resolution: "25 cm" },
+const highResolutionSatellites = [
+  { name: "Pleiades Neo", resolution: "30 cm", minOrder: 25 },
+  { name: "WorldView Legion", resolution: "30 cm", minOrder: 25 },
+  { name: "WorldView-4", resolution: "30 cm", minOrder: 25 },
+  { name: "WorldView-5", resolution: "30 cm", minOrder: 25 },
+  { name: "WorldView-2", resolution: "40 cm", minOrder: 25 },
+  { name: "GeoEye-1", resolution: "40 cm", minOrder: 25 },
+  { name: "Pleiades 1", resolution: "50 cm", minOrder: 25 },
+  { name: "BJ3N", resolution: "30 cm", minOrder: 25 },
+  { name: "Superview Neo - 1 & Neo 3", resolution: "30 | 50 cm", minOrder: 25 },
+  { name: "Jilin - 1", resolution: "75 cm", minOrder: 50 },
+  { name: "SuperView-2", resolution: "40 cm", minOrder: 25 },
+  { name: "SuperView-1", resolution: "50 cm", minOrder: 25 },
+  { name: "BJ3A", resolution: "50 cm", minOrder: 25 },
+  { name: "SkySat", resolution: "50 cm", minOrder: 25 },
+  { name: "KOMPSAT-3A", resolution: "40 cm", minOrder: 25 },
+  { name: "QuickBird", resolution: "60 cm", minOrder: 25 },
+  { name: "Kompsat-3", resolution: "70 cm", minOrder: 25 },
+  { name: "EROS B", resolution: "70 cm", minOrder: 25 },
+  { name: "GEOSAT-2", resolution: "75 cm", minOrder: 25 },
+  { name: "IKONOS", resolution: "80 cm", minOrder: 25 },
+  { name: "GaoFen-2", resolution: "80 cm", minOrder: 25 },
+  { name: "OVS-3", resolution: "90 cm", minOrder: 131 },
+  { name: "TripleSat", resolution: "80 cm", minOrder: 25 },
+  { name: "KazEOSat-1", resolution: "50 cm", minOrder: 100 },
+  { name: "TeLEOS-1", resolution: "100 cm", minOrder: 100 },
+  { name: "KOMPSAT-2", resolution: "100 cm", minOrder: 25 },
+];
+
+const mediumResolutionSatellites = [
+  { name: "SPOT 6-7", resolution: "150 cm", minOrder: 100 },
+  { name: "PlanetScope", resolution: "300 cm", minOrder: 250 },
+  { name: "RapidEye", resolution: "500 cm", minOrder: 375 },
+  { name: "FORMOSAT-5", resolution: "200 cm", minOrder: 200 },
+  { name: "FORMOSAT-2", resolution: "200 cm", minOrder: 200 },
+  { name: "GaoFen-1", resolution: "200 cm", minOrder: 500 },
+  { name: "EROS A", resolution: "200 cm", minOrder: 375 },
+  { name: "ZiYuan-3", resolution: "250 - 350 cm", minOrder: 500 },
+  { name: "KazEOSat-2", resolution: "650 cm", minOrder: 500 },
+  { name: "Orbita Hyperspectral Satellite (OHS)", resolution: "1000 cm", minOrder: 2500 },
+  { name: "GEOSAT-1", resolution: "2200 cm", minOrder: 6000 },
 ];
 
 export default function CitraSatelitContent() {
@@ -96,19 +131,84 @@ export default function CitraSatelitContent() {
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-greensecondarycolor">{t.csFleetTitle}</h2>
           <p className="leading-relaxed">{t.csFleetDesc}</p>
-          <ul className="divide-y divide-gray-700 border border-gray-700 rounded-lg overflow-hidden">
-            {satelliteFleet.map((sat) => (
-              <li
-                key={sat.name}
-                className="flex items-center justify-between px-4 py-3 text-sm sm:text-base"
-              >
-                <span className="font-semibold text-gray-200">{sat.name}</span>
-                <span className="text-greenmaincolor">
-                  {t.csFleetResolutionLabel} {sat.resolution}
-                </span>
-              </li>
-            ))}
-          </ul>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-200 mb-2">
+                {t.csFleetHighResTitle}
+              </h3>
+              <div className="border border-gray-700 rounded-lg overflow-auto max-h-80">
+                <table className="w-full text-xs sm:text-sm">
+                  <thead className="sticky top-0 bg-secondarycolor">
+                    <tr className="text-left">
+                      <th className="px-3 py-2 text-gray-400 font-semibold">No</th>
+                      <th className="px-3 py-2 text-gray-400 font-semibold">
+                        {t.csFleetNameLabel}
+                      </th>
+                      <th className="px-3 py-2 text-gray-400 font-semibold whitespace-nowrap">
+                        {t.csFleetResolutionLabel}
+                      </th>
+                      <th className="px-3 py-2 text-gray-400 font-semibold whitespace-nowrap">
+                        {t.csFleetMinOrderLabel}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-700">
+                    {highResolutionSatellites.map((sat, idx) => (
+                      <tr key={sat.name}>
+                        <td className="px-3 py-2 text-gray-400">{idx + 1}</td>
+                        <td className="px-3 py-2 text-gray-200">{sat.name}</td>
+                        <td className="px-3 py-2 text-greenmaincolor whitespace-nowrap">
+                          {sat.resolution}
+                        </td>
+                        <td className="px-3 py-2 text-gray-400 whitespace-nowrap">
+                          {sat.minOrder} km²
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-gray-200 mb-2">
+                {t.csFleetMediumResTitle}
+              </h3>
+              <div className="border border-gray-700 rounded-lg overflow-auto max-h-80">
+                <table className="w-full text-xs sm:text-sm">
+                  <thead className="sticky top-0 bg-secondarycolor">
+                    <tr className="text-left">
+                      <th className="px-3 py-2 text-gray-400 font-semibold">No</th>
+                      <th className="px-3 py-2 text-gray-400 font-semibold">
+                        {t.csFleetNameLabel}
+                      </th>
+                      <th className="px-3 py-2 text-gray-400 font-semibold whitespace-nowrap">
+                        {t.csFleetResolutionLabel}
+                      </th>
+                      <th className="px-3 py-2 text-gray-400 font-semibold whitespace-nowrap">
+                        {t.csFleetMinOrderLabel}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-700">
+                    {mediumResolutionSatellites.map((sat, idx) => (
+                      <tr key={sat.name}>
+                        <td className="px-3 py-2 text-gray-400">{idx + 1}</td>
+                        <td className="px-3 py-2 text-gray-200">{sat.name}</td>
+                        <td className="px-3 py-2 text-greenmaincolor whitespace-nowrap">
+                          {sat.resolution}
+                        </td>
+                        <td className="px-3 py-2 text-gray-400 whitespace-nowrap">
+                          {sat.minOrder} km²
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Cara beli */}

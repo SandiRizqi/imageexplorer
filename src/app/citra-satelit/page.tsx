@@ -7,16 +7,16 @@ const siteUrl =
     : "https://explorer.ruangbumi.com";
 
 export const metadata: Metadata = {
-  title: "Jual Beli Citra Satelit Resolusi Tinggi | Ruang Bumi Explorer",
+  title: "Jual Beli & Pengadaan Citra Satelit Resolusi Tinggi | Ruang Bumi Explorer",
   description:
-    "Jual beli citra satelit resolusi tinggi mulai dari 30 cm untuk kebutuhan pemetaan, riset, dan bisnis. Cari, pesan, dan unduh citra satelit terbaru dari berbagai satelit langsung secara online.",
+    "Jual beli dan pengadaan citra satelit resolusi tinggi mulai dari 30 cm untuk kebutuhan pemetaan, riset, dan bisnis. Cari, pesan, dan unduh citra satelit terbaru dari berbagai satelit langsung secara online.",
   alternates: {
     canonical: `${siteUrl}/citra-satelit`,
   },
   openGraph: {
-    title: "Jual Beli Citra Satelit Resolusi Tinggi | Ruang Bumi Explorer",
+    title: "Jual Beli & Pengadaan Citra Satelit Resolusi Tinggi | Ruang Bumi Explorer",
     description:
-      "Jual beli citra satelit resolusi tinggi mulai dari 30 cm untuk kebutuhan pemetaan, riset, dan bisnis. Cari, pesan, dan unduh citra satelit terbaru secara online.",
+      "Jual beli dan pengadaan citra satelit resolusi tinggi mulai dari 30 cm untuk kebutuhan pemetaan, riset, dan bisnis. Cari, pesan, dan unduh citra satelit terbaru secara online.",
     url: `${siteUrl}/citra-satelit`,
     siteName: "Ruang Bumi Explorer",
     locale: "id_ID",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Service",
-  serviceType: "Jual Beli Citra Satelit Resolusi Tinggi",
+  serviceType: "Jual Beli dan Pengadaan Citra Satelit Resolusi Tinggi",
   provider: {
     "@type": "Organization",
     name: "Ruang Bumi Explorer",
@@ -35,7 +35,7 @@ const jsonLd = {
   },
   areaServed: "ID",
   description:
-    "Layanan jual beli citra satelit resolusi tinggi mulai dari 30 cm untuk kebutuhan pemetaan, riset, dan bisnis.",
+    "Layanan jual beli dan pengadaan citra satelit resolusi tinggi mulai dari 30 cm untuk kebutuhan pemetaan, riset, dan bisnis.",
 };
 
 export default function CitraSatelitPage() {
