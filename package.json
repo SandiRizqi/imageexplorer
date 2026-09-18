@@ -42,7 +42,6 @@
     "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^0.5.11",
     "@types/express": "^5.0.0",
     "@types/node": "^20",
     "@types/proj4": "^2.5.6",
