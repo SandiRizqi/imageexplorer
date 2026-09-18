@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
-import Head from "next/head";
 import localFont from "next/font/local";
 import { AuthProviders } from "./components/context/AuthProrider";
 import { LanguageProvider } from "./components/context/LanguageProvider";
 // import { Analytics } from "@vercel/analytics/react";
 // import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_HOST && process.env.NEXT_PUBLIC_HOST.startsWith("http")
+    ? process.env.NEXT_PUBLIC_HOST
+    : "https://explorer.ruangbumi.com";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,8 +23,17 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Ruang Bumi Explorer | a leading satellite imagery provider in the world with the most complete images collection.",
-  description: "We provide high-quality satellite imagery data to empower businesses, researchers, and decision-makers with cutting-edge geospatial insights.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default:
+      "Ruang Bumi Explorer | a leading satellite imagery provider in the world with the most complete images collection.",
+    template: "%s | Ruang Bumi Explorer",
+  },
+  description:
+    "We provide high-quality satellite imagery data to empower businesses, researchers, and decision-makers with cutting-edge geospatial insights.",
+  icons: {
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -32,10 +45,6 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <Head>
-        <link rel="icon" href="./favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="./favicon.ico" />
-      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

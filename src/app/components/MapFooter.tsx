@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useMap } from './context/MapProvider';
 import { usePolygon } from './context/PolygonProvider';
 import { MapMouseEvent } from 'maplibre-gl';
@@ -61,7 +62,12 @@ const MapFooter: React.FC<MapFooterProps> = (props) => {
             className="absolute bottom-0 right-0 w-full bg-maincolor text-white text-xs px-4 py-1 flex justify-between items-center"
             {...props} // Spread props for flexibility
         >
-            <span className='text-gray-300'>V.{process.env.NEXT_PUBLIC_VERSION}</span>
+            <span className='text-gray-300 flex items-center gap-3'>
+                V.{process.env.NEXT_PUBLIC_VERSION}
+                <Link href="/citra-satelit" className="hover:text-greenmaincolor underline">
+                    Jual Beli Citra Satelit
+                </Link>
+            </span>
             <div className='flex gap-5'>
                 <div>{totalArea.toFixed(2)} km²</div>
                 {cursorCoords && `${t.long} : ${cursorCoords[0].toFixed(5)}  ${t.lat}: ${cursorCoords[1].toFixed(5)}`}
